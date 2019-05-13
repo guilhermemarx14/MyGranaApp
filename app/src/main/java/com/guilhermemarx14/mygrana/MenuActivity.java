@@ -23,12 +23,18 @@ import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.guilhermemarx14.mygrana.RealmObjects.Category;
 import com.guilhermemarx14.mygrana.RealmObjects.UserProfilePhoto;
 
 import java.io.InputStream;
 
 import io.fabric.sdk.android.services.concurrency.AsyncTask;
 import io.realm.Realm;
+
+import static com.guilhermemarx14.mygrana.Utils.Constants.GASTO;
+import static com.guilhermemarx14.mygrana.Utils.Constants.RENDA;
 
 public class MenuActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -69,14 +75,33 @@ public class MenuActivity extends AppCompatActivity
     private void setUpNavigationHeader(NavigationView navigationView) {
         View v = navigationView.getHeaderView(0);
         upp = realm.where(UserProfilePhoto.class).findFirst();
-        if (upp == null)
+        if (upp == null) {
+            setUpFirstTimeUser();
             new DownloadImageFromInternet(((ImageView) v.findViewById(R.id.navHeaderPhoto))).execute(user.getPhotoUrl().toString());
-        else
+        }else
             ((ImageView) v.findViewById(R.id.navHeaderPhoto)).setImageBitmap(upp.getUserPhoto());
 
         ((TextView) v.findViewById(R.id.navHeaderTitle)).setText(user.getDisplayName());
 
         ((TextView) v.findViewById(R.id.navHeaderEmail)).setText(user.getEmail());
+    }
+
+    private void setUpFirstTimeUser() {
+        realm.beginTransaction();
+            realm.copyToRealm(new Category("Salário",RENDA));
+            realm.copyToRealm(new Category("Pensão",RENDA));
+            realm.copyToRealm(new Category("Moradia",GASTO));
+            realm.copyToRealm(new Category("Alimentação",GASTO));
+            realm.copyToRealm(new Category("Lazer",GASTO));
+            realm.copyToRealm(new Category("Vestimenta",GASTO));
+            realm.copyToRealm(new Category("Transporte",GASTO));
+            realm.copyToRealm(new Category("Investimentos",GASTO));
+        realm.commitTransaction();
+
+
+
+
+
     }
 
 
@@ -130,6 +155,9 @@ public class MenuActivity extends AppCompatActivity
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             FirebaseAuth.getInstance().signOut();
+            realm.beginTransaction();
+            realm.deleteAll();
+            realm.commitTransaction();
             Intent it = new Intent(this, LoginActivity.class);
             it.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(it);

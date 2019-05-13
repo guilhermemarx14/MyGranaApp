@@ -23,10 +23,19 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.guilhermemarx14.mygrana.RealmObjects.Category;
 import com.guilhermemarx14.mygrana.RealmObjects.UserProfilePhoto;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import io.fabric.sdk.android.Fabric;
 import io.realm.Realm;
+
+import static com.guilhermemarx14.mygrana.Utils.Constants.GASTO;
+import static com.guilhermemarx14.mygrana.Utils.Constants.RENDA;
 
 public class LoginActivity extends AppCompatActivity {
     public static final int RC_SIGN_IN = 1;
