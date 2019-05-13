@@ -23,8 +23,10 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.guilhermemarx14.mygrana.RealmObjects.UserProfilePhoto;
 
 import io.fabric.sdk.android.Fabric;
+import io.realm.Realm;
 
 public class LoginActivity extends AppCompatActivity {
     public static final int RC_SIGN_IN = 1;
@@ -35,8 +37,8 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         //Fabric.with(this, new Crashlytics(), new CrashlyticsNdk());
-
-
+        Realm.init(this);
+        //FirebaseAuth.getInstance().signOut();
         mAuth = FirebaseAuth.getInstance();
         if(mAuth.getCurrentUser()!= null  ){
 
@@ -97,7 +99,6 @@ public class LoginActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
-                            Log.d("pxt", "signInWithCredential:success");
                             FirebaseUser user = mAuth.getCurrentUser();
                             updateUI(user);
                         } else {

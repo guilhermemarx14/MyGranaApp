@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -22,14 +23,20 @@ import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.guilhermemarx14.mygrana.RealmObjects.UserProfilePhoto;
 
 import java.io.InputStream;
 
 import io.fabric.sdk.android.services.concurrency.AsyncTask;
+import io.realm.Realm;
+import io.realm.RealmObject;
+import io.realm.RealmResults;
 
 public class MenuActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
     FirebaseUser user;
+    UserProfilePhoto upp;
+    Realm realm;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,7 +46,7 @@ public class MenuActivity extends AppCompatActivity
         Toolbar toolbar = getToolbar();
 
         user = getFirebaseUser();
-
+        realm = Realm.getDefaultInstance();
 
         setFloatingActionButton();
 
@@ -51,13 +58,17 @@ public class MenuActivity extends AppCompatActivity
     private void setNavigationDrawer(Toolbar toolbar) {
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
+        boolean objectNull = false;
 
         View v = navigationView.getHeaderView(0);
-        ((TextView) v.findViewById(R.id.navHeaderTitle)).setText(user.getDisplayName());
-        Log.d("pxt", user.getPhotoUrl().toString());
+        upp = realm.where(UserProfilePhoto.class).findFirst();
+        if (upp == null) {
+            new DownloadImageFromInternet(((ImageView) v.findViewById(R.id.navHeaderPhoto))).execute(user.getPhotoUrl().toString());
+            objectNull = true;
+        }else
+            ((ImageView) v.findViewById(R.id.navHeaderPhoto)).setImageBitmap(upp.getUserPhoto());
 
-        new DownloadImageFromInternet(((ImageView) v.findViewById(R.id.navHeaderPhoto))).execute(user.getPhotoUrl().toString());
-        //((ImageView) v.findViewById(R.id.navHeaderPhoto)).setImageDrawable(user.getPhotoUrl());
+        ((TextView) v.findViewById(R.id.navHeaderTitle)).setText(user.getDisplayName());
 
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -128,7 +139,7 @@ public class MenuActivity extends AppCompatActivity
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
@@ -154,14 +165,14 @@ public class MenuActivity extends AppCompatActivity
     private class DownloadImageFromInternet extends AsyncTask<String, Void, Bitmap> {
         ImageView imageView;
 
-        public DownloadImageFromInternet(ImageView imageView) {
+        private DownloadImageFromInternet(ImageView imageView) {
             this.imageView = imageView;
         }
 
         protected Bitmap doInBackground(String... urls) {
             String imageURL = urls[0];
             Bitmap bimage = null;
-
+            Realm realm = Realm.getDefaultInstance();
             try {
                 InputStream in = new java.net.URL(imageURL).openStream();
                 bimage = BitmapFactory.decodeStream(in);
@@ -170,12 +181,18 @@ public class MenuActivity extends AppCompatActivity
                 Log.e("Error Message", e.getMessage());
                 e.printStackTrace();
             }
+            upp = new UserProfilePhoto(bimage);
+            realm.beginTransaction();
+            realm.copyToRealm(upp);
+            realm.commitTransaction();
             return bimage;
         }
 
         protected void onPostExecute(Bitmap result) {
-            if (result != null)
+            if (result != null) {
                 imageView.setImageBitmap(result);
+
+            }
         }
     }
 
