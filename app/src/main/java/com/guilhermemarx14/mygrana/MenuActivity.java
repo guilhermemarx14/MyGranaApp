@@ -29,8 +29,6 @@ import java.io.InputStream;
 
 import io.fabric.sdk.android.services.concurrency.AsyncTask;
 import io.realm.Realm;
-import io.realm.RealmObject;
-import io.realm.RealmResults;
 
 public class MenuActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -58,23 +56,27 @@ public class MenuActivity extends AppCompatActivity
     private void setNavigationDrawer(Toolbar toolbar) {
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
-        boolean objectNull = false;
 
-        View v = navigationView.getHeaderView(0);
-        upp = realm.where(UserProfilePhoto.class).findFirst();
-        if (upp == null) {
-            new DownloadImageFromInternet(((ImageView) v.findViewById(R.id.navHeaderPhoto))).execute(user.getPhotoUrl().toString());
-            objectNull = true;
-        }else
-            ((ImageView) v.findViewById(R.id.navHeaderPhoto)).setImageBitmap(upp.getUserPhoto());
-
-        ((TextView) v.findViewById(R.id.navHeaderTitle)).setText(user.getDisplayName());
+        setUpNavigationHeader(navigationView);
 
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
         navigationView.setNavigationItemSelectedListener(this);
+    }
+
+    private void setUpNavigationHeader(NavigationView navigationView) {
+        View v = navigationView.getHeaderView(0);
+        upp = realm.where(UserProfilePhoto.class).findFirst();
+        if (upp == null)
+            new DownloadImageFromInternet(((ImageView) v.findViewById(R.id.navHeaderPhoto))).execute(user.getPhotoUrl().toString());
+        else
+            ((ImageView) v.findViewById(R.id.navHeaderPhoto)).setImageBitmap(upp.getUserPhoto());
+
+        ((TextView) v.findViewById(R.id.navHeaderTitle)).setText(user.getDisplayName());
+
+        ((TextView) v.findViewById(R.id.navHeaderEmail)).setText(user.getEmail());
     }
 
 
