@@ -34,7 +34,7 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        Fabric.with(this, new Crashlytics(), new CrashlyticsNdk());
+        //Fabric.with(this, new Crashlytics(), new CrashlyticsNdk());
 
 
         mAuth = FirebaseAuth.getInstance();
@@ -99,12 +99,10 @@ public class LoginActivity extends AppCompatActivity {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d("pxt", "signInWithCredential:success");
                             FirebaseUser user = mAuth.getCurrentUser();
-                            Log.d("pxt", user.getEmail());
                             updateUI(user);
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w("pxt", "signInWithCredential:failure", task.getException());
-
                             updateUI(null);
                         }
 
@@ -112,20 +110,12 @@ public class LoginActivity extends AppCompatActivity {
                     }
                 });
     }
-    private void handleSignInResult(Task<GoogleSignInAccount> completedTask) {
-        try {
-            GoogleSignInAccount account = completedTask.getResult(ApiException.class);
-
-            // Signed in successfully, show authenticated UI.
-            updateUI(account);
-        } catch (ApiException e) {
-            // The ApiException status code indicates the detailed failure reason.
-            // Please refer to the GoogleSignInStatusCodes class reference for more information.
-            Log.w("pxt", "signInResult:failed code=" + e.getStatusCode());
-        }
-    }
 
     private void updateUI(Object o) {
+        if(o!= null){
+            Intent it = new Intent(this ,MenuActivity.class);
+            startActivity(it);
+        }
 
     }
 
@@ -135,8 +125,8 @@ public class LoginActivity extends AppCompatActivity {
 
         // Check for existing Google Sign In account, if the user is already signed in
 // the GoogleSignInAccount will be non-null.
-        GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
-        FirebaseUser currentUser = mAuth.getCurrentUser();
-        updateUI(account);
+//        GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
+//        FirebaseUser currentUser = mAuth.getCurrentUser();
+//        updateUI(account);
     }
 }

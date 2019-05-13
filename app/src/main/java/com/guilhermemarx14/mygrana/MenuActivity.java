@@ -1,5 +1,6 @@
 package com.guilhermemarx14.mygrana;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -115,6 +116,10 @@ public class MenuActivity extends AppCompatActivity
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            FirebaseAuth.getInstance().signOut();
+            Intent it = new Intent(this, LoginActivity.class);
+            it.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(it);
             return true;
         }
 
