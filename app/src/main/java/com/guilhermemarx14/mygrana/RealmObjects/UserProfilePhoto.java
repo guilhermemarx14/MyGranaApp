@@ -2,15 +2,7 @@ package com.guilhermemarx14.mygrana.RealmObjects;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.os.SystemClock;
-import android.util.Log;
-import android.widget.ImageView;
-
 import java.io.ByteArrayOutputStream;
-import java.io.InputStream;
-
-import io.fabric.sdk.android.services.concurrency.AsyncTask;
-import io.realm.Realm;
 import io.realm.RealmObject;
 
 /**

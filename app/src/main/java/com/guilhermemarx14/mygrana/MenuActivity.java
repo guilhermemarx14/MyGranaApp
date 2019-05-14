@@ -1,5 +1,6 @@
 package com.guilhermemarx14.mygrana;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -23,8 +24,6 @@ import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.guilhermemarx14.mygrana.RealmObjects.Category;
 import com.guilhermemarx14.mygrana.RealmObjects.UserProfilePhoto;
 
@@ -41,7 +40,7 @@ public class MenuActivity extends AppCompatActivity
     FirebaseUser user;
     UserProfilePhoto upp;
     Realm realm;
-
+    Context context = this;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -97,11 +96,6 @@ public class MenuActivity extends AppCompatActivity
             realm.copyToRealm(new Category("Transporte",GASTO));
             realm.copyToRealm(new Category("Investimentos",GASTO));
         realm.commitTransaction();
-
-
-
-
-
     }
 
 
@@ -122,8 +116,8 @@ public class MenuActivity extends AppCompatActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                Intent it = new Intent(context,AddTransaction.class);
+                startActivity(it);
             }
         });
     }
