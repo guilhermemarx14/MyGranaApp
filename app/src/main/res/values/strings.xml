@@ -8,7 +8,7 @@
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Logout</string>
 
-    <string name="menu_home">Home</string>
+    <string name="menu_new_subcategory">Criar nova Subcategoria</string>
     <string name="menu_gallery">Gallery</string>
     <string name="menu_slideshow">Slideshow</string>
     <string name="menu_tools">Tools</string>
@@ -17,5 +17,7 @@
     <string name="title_activity_add_transaction">Adicionar Transação</string>
 
     <string name="text_category">Categoria</string>
+    <string name="text_subcategory_name">Nome</string>
+    <string name="text_confirm">Confirmar</string>
 
 </resources>
