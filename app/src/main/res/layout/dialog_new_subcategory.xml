@@ -2,10 +2,24 @@
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:paddingBottom="24dp"
     >
+
+
+    <TextView
+        android:id="@+id/addSubcategoryTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:fontFamily="@font/myriad_pro_regular"
+        android:text="@string/menu_new_subcategory"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.47"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 
     <TextView
@@ -15,6 +29,7 @@
         android:layout_marginStart="24dp"
         android:layout_marginEnd="24dp"
         android:text="@string/text_category"
+        android:fontFamily="@font/myriad_pro_regular"
         app:layout_constraintBottom_toBottomOf="@+id/spinnerCategoryAdd"
         app:layout_constraintEnd_toStartOf="@+id/spinnerCategoryAdd"
         app:layout_constraintStart_toStartOf="parent"
@@ -27,38 +42,43 @@
         android:layout_marginTop="24dp"
         android:layout_marginEnd="24dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/addSubcategoryTitle" />
 
     <TextView
         android:id="@+id/textSubcategoryName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
-        android:text="TextView"
-        app:layout_constraintBottom_toBottomOf="@+id/inpSubcategoryName"
+        android:fontFamily="@font/myriad_pro_regular"
+        android:text="@string/text_name"
+        app:layout_constraintBottom_toBottomOf="@id/inpSubcategoryName"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/inpSubcategoryName" />
+        app:layout_constraintTop_toTopOf="@id/inpSubcategoryName" />
 
     <EditText
         android:id="@+id/inpSubcategoryName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:fontFamily="@font/myriad_pro_regular"
         android:layout_marginTop="24dp"
         android:layout_marginEnd="8dp"
         android:ems="10"
         android:inputType="textPersonName"
-        android:text="Name"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/spinnerCategoryAdd" />
+        app:layout_constraintTop_toBottomOf="@id/spinnerCategoryAdd" />
 
     <Button
         android:id="@+id/buttonAddSubcategory"
-        android:layout_width="wrap_content"
+        android:layout_width="150dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
-        android:text="Button"
+        android:text="@string/action_confirm"
+        style="@style/ButtonOrange"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/inpSubcategoryName" />
+        app:layout_constraintTop_toBottomOf="@id/inpSubcategoryName"
+        android:layout_marginBottom="24dp"/>
+
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

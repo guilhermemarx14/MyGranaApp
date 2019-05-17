@@ -3,7 +3,6 @@
     <string name="title_activity_menu">MenuActivity</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
-    <string name="nav_header_title">Android Studio</string>
     <string name="nav_header_subtitle">android.studio@android.com</string>
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Logout</string>
@@ -17,7 +16,7 @@
     <string name="title_activity_add_transaction">Adicionar Transação</string>
 
     <string name="text_category">Categoria</string>
-    <string name="text_subcategory_name">Nome</string>
-    <string name="text_confirm">Confirmar</string>
+    <string name="action_confirm">Confirmar</string>
+    <string name="text_name">Nome</string>
 
 </resources>
