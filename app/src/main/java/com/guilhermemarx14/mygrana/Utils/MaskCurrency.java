@@ -20,7 +20,8 @@ public class MaskCurrency implements TextWatcher {
     public MaskCurrency(TextInputEditText field){
         this.field = field;
         field.setText("");
-        nf.setMaximumIntegerDigits(6);
+        nf.setMaximumIntegerDigits(7);
+
     }
 
     @Override
@@ -30,6 +31,12 @@ public class MaskCurrency implements TextWatcher {
     public void onTextChanged(CharSequence s, int start, int before, int count) {
         if(isUpdating){
             isUpdating = false;
+            return;
+        }
+        if(s.toString().length() >= 13) {
+            String str = s.toString();
+            str = str.substring(0,str.length()-1);
+            field.setText(str);
             return;
         }
         isUpdating = true;
