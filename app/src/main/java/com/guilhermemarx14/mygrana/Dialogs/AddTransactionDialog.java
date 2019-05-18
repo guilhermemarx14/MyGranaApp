@@ -4,8 +4,6 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.View;
 import android.view.Window;
 import android.widget.AdapterView;
@@ -22,9 +20,6 @@ import com.guilhermemarx14.mygrana.R;
 import com.guilhermemarx14.mygrana.RealmObjects.Category;
 import com.guilhermemarx14.mygrana.RealmObjects.Subcategory;
 import com.guilhermemarx14.mygrana.Utils.MaskCurrency;
-import com.vicmikhailau.maskededittext.MaskedEditText;
-
-import java.util.ArrayList;
 
 import io.realm.Realm;
 import io.realm.RealmList;

@@ -1,9 +1,7 @@
 package com.guilhermemarx14.mygrana.Utils;
 
 import android.text.Editable;
-import android.text.InputFilter;
 import android.text.TextWatcher;
-import android.widget.EditText;
 
 import com.google.android.material.textfield.TextInputEditText;
 
