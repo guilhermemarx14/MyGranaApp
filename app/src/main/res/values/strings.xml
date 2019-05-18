@@ -23,5 +23,7 @@
     <string name="text_name">Nome</string>
     <string name="error">Erro</string>
     <string name="text_no_value">Nenhum valor inserido</string>
+    <string name="text_your_balance">Seu saldo: </string>
+    <string name="text_splash">Aguarde enquanto configuramos sua conta</string>
 
 </resources>

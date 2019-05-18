@@ -2,6 +2,7 @@ package com.guilhermemarx14.mygrana.Dialogs;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
@@ -16,6 +17,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.guilhermemarx14.mygrana.MenuActivity;
 import com.guilhermemarx14.mygrana.R;
 import com.guilhermemarx14.mygrana.RealmObjects.Category;
 import com.guilhermemarx14.mygrana.RealmObjects.Subcategory;
@@ -72,7 +74,9 @@ public class AddSubcategoryDialog extends Dialog{
                 DatabaseReference myRef = database.getReference(user.getUid());
                 myRef.child("subcategories").push().setValue(new Subcategory(et.getText().toString(),category.getName()));
 
-
+                Intent it = new Intent(act, MenuActivity.class);
+                it.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                act.startActivity(it);
                 dismiss();
             }
         });

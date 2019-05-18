@@ -38,7 +38,7 @@ public class LoginActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         if(mAuth.getCurrentUser()!= null  ){
 
-            Intent it = new Intent(this,MenuActivity.class);
+            Intent it = new Intent(this,SplashActivity.class);
             startActivity(it);
         }
         // Configure Google Sign In
@@ -110,7 +110,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private void updateUI(Object o) {
         if(o!= null){
-            Intent it = new Intent(this ,MenuActivity.class);
+            Intent it = new Intent(this ,SplashActivity.class);
             startActivity(it);
         }
 
