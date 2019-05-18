@@ -20,6 +20,7 @@ public class MaskCurrency implements TextWatcher {
     public MaskCurrency(TextInputEditText field){
         this.field = field;
         field.setText("");
+        nf.setMaximumIntegerDigits(6);
     }
 
     @Override
