@@ -1,27 +1,29 @@
 package com.guilhermemarx14.mygrana.RealmObjects;
 
+import java.io.Serializable;
+
 import io.realm.RealmObject;
 
 /**
  * Created by Guilherme Marx on 2019-05-18
  */
-public class Transaction extends RealmObject {
+public class Transaction extends RealmObject implements Serializable {
     private float value;
-    private Category category;
-    private Subcategory subcategory;
+    private String categoryName;
+    private String subcategory;
     private String description;
     private String date;
 
-    public Transaction(float value, Category category, String description, String date) {
+    public Transaction(float value, String category, String description, String date) {
         this.value = value;
-        this.category = category;
+        this.categoryName = category;
         this.description = description;
         this.date = date;
     }
 
-    public Transaction(float value, Category category, Subcategory subcategory, String description, String date) {
+    public Transaction(float value, String category, String subcategory, String description, String date) {
         this.value = value;
-        this.category = category;
+        this.categoryName = category;
         this.subcategory = subcategory;
         this.description = description;
         this.date = date;
@@ -46,19 +48,19 @@ public class Transaction extends RealmObject {
         this.value = value;
     }
 
-    public Category getCategory() {
-        return category;
+    public String getCategory() {
+        return categoryName;
     }
 
-    public void setCategory(Category category) {
-        this.category = category;
+    public void setCategory(String category) {
+        this.categoryName = category;
     }
 
-    public Subcategory getSubcategory() {
+    public String getSubcategory() {
         return subcategory;
     }
 
-    public void setSubcategory(Subcategory subcategory) {
+    public void setSubcategory(String subcategory) {
         this.subcategory = subcategory;
     }
 

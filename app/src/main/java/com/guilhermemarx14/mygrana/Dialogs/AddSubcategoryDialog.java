@@ -12,9 +12,15 @@ import android.widget.Spinner;
 
 import androidx.annotation.NonNull;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.guilhermemarx14.mygrana.R;
 import com.guilhermemarx14.mygrana.RealmObjects.Category;
 import com.guilhermemarx14.mygrana.RealmObjects.Subcategory;
+
+import java.util.HashMap;
 
 import io.realm.Realm;
 
@@ -55,10 +61,18 @@ public class AddSubcategoryDialog extends Dialog{
                 EditText et = findViewById(R.id.inpSubcategoryName);
                 realm.beginTransaction();
                 Category category = realm.where(Category.class).equalTo("name",(String) categoryAdd.getSelectedItem()).findFirst();
-                realm.copyToRealm(new Subcategory(et.getText().toString(),category));
-                category.getSubcategories().add(new Subcategory(et.getText().toString(),category));
+                realm.copyToRealm(new Subcategory(et.getText().toString(),category.getName()));
+                category.getSubcategories().add(new Subcategory(et.getText().toString(),category.getName()));
                 realm.insertOrUpdate(category);
                 realm.commitTransaction();
+
+                FirebaseAuth mAuth = FirebaseAuth.getInstance();
+                FirebaseUser user = mAuth.getCurrentUser();
+                FirebaseDatabase database = FirebaseDatabase.getInstance();
+                DatabaseReference myRef = database.getReference(user.getUid());
+                myRef.child("subcategories").push().setValue(new Subcategory(et.getText().toString(),category.getName()));
+
+
                 dismiss();
             }
         });

@@ -19,6 +19,10 @@ import android.widget.Spinner;
 import androidx.annotation.NonNull;
 
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.guilhermemarx14.mygrana.R;
 import com.guilhermemarx14.mygrana.RealmObjects.Category;
 import com.guilhermemarx14.mygrana.RealmObjects.Subcategory;
@@ -182,11 +186,16 @@ public class AddTransactionDialog extends Dialog{
                 float value = (float) num/100;
                 Transaction t;
                 if(selected2 == null)
-                    t = new Transaction(value,selected,desc,dateConvert(inpDate.getText().toString()));
-                else t = new Transaction(value,selected,selected2,desc,dateConvert(inpDate.getText().toString()));
+                    t = new Transaction(value,selected.getName(),desc,dateConvert(inpDate.getText().toString()));
+                else t = new Transaction(value,selected.getName(),selected2.getSubcategoryName(),desc,dateConvert(inpDate.getText().toString()));
                 realm.beginTransaction();
                     realm.copyToRealm(t);
                 realm.commitTransaction();
+                FirebaseAuth mAuth = FirebaseAuth.getInstance();
+                FirebaseUser user = mAuth.getCurrentUser();
+                FirebaseDatabase database = FirebaseDatabase.getInstance();
+                DatabaseReference myRef = database.getReference(user.getUid());
+                myRef.child("transactions").push().setValue(t);
                 dismiss();
             }
         });

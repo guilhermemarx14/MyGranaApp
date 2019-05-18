@@ -1,21 +1,23 @@
 package com.guilhermemarx14.mygrana.RealmObjects;
 
+import java.io.Serializable;
+
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
 
 /**
  * Created by Guilherme Marx on 2019-05-13
  */
-public class Subcategory extends RealmObject {
+public class Subcategory extends RealmObject implements Serializable {
     @PrimaryKey
     private String subcategoryName;
-    private Category category;
+    private String categoryName;
 
     public Subcategory(){}
 
-    public Subcategory(String nameSubcategory, Category category){
+    public Subcategory(String nameSubcategory, String category){
         this.subcategoryName = nameSubcategory;
-        this.category = category;
+        this.categoryName = category;
     }
 
     public String getSubcategoryName() {
@@ -26,11 +28,11 @@ public class Subcategory extends RealmObject {
         this.subcategoryName = subcategoryName;
     }
 
-    public Category getCategory() {
-        return category;
+    public String getCategory() {
+        return categoryName;
     }
 
-    public void setCategory(Category category) {
-        this.category = category;
+    public void setCategory(String category) {
+        this.categoryName = category;
     }
 }
