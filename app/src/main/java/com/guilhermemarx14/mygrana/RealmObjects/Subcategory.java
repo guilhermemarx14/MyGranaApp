@@ -1,20 +1,29 @@
 package com.guilhermemarx14.mygrana.RealmObjects;
 
 import io.realm.RealmObject;
+import io.realm.annotations.PrimaryKey;
 
 /**
  * Created by Guilherme Marx on 2019-05-13
  */
 public class Subcategory extends RealmObject {
-    String name;
+    @PrimaryKey
+    String subcategoryName;
     Category category;
 
-    public String getName() {
-        return name;
+    public Subcategory(){}
+
+    public Subcategory(String nameSubcategory, Category category){
+        this.subcategoryName = nameSubcategory;
+        this.category = category;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public String getSubcategoryName() {
+        return subcategoryName;
+    }
+
+    public void setSubcategoryName(String subcategoryName) {
+        this.subcategoryName = subcategoryName;
     }
 
     public Category getCategory() {

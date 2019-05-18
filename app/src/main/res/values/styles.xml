@@ -6,6 +6,8 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:textViewStyle">@font/myriad_pro_regular</item>
+        <item name="android:buttonStyle">@font/bebas_neue_bold</item>
     </style>
 
     <style name="AppTheme.NoActionBar">
@@ -23,12 +25,19 @@
         <item name="android:layout_width">0dp</item>
         <item name="android:layout_height">45dp</item>
         <item name="android:layout_weight">1</item>
-        <item name="android:background">@drawable/button_back_shape</item>
         <item name="android:textColor">@color/colorPrimary</item>
     </style>
 
     <style name="ButtonOrange" parent="ButtonBack">
         <item name="android:background">@drawable/button_orange_shape</item>
         <item name="android:textColor">@android:color/white</item>
+    </style>
+
+    <style name="TextTitleDialog" parent="AppTheme">
+        <item name="android:fontFamily">@font/bebas_neue_regular</item>
+    </style>
+
+    <style name="TextDialog" parent="AppTheme">
+        <item name="android:fontFamily">@font/myriad_pro_regular</item>
     </style>
 </resources>
