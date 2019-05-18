@@ -40,4 +40,8 @@
     <style name="TextDialog" parent="AppTheme">
         <item name="android:fontFamily">@font/myriad_pro_regular</item>
     </style>
+
+    <style name="MySpinnerLook" parent="Widget.AppCompat.Light.DropDownItem.Spinner">
+        <item name="android:textSize">2sp</item>
+    </style>
 </resources>

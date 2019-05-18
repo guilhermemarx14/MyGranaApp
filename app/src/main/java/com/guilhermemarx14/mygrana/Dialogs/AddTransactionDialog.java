@@ -51,7 +51,7 @@ public class AddTransactionDialog extends Dialog{
         findViewById(R.id.textSubcategoryName).setVisibility(View.INVISIBLE);
         findViewById(R.id.spinnerSubcategory).setVisibility(View.INVISIBLE);
         final Spinner category = findViewById(R.id.spinnerCategory);
-        final ArrayAdapter<String> arrayAdapterCategory = new ArrayAdapter<>(act,android.R.layout.simple_list_item_1,getListCategories());
+        final ArrayAdapter<String> arrayAdapterCategory = new ArrayAdapter<>(act,R.layout.spinners,getListCategories());
         category.setAdapter(arrayAdapterCategory);
 
         category.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -65,7 +65,7 @@ public class AddTransactionDialog extends Dialog{
                     findViewById(R.id.textSubcategoryName).setVisibility(View.VISIBLE);
                     findViewById(R.id.spinnerSubcategory).setVisibility(View.VISIBLE);
                     final Spinner subcategory = findViewById(R.id.spinnerSubcategory);
-                    final ArrayAdapter<String> arrayAdapterSubcategory = new ArrayAdapter<>(act,android.R.layout.simple_list_item_1,getListSubcategories(categorySelected));
+                    final ArrayAdapter<String> arrayAdapterSubcategory = new ArrayAdapter<>(act,R.layout.spinners,getListSubcategories(categorySelected));
                     subcategory.setAdapter(arrayAdapterSubcategory);
 
                 }else{
