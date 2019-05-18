@@ -70,6 +70,18 @@
         style="@style/TextDialog"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:fontFamily="@font/myriad_pro_bold"
+        android:text="@string/text_date"
+        app:layout_constraintBottom_toBottomOf="@+id/inpDate"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/inpDate" />
+
+    <TextView
+        android:id="@+id/txtdescription2"
+        style="@style/TextDialog"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
         android:layout_marginEnd="24dp"
         android:fontFamily="@font/myriad_pro_bold"
@@ -97,15 +109,15 @@
         android:layout_width="150dp"
         android:layout_height="40dp"
         android:layout_marginStart="24dp"
+
         android:layout_marginTop="24dp"
         android:layout_marginEnd="24dp"
-
         android:gravity="center"
         android:text="@string/action_confirm"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.467"
+        app:layout_constraintHorizontal_bias="0.502"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/inpDescription" />
+        app:layout_constraintTop_toBottomOf="@+id/inpDate" />
 
     <com.google.android.material.textfield.TextInputEditText
         android:id="@+id/inpValue"
@@ -129,5 +141,26 @@
         android:inputType="textMultiLine"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/inpValue" />
+
+    <ImageView
+        android:id="@+id/ic_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="24dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/inpDescription"
+        app:srcCompat="@drawable/ic_date_range_black_24dp" />
+
+    <EditText
+        android:id="@+id/inpDate"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="24dp"
+        android:ems="10"
+        android:inputType="textPersonName"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/inpDescription" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

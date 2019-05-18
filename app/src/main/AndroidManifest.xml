@@ -10,10 +10,6 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".AddTransaction"
-            android:label="@string/title_activity_add_transaction"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
-        <activity
             android:name=".MenuActivity"
             android:label="@string/title_activity_menu"
             android:theme="@style/AppTheme.NoActionBar" />

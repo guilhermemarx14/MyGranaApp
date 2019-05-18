@@ -1,15 +1,20 @@
 package com.guilhermemarx14.mygrana.Dialogs;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -21,6 +26,8 @@ import com.guilhermemarx14.mygrana.RealmObjects.Category;
 import com.guilhermemarx14.mygrana.RealmObjects.Subcategory;
 import com.guilhermemarx14.mygrana.RealmObjects.Transaction;
 import com.guilhermemarx14.mygrana.Utils.MaskCurrency;
+
+import java.util.Calendar;
 
 import io.realm.Realm;
 import io.realm.RealmList;
@@ -38,6 +45,7 @@ public class AddTransactionDialog extends Dialog{
     Button confirm;
     Category selected;
     Subcategory selected2;
+    TextInputEditText value;
     public AddTransactionDialog(@NonNull Context context) {
         super(context);
         act =(Activity) context;
@@ -105,10 +113,50 @@ public class AddTransactionDialog extends Dialog{
 
 
         //setar a mascara de dinheiro
-        TextInputEditText value = findViewById(R.id.inpValue);
+        value = findViewById(R.id.inpValue);
 
         value.addTextChangedListener(new MaskCurrency(value));
 
+
+        final EditText inpDate = findViewById(R.id.inpDate);
+        inpDate.setFocusable(false);
+        Calendar c = Calendar.getInstance();
+        String mDay;
+        String mMonth;
+        if(c.get(Calendar.DAY_OF_MONTH)<=9)
+            mDay = "0"+c.get(Calendar.DAY_OF_MONTH);
+        else mDay = "" + c.get(Calendar.DAY_OF_MONTH);
+
+        int month = c.get(Calendar.MONTH)+1;
+        if(month<=9)
+            mMonth = "0"+month;
+        else mMonth = "" + month;
+
+        inpDate.setText(String.format("%s/%s/%d",mDay,mMonth,c.get(Calendar.YEAR)));
+        inpDate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Calendar c = Calendar.getInstance();
+                DatePickerDialog dpd = new DatePickerDialog((Context) act, new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                        String mDay;
+                        String mMonth;
+                        if(dayOfMonth<=9)
+                            mDay = "0"+dayOfMonth;
+                        else mDay = "" + dayOfMonth;
+
+                        month = month+1;
+                        if(month<=9)
+                            mMonth = "0"+month;
+                        else mMonth = "" + month;
+
+                        inpDate.setText(String.format("%s/%s/%d",mDay,mMonth,year));
+                    }
+                }, c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH));
+                dpd.show();
+            }
+        });
 
 
 //
@@ -117,8 +165,18 @@ public class AddTransactionDialog extends Dialog{
         confirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(value.getText().toString().trim().isEmpty()) {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(act);
+                    builder.setTitle(act.getResources().getString(R.string.error));
+                    builder.setMessage(act.getResources().getString(R.string.text_no_value));
+                    builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface arg0, int arg1) {
+                        }
+                    });
+                    builder.create().show();
 
-
+                    return;
+                }
                 EditText et = findViewById(R.id.inpValue);
                 int num = Integer.parseInt(et.getText().toString().replace(".","").replace(",","").
                         replace(" ","").replace("R$",""));
@@ -135,4 +193,7 @@ public class AddTransactionDialog extends Dialog{
             }
         });
     }
+
+
+
 }
