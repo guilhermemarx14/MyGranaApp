@@ -17,6 +17,7 @@
     <string name="text_value_transaction">Valor: </string>
     <string name="text_category">Categoria</string>
     <string name="text_subcategory">Subcategoria</string>
+    <string name="text_description">Descrição</string>
     <string name="action_confirm">Confirmar</string>
     <string name="text_name">Nome</string>
 
