@@ -19,6 +19,7 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.guilhermemarx14.mygrana.R;
 import com.guilhermemarx14.mygrana.RealmObjects.Category;
 import com.guilhermemarx14.mygrana.RealmObjects.Subcategory;
+import com.guilhermemarx14.mygrana.RealmObjects.Transaction;
 import com.guilhermemarx14.mygrana.Utils.MaskCurrency;
 
 import io.realm.Realm;
@@ -35,10 +36,13 @@ public class AddTransactionDialog extends Dialog{
 
     Activity act;
     Button confirm;
-
+    Category selected;
+    Subcategory selected2;
     public AddTransactionDialog(@NonNull Context context) {
         super(context);
         act =(Activity) context;
+        selected=null;
+        selected2=null;
     }
 
 
@@ -59,6 +63,7 @@ public class AddTransactionDialog extends Dialog{
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 String categorySelected = arrayAdapterCategory.getItem(i);
+                selected = realm.where(Category.class).equalTo("name",categorySelected).findFirst();
                 RealmList<Subcategory> list= realm.where(Category.class).equalTo("name",categorySelected).findFirst().getSubcategories();
 
                 if (list.size()>0)
@@ -69,9 +74,24 @@ public class AddTransactionDialog extends Dialog{
                     final ArrayAdapter<String> arrayAdapterSubcategory = new ArrayAdapter<>(act,R.layout.spinners,getListSubcategories(categorySelected));
                     subcategory.setAdapter(arrayAdapterSubcategory);
 
+                    subcategory.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                        @Override
+                        public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                            String subcategorySelected = arrayAdapterSubcategory.getItem(position);
+                            selected2 = realm.where(Subcategory.class).equalTo("subcategoryName",subcategorySelected).findFirst();
+                        }
+
+                        @Override
+                        public void onNothingSelected(AdapterView<?> parent) {
+
+                        }
+                    });
+
                 }else{
                     findViewById(R.id.textSubcategoryName).setVisibility(View.INVISIBLE);
                     findViewById(R.id.spinnerSubcategory).setVisibility(View.INVISIBLE);
+                    selected2 = null;
+
                 }
 
 
@@ -100,14 +120,18 @@ public class AddTransactionDialog extends Dialog{
 
 
                 EditText et = findViewById(R.id.inpValue);
-                Toast.makeText(act,"" + ((EditText)findViewById(R.id.inpValue)).getText().toString(), Toast.LENGTH_LONG).show();
-//                realm.beginTransaction();
-//                Category category = realm.where(Category.class).equalTo("name",(String) categoryAdd.getSelectedItem()).findFirst();
-//                realm.copyToRealm(new Subcategory(et.getText().toString(),category));
-//                category.getSubcategories().add(new Subcategory(et.getText().toString(),category));
-//                realm.insertOrUpdate(category);
-//                realm.commitTransaction();
-//                dismiss();
+                int num = Integer.parseInt(et.getText().toString().replace(".","").replace(",","").
+                        replace(" ","").replace("R$",""));
+                String desc = ((EditText) findViewById(R.id.inpDescription)).getText().toString();
+                float value = (float) num/100;
+                Transaction t;
+                if(selected2 == null)
+                    t = new Transaction(value,selected,desc);
+                else t = new Transaction(value,selected,selected2,desc);
+                realm.beginTransaction();
+                    realm.copyToRealm(t);
+                realm.commitTransaction();
+                dismiss();
             }
         });
     }

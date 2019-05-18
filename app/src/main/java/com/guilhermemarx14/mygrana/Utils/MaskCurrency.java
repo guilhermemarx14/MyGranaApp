@@ -34,6 +34,7 @@ public class MaskCurrency implements TextWatcher {
         if(s.toString().length() >= 13) {
             String str = s.toString();
             str = str.substring(0,str.length()-1);
+            str = str.replace("$","$ ");
             field.setText(str);
             return;
         }
@@ -43,6 +44,7 @@ public class MaskCurrency implements TextWatcher {
 
         try{
             str = nf.format((double) (Float.parseFloat(str)/100));
+            str = str.replace("$","$ ");
             field.setText(str);
             field.setSelection(field.getText().length());
         }catch (Exception e){
