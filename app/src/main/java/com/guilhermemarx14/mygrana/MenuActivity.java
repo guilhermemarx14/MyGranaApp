@@ -23,12 +23,20 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 import com.guilhermemarx14.mygrana.Dialogs.AddSubcategoryDialog;
 import com.guilhermemarx14.mygrana.Dialogs.AddTransactionDialog;
 import com.guilhermemarx14.mygrana.RealmObjects.Category;
+import com.guilhermemarx14.mygrana.RealmObjects.Subcategory;
 import com.guilhermemarx14.mygrana.RealmObjects.UserProfilePhoto;
 
 import java.io.InputStream;
+import java.util.ArrayList;
 
 import io.fabric.sdk.android.services.concurrency.AsyncTask;
 import io.realm.Realm;
@@ -97,6 +105,32 @@ public class MenuActivity extends AppCompatActivity
             realm.copyToRealm(new Category("Transporte",GASTO));
             realm.copyToRealm(new Category("Investimentos",GASTO));
         realm.commitTransaction();
+
+        DatabaseReference mDatabase;
+// ...
+        mDatabase = FirebaseDatabase.getInstance().getReference();
+
+        DatabaseReference myquery = mDatabase.child(user.getUid()).child("subcategories");
+        ValueEventListener eventListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for(DataSnapshot ds : dataSnapshot.getChildren()) {
+                    Subcategory s = ds.getValue(Subcategory.class);
+                    realm.beginTransaction();
+                    Category category = realm.where(Category.class).equalTo("name",(String) s.getCategory()).findFirst();
+                    realm.copyToRealm(s);
+                    category.getSubcategories().add(s);
+                    realm.insertOrUpdate(category);
+                    realm.commitTransaction();
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {}
+        };
+        myquery.addListenerForSingleValueEvent(eventListener);
+
+
     }
 
 
