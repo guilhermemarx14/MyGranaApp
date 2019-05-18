@@ -2,8 +2,6 @@ package com.guilhermemarx14.mygrana.RealmObjects;
 
 import io.realm.RealmList;
 import io.realm.RealmObject;
-import io.realm.RealmResults;
-import io.realm.annotations.LinkingObjects;
 import io.realm.annotations.PrimaryKey;
 
 /**
@@ -13,6 +11,20 @@ public class Category extends RealmObject {
     @PrimaryKey
     String name;
     int type;
+    RealmList<Subcategory> subcategories;
+
+
+
+
+    public Category() {
+        subcategories = new RealmList<>();
+    }
+
+    public Category(String name, int type) {
+        this.name = name;
+        this.type = type;
+        subcategories = new RealmList<>();
+    }
 
     public RealmList<Subcategory> getSubcategories() {
         return subcategories;
@@ -20,16 +32,6 @@ public class Category extends RealmObject {
 
     public void setSubcategories(RealmList<Subcategory> subcategories) {
         this.subcategories = subcategories;
-    }
-
-    RealmList<Subcategory> subcategories;
-
-    public Category() {
-    }
-
-    public Category(String name, int type) {
-        this.name = name;
-        this.type = type;
     }
 
     public String getName() {
