@@ -24,6 +24,7 @@ import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.guilhermemarx14.mygrana.Dialogs.AddSubcategoryDialog;
+import com.guilhermemarx14.mygrana.Dialogs.AddTransactionDialog;
 import com.guilhermemarx14.mygrana.RealmObjects.Category;
 import com.guilhermemarx14.mygrana.RealmObjects.UserProfilePhoto;
 
@@ -116,8 +117,9 @@ public class MenuActivity extends AppCompatActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent it = new Intent(context,AddTransaction.class);
-                startActivity(it);
+                AddTransactionDialog atd = new AddTransactionDialog(context);
+                atd.show();
+
             }
         });
     }
