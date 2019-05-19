@@ -19,6 +19,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+
 import com.github.mikephil.charting.animation.Easing;
 import com.github.mikephil.charting.charts.Chart;
 import com.github.mikephil.charting.charts.PieChart;
@@ -54,7 +55,9 @@ import io.realm.RealmResults;
 
 public class MenuActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, OnChartValueSelectedListener {
-    protected final String[] parties = new String[] {
+
+
+    protected final String[] parties = new String[]{
             "Salário", "Pensão", "Moradia", "Alimentação", "Lazer", "Vestimenta", "Transporte", "Investimentos"
     };
     FirebaseUser user;
@@ -63,6 +66,7 @@ public class MenuActivity extends AppCompatActivity
     Context context = this;
     float balance = 0, positive = 0, negative = 0;
     private PieChart chart;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -71,7 +75,7 @@ public class MenuActivity extends AppCompatActivity
         setTitle(R.string.app_name);
         user = getFirebaseUser();
         realm = Realm.getDefaultInstance();
-   //     faker();
+        //     faker();
         setFloatingActionButton();
 
         setNavigationDrawer(toolbar);
@@ -125,10 +129,10 @@ public class MenuActivity extends AppCompatActivity
         chart.setEntryLabelColor(Color.WHITE);
 
         chart.setEntryLabelTextSize(12f);
-        RealmResults<Transaction> result = realm.where(Transaction.class).findAll();
-        setData(8,result.size());
+        setData();
     }
-    private void setData(int count, float range) {
+
+    private void setData() {
         ArrayList<PieEntry> entries = new ArrayList<>();
 
         // NOTE: The order of the entries when being added to the entries array determines their position around the center of
@@ -140,21 +144,18 @@ public class MenuActivity extends AppCompatActivity
         String nome;
 
         float soma[] = new float[8];
-        for(int i=0;i<8;i++)
+        for (int i = 0; i < 8; i++)
             soma[i] = 0;
-        for(int i=0;i<list.size();i++) {
+        for (int i = 0; i < list.size(); i++) {
             valor = list.get(i).getValue();
             if (valor < 0) valor = -valor;
             nome = list.get(i).getCategoryName();
-            soma[position(nome)]+=valor;
+            soma[position(nome)] += valor;
         }
 
 
-
-
-
-        for(int i=0;i<8;i++){
-            entries.add(new PieEntry(soma[i],parties[i],getResources().getDrawable(R.drawable.star)));
+        for (int i = 0; i < 8; i++) {
+            entries.add(new PieEntry(soma[i], parties[i], getResources().getDrawable(R.drawable.star)));
         }
 
         PieDataSet dataSet = new PieDataSet(entries, getString(R.string.text_category));
@@ -190,12 +191,13 @@ public class MenuActivity extends AppCompatActivity
 
         chart.invalidate();
     }
-    public int position(String category){
-        for(int i=0;i<parties.length;i++)
-            if(category.equals(parties[i]))
+
+    public int position(String category) {
+        for (int i = 0; i < parties.length; i++)
+            if (category.equals(parties[i]))
                 return i;
 
-            return -1;
+        return -1;
     }
 
 //    private void faker() {
@@ -401,6 +403,7 @@ public class MenuActivity extends AppCompatActivity
         AddTransactionDialog add = new AddTransactionDialog(this);
         add.show();
     }
+
     @Override
     public void onValueSelected(Entry e, Highlight h) {
         chart.setUsePercentValues(!chart.isUsePercentValuesEnabled());

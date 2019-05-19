@@ -37,6 +37,7 @@ public class SplashActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
+        Realm.init(this);
         getSupportActionBar().hide();
         final Animation animRotate = AnimationUtils.loadAnimation(this, R.anim.rotate);
         (new Thread(new Runnable() {
