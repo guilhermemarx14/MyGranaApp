@@ -1,7 +1,7 @@
 <resources>
 
     <item name="fab_new_subcategory" type="id" />
-    <item name="fab_action2" type="id" />
+    <item name="fab_new_transaction" type="id" />
     <item name="fab_action3" type="id" />
     <item name="fab_action4" type="id" />
 
@@ -14,13 +14,13 @@
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Logout</string>
 
-    <string name="menu_new_subcategory">Criar nova Subcategoria</string>
+    <string name="menu_new_subcategory">Nova Subcategoria</string>
     <string name="menu_gallery">Gallery</string>
     <string name="menu_slideshow">Slideshow</string>
     <string name="menu_tools">Tools</string>
     <string name="menu_share">Share</string>
     <string name="menu_send">Send</string>
-    <string name="title_activity_add_transaction">Adicionar Transação</string>
+    <string name="title_activity_add_transaction">Nova Transação</string>
     <string name="text_value_transaction">Valor: </string>
     <string name="text_category">Categoria</string>
     <string name="text_subcategory">Subcategoria</string>

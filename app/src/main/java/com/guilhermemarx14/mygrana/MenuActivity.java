@@ -125,10 +125,40 @@ public class MenuActivity extends AppCompatActivity
     SpeedDialView fab;
     private void setFloatingActionButton() {
         fab = findViewById(R.id.speedDial);
-        fab.addActionItem(new SpeedDialActionItem.Builder(R.id.fab_new_subcategory,android.R.drawable.ic_media_previous).create());
+        fab.addActionItem(new SpeedDialActionItem.Builder(R.id.fab_new_subcategory,R.drawable.ic_add)
+                .setLabel(R.string.menu_new_subcategory)
+                .setLabelBackgroundColor(getResources().getColor(android.R.color.white))
+                .setLabelColor(getResources().getColor(android.R.color.black))
+                .create());
+
+        fab.addActionItem(new SpeedDialActionItem.Builder(R.id.fab_new_transaction,R.drawable.ic_playlist_add)
+                .setLabel(R.string.title_activity_add_transaction)
+                .setLabelBackgroundColor(getResources().getColor(android.R.color.white))
+                .setLabelColor(getResources().getColor(android.R.color.black))
+                .create());
+
+        fab.setOnActionSelectedListener(new SpeedDialView.OnActionSelectedListener() {
+            @Override
+            public boolean onActionSelected(SpeedDialActionItem actionItem) {
+                switch(actionItem.getId()){
+                    case R.id.fab_new_subcategory:
+                        dialogNewSubcategory();
+                        return false;
+                    case R.id.fab_new_transaction:
+                        dialogNewTransaction();
+                        return false;
+                    default: return false;
+                }
+            }
+        });
     }
 
-        @Override
+    private void dialogNewTransaction() {
+        AddTransactionDialog add = new AddTransactionDialog(this);
+        add.show();
+    }
+
+    @Override
     public void onBackPressed() {
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
