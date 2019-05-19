@@ -15,6 +15,8 @@ import com.guilhermemarx14.mygrana.RealmObjects.Transaction;
 
 import java.util.List;
 
+import static com.guilhermemarx14.mygrana.Utils.Constants.convertDateForExibition;
+
 /**
  * Created by Guilherme Marx on 2019-05-19
  */
@@ -85,7 +87,7 @@ public class TransactionsAdapter extends
 
         viewHolder.valueTextView.setText(String.format("R$ %.2f", transaction.getValue()));
         viewHolder.descriptionTextView.setText(transaction.getDescription());
-        viewHolder.dateTextView.setText(transaction.getDate());
+        viewHolder.dateTextView.setText(convertDateForExibition(transaction.getDate()));
         viewHolder.categoryTextView.setText(transaction.getCategory());
         if(transaction.isPayd()) {
             viewHolder.unpayd.setVisibility(View.GONE);

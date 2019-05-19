@@ -7,7 +7,7 @@ import io.realm.RealmObject;
 /**
  * Created by Guilherme Marx on 2019-05-18
  */
-public class Transaction extends RealmObject implements Serializable {
+public class Transaction extends RealmObject implements Serializable, Comparable<Transaction> {
     private float value;
     private String categoryName;
     private String subcategory = null;
@@ -89,5 +89,10 @@ public class Transaction extends RealmObject implements Serializable {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    @Override
+    public int compareTo(Transaction o) {
+        return -this.date.compareTo(o.date);
     }
 }

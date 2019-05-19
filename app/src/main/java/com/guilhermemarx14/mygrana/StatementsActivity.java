@@ -19,6 +19,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.guilhermemarx14.mygrana.Adapters.TransactionsAdapter;
 import com.guilhermemarx14.mygrana.Dialogs.AddSubcategoryDialog;
 import com.guilhermemarx14.mygrana.Dialogs.AddTransactionDialog;
+import com.guilhermemarx14.mygrana.Dialogs.SelectDateFilterStatements;
 import com.guilhermemarx14.mygrana.RealmObjects.Transaction;
 import com.guilhermemarx14.mygrana.RealmObjects.UserProfilePhoto;
 import com.leinardi.android.speeddial.SpeedDialActionItem;
@@ -35,6 +36,9 @@ import android.view.Menu;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+import java.util.Collections;
+
 import io.realm.Realm;
 import io.realm.RealmResults;
 
@@ -43,7 +47,9 @@ public class StatementsActivity extends AppCompatActivity
     FirebaseUser user;
     UserProfilePhoto upp;
     Realm realm;
+    public RecyclerView rv;
     float balance = 0, positive = 0, negative = 0;
+    public TransactionsAdapter adapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,14 +60,14 @@ public class StatementsActivity extends AppCompatActivity
         user = getFirebaseUser();
         realm = Realm.getDefaultInstance();
 
-        setFloatingActionButton();
-
         setNavigationDrawer(toolbar);
 
-        RecyclerView rv = findViewById(R.id.rvTransactions);
+        rv = findViewById(R.id.rvTransactions);
         RealmResults<Transaction> result = realm.where(Transaction.class).findAll();
-
-        TransactionsAdapter adapter = new TransactionsAdapter(this, result);
+        ArrayList<Transaction> myList = new ArrayList<>();
+        myList.addAll(result);
+        Collections.sort(myList);
+        adapter = new TransactionsAdapter(this, myList);
         rv.setAdapter(adapter);
         rv.setLayoutManager(new LinearLayoutManager(this));
     }
@@ -122,44 +128,6 @@ public class StatementsActivity extends AppCompatActivity
         ((TextView) v.findViewById(R.id.txBalance)).setText(String.format("R$ %.2f", balance));
     }
 
-    SpeedDialView fab;
-    private void setFloatingActionButton() {
-        fab = findViewById(R.id.fab);
-        fab.addActionItem(new SpeedDialActionItem.Builder(R.id.fab_new_subcategory,R.drawable.ic_add)
-                .setLabel(R.string.menu_new_subcategory)
-                .setLabelBackgroundColor(getResources().getColor(android.R.color.white))
-                .setLabelColor(getResources().getColor(android.R.color.black))
-                .create());
-
-        fab.addActionItem(new SpeedDialActionItem.Builder(R.id.fab_new_transaction,R.drawable.ic_playlist_add)
-                .setLabel(R.string.title_activity_add_transaction)
-                .setLabelBackgroundColor(getResources().getColor(android.R.color.white))
-                .setLabelColor(getResources().getColor(android.R.color.black))
-                .create());
-
-        fab.setOnActionSelectedListener(new SpeedDialView.OnActionSelectedListener() {
-            @Override
-            public boolean onActionSelected(SpeedDialActionItem actionItem) {
-                switch(actionItem.getId()){
-                    case R.id.fab_new_subcategory:
-                        dialogNewSubcategory();
-                        return false;
-                    case R.id.fab_new_transaction:
-                        dialogNewTransaction();
-                        return false;
-                    default: return false;
-                }
-            }
-        });
-    }
-    private void dialogNewSubcategory() {
-        AddSubcategoryDialog asd = new AddSubcategoryDialog(this);
-        asd.show();
-    }
-    private void dialogNewTransaction() {
-        AddTransactionDialog add = new AddTransactionDialog(this);
-        add.show();
-    }
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
@@ -198,8 +166,9 @@ public class StatementsActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_home) {
-            // Handle the camera action
+        if (id == R.id.nav_date_filter) {
+            SelectDateFilterStatements sdfs = new SelectDateFilterStatements(this);
+            sdfs.show();
         } else if (id == R.id.nav_gallery) {
 
         } else if (id == R.id.nav_slideshow) {

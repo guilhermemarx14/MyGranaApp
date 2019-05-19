@@ -123,7 +123,7 @@ public class AddTransactionDialog extends Dialog{
         value.addTextChangedListener(new MaskCurrency(value));
 
 
-        final EditText inpDate = findViewById(R.id.inpDate);
+        final EditText inpDate = findViewById(R.id.inpDateEnd);
         inpDate.setFocusable(false);
         Calendar c = Calendar.getInstance();
         String mDay;
@@ -165,7 +165,7 @@ public class AddTransactionDialog extends Dialog{
 
 
 //
-        confirm = findViewById(R.id.buttonAddTransaction);
+        confirm = findViewById(R.id.buttonConfirmFilter);
 //
         confirm.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -36,7 +36,10 @@
     <string name="title_activity_statements">StatementsActivity</string>
     <string name="nav_header_title">Android Studio</string>
     <string name="text_payd">Marcar como pago</string>
-
+    <string name="text_date_filter">Filtrar por data</string>
     <string name="menu_home">Home</string>
+    <string name="text_begin_filter">Data de início</string>
+    <string name="text_end_filter">Data de fim</string>
+    <string name="error_data_filter">As datas escolhidas estão incorretas</string>
 
 </resources>

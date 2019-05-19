@@ -22,11 +22,4 @@
 
     <include layout="@layout/content_statements" />
 
-    <com.leinardi.android.speeddial.SpeedDialView
-        android:id="@+id/fab"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        app:sdMainFabClosedSrc="@drawable/ic_more_vert"/>
-
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

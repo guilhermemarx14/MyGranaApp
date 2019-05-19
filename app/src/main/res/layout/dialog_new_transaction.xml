@@ -73,9 +73,9 @@
         android:layout_marginStart="16dp"
         android:fontFamily="@font/myriad_pro_bold"
         android:text="@string/text_date"
-        app:layout_constraintBottom_toBottomOf="@+id/inpDate"
+        app:layout_constraintBottom_toBottomOf="@+id/inpDateEnd"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/inpDate" />
+        app:layout_constraintTop_toTopOf="@+id/inpDateEnd" />
 
     <TextView
         android:id="@+id/txtdescription2"
@@ -104,7 +104,7 @@
         app:layout_constraintTop_toTopOf="@+id/inpValue" />
 
     <Button
-        android:id="@+id/buttonAddTransaction"
+        android:id="@+id/buttonConfirmFilter"
         style="@style/ButtonOrange"
         android:layout_width="150dp"
         android:layout_height="40dp"
@@ -153,7 +153,7 @@
         app:srcCompat="@drawable/ic_date_range_black_24dp" />
 
     <EditText
-        android:id="@+id/inpDate"
+        android:id="@+id/inpDateEnd"
         android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
@@ -171,7 +171,7 @@
         android:layout_marginEnd="8dp"
         android:fontFamily="@font/myriad_pro_bold"
         android:text="@string/text_payd"
-        app:layout_constraintEnd_toEndOf="@+id/inpDate"
-        app:layout_constraintTop_toBottomOf="@+id/inpDate" />
+        app:layout_constraintEnd_toEndOf="@+id/inpDateEnd"
+        app:layout_constraintTop_toBottomOf="@+id/inpDateEnd" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -13,7 +13,7 @@
         android:id="@+id/valueList"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
+        android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:fontFamily="@font/myriad_pro_bold"
         android:text="TextView"
@@ -24,7 +24,7 @@
         android:id="@+id/descriptionList"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
+        android:layout_marginStart="16dp"
         android:fontFamily="@font/myriad_pro_regular"
         android:maxLength="30"
         android:text="TextView"
@@ -40,8 +40,8 @@
         android:fontFamily="@font/myriad_pro_regular"
         android:text="TextView"
         app:layout_constraintBottom_toBottomOf="@+id/valueList"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintEnd_toStartOf="@+id/categoryList"
+        app:layout_constraintStart_toEndOf="@+id/valueList" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline"
@@ -54,7 +54,7 @@
         android:id="@+id/categoryList"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="24dp"
+        android:layout_marginEnd="16dp"
         android:fontFamily="@font/myriad_pro_bold"
         android:text="TextView"
         app:layout_constraintBottom_toBottomOf="@+id/dateList"
