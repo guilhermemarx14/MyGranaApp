@@ -32,5 +32,10 @@
     <string name="text_no_value">Nenhum valor inserido</string>
     <string name="text_your_balance">Seu saldo: </string>
     <string name="text_splash">Aguarde enquanto configuramos sua conta</string>
+    <string name="text_statements">Extrato Financeiro</string>
+    <string name="title_activity_statements">StatementsActivity</string>
+    <string name="nav_header_title">Android Studio</string>
+
+    <string name="menu_home">Home</string>
 
 </resources>

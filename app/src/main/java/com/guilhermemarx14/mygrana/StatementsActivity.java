@@ -1,25 +1,18 @@
 package com.guilhermemarx14.mygrana;
 
 import android.content.Context;
-import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
-import android.widget.ImageView;
-import android.widget.TextView;
-
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBarDrawerToggle;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.core.view.GravityCompat;
-import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.snackbar.Snackbar;
+
+import android.view.View;
+
+import androidx.core.view.GravityCompat;
+import androidx.appcompat.app.ActionBarDrawerToggle;
+
+import android.view.MenuItem;
+
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -30,35 +23,48 @@ import com.guilhermemarx14.mygrana.RealmObjects.UserProfilePhoto;
 import com.leinardi.android.speeddial.SpeedDialActionItem;
 import com.leinardi.android.speeddial.SpeedDialView;
 
-import java.io.InputStream;
+import androidx.drawerlayout.widget.DrawerLayout;
 
-import io.fabric.sdk.android.services.concurrency.AsyncTask;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+
+import android.view.Menu;
+import android.widget.ImageView;
+import android.widget.TextView;
+
 import io.realm.Realm;
 import io.realm.RealmResults;
 
-public class MenuActivity extends AppCompatActivity
+public class StatementsActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
     FirebaseUser user;
     UserProfilePhoto upp;
     Realm realm;
-    Context context = this;
     float balance = 0, positive = 0, negative = 0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_menu);
-
+        setContentView(R.layout.activity_statements);
         Toolbar toolbar = getToolbar();
-        setTitle(R.string.app_name);
+        setTitle(R.string.text_statements);
         user = getFirebaseUser();
         realm = Realm.getDefaultInstance();
 
         setFloatingActionButton();
 
         setNavigationDrawer(toolbar);
-
+    }
+    private Toolbar getToolbar() {
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        return toolbar;
     }
 
+    private FirebaseUser getFirebaseUser() {
+        //get active user
+        FirebaseAuth mAuth = FirebaseAuth.getInstance();
+        return mAuth.getCurrentUser();
+    }
     private void setNavigationDrawer(Toolbar toolbar) {
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
@@ -76,12 +82,9 @@ public class MenuActivity extends AppCompatActivity
     private void setUpNavigationHeader(NavigationView navigationView) {
         View v = navigationView.getHeaderView(0);
 
-
         upp = realm.where(UserProfilePhoto.class).findFirst();
-        if (upp == null) {
-            new DownloadImageFromInternet(((ImageView) v.findViewById(R.id.navHeaderPhoto))).execute(user.getPhotoUrl().toString());
-        }else
-            ((ImageView) v.findViewById(R.id.navHeaderPhoto)).setImageBitmap(upp.getUserPhoto());
+
+        ((ImageView) v.findViewById(R.id.navHeaderPhoto)).setImageBitmap(upp.getUserPhoto());
 
         ((TextView) v.findViewById(R.id.navHeaderTitle)).setText(user.getDisplayName());
 
@@ -108,23 +111,9 @@ public class MenuActivity extends AppCompatActivity
         ((TextView) v.findViewById(R.id.txBalance)).setText(String.format("R$ %.2f", balance));
     }
 
-
-
-
-    private Toolbar getToolbar() {
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        return toolbar;
-    }
-
-    private FirebaseUser getFirebaseUser() {
-        //get active user
-        FirebaseAuth mAuth = FirebaseAuth.getInstance();
-        return mAuth.getCurrentUser();
-    }
     SpeedDialView fab;
     private void setFloatingActionButton() {
-        fab = findViewById(R.id.speedDial);
+        fab = findViewById(R.id.fab);
         fab.addActionItem(new SpeedDialActionItem.Builder(R.id.fab_new_subcategory,R.drawable.ic_add)
                 .setLabel(R.string.menu_new_subcategory)
                 .setLabelBackgroundColor(getResources().getColor(android.R.color.white))
@@ -152,9 +141,14 @@ public class MenuActivity extends AppCompatActivity
             }
         });
     }
-
-
-
+    private void dialogNewSubcategory() {
+        AddSubcategoryDialog asd = new AddSubcategoryDialog(this);
+        asd.show();
+    }
+    private void dialogNewTransaction() {
+        AddTransactionDialog add = new AddTransactionDialog(this);
+        add.show();
+    }
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
@@ -168,7 +162,7 @@ public class MenuActivity extends AppCompatActivity
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu, menu);
+        getMenuInflater().inflate(R.menu.statements, menu);
         return true;
     }
 
@@ -181,13 +175,6 @@ public class MenuActivity extends AppCompatActivity
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
-            FirebaseAuth.getInstance().signOut();
-            realm.beginTransaction();
-            realm.deleteAll();
-            realm.commitTransaction();
-            Intent it = new Intent(this, LoginActivity.class);
-            it.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            startActivity(it);
             return true;
         }
 
@@ -196,14 +183,17 @@ public class MenuActivity extends AppCompatActivity
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
-    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+    public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_statements) {
-            Intent it = new Intent(this, StatementsActivity.class);
-            startActivity(it);
+        if (id == R.id.nav_home) {
+            // Handle the camera action
+        } else if (id == R.id.nav_gallery) {
 
+        } else if (id == R.id.nav_slideshow) {
+
+        } else if (id == R.id.nav_tools) {
 
         } else if (id == R.id.nav_share) {
 
@@ -215,47 +205,4 @@ public class MenuActivity extends AppCompatActivity
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
-
-    private void dialogNewSubcategory() {
-        AddSubcategoryDialog asd = new AddSubcategoryDialog(this);
-        asd.show();
-    }
-    private void dialogNewTransaction() {
-        AddTransactionDialog add = new AddTransactionDialog(this);
-        add.show();
-    }
-    private class DownloadImageFromInternet extends AsyncTask<String, Void, Bitmap> {
-        ImageView imageView;
-
-        private DownloadImageFromInternet(ImageView imageView) {
-            this.imageView = imageView;
-        }
-
-        protected Bitmap doInBackground(String... urls) {
-            String imageURL = urls[0];
-            Bitmap bimage = null;
-            Realm realm = Realm.getDefaultInstance();
-            try {
-                InputStream in = new java.net.URL(imageURL).openStream();
-                bimage = BitmapFactory.decodeStream(in);
-
-            } catch (Exception e) {
-                Log.e("Error Message", e.getMessage());
-                e.printStackTrace();
-            }
-            upp = new UserProfilePhoto(bimage);
-            realm.beginTransaction();
-            realm.copyToRealm(upp);
-            realm.commitTransaction();
-            return bimage;
-        }
-
-        protected void onPostExecute(Bitmap result) {
-            if (result != null) {
-                imageView.setImageBitmap(result);
-
-            }
-        }
-    }
-
 }
