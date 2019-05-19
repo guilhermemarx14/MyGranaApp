@@ -52,7 +52,6 @@ public class SplashActivity extends AppCompatActivity {
 
         user = getFirebaseUser();
         realm = Realm.getDefaultInstance();
-
         upp = realm.where(UserProfilePhoto.class).findFirst();
         if (upp == null)
             setUpFirstTimeUser();
