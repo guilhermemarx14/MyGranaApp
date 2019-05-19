@@ -1,4 +1,11 @@
 <resources>
+
+    <item name="fab_new_subcategory" type="id" />
+    <item name="fab_action2" type="id" />
+    <item name="fab_action3" type="id" />
+    <item name="fab_action4" type="id" />
+
+
     <string name="app_name">My Grana</string>
     <string name="title_activity_menu">MenuActivity</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>

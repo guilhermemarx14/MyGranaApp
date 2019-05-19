@@ -27,6 +27,8 @@ import com.guilhermemarx14.mygrana.Dialogs.AddSubcategoryDialog;
 import com.guilhermemarx14.mygrana.Dialogs.AddTransactionDialog;
 import com.guilhermemarx14.mygrana.RealmObjects.Transaction;
 import com.guilhermemarx14.mygrana.RealmObjects.UserProfilePhoto;
+import com.leinardi.android.speeddial.SpeedDialActionItem;
+import com.leinardi.android.speeddial.SpeedDialView;
 
 import java.io.InputStream;
 
@@ -120,20 +122,13 @@ public class MenuActivity extends AppCompatActivity
         FirebaseAuth mAuth = FirebaseAuth.getInstance();
         return mAuth.getCurrentUser();
     }
-
+    SpeedDialView fab;
     private void setFloatingActionButton() {
-        FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                AddTransactionDialog atd = new AddTransactionDialog(context);
-                atd.show();
-
-            }
-        });
+        fab = findViewById(R.id.speedDial);
+        fab.addActionItem(new SpeedDialActionItem.Builder(R.id.fab_new_subcategory,android.R.drawable.ic_media_previous).create());
     }
 
-    @Override
+        @Override
     public void onBackPressed() {
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
