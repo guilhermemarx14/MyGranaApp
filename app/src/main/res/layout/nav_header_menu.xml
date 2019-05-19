@@ -83,7 +83,7 @@
             android:fontFamily="@font/myriad_pro_bold"
             android:text="b"
             android:textAlignment="center"
-            android:textColor="@android:color/holo_green_light" />
+            android:textColor="@color/colorAccent" />
 
         <TextView
             android:id="@+id/txNegative"
@@ -93,7 +93,7 @@
             android:fontFamily="@font/myriad_pro_bold"
             android:text="a"
             android:textAlignment="center"
-            android:textColor="@android:color/holo_red_light" />
+            android:textColor="@color/colorRed" />
     </LinearLayout>
 
 

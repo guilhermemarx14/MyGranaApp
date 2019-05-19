@@ -100,9 +100,9 @@ public class MenuActivity extends AppCompatActivity
         ((TextView) v.findViewById(R.id.txPositive)).setText(String.format("R$ %.2f", positive));
         ((TextView) v.findViewById(R.id.txNegative)).setText(String.format("R$ %.2f", negative));
         if (balance >= 0)
-            ((TextView) v.findViewById(R.id.txBalance)).setTextColor(getResources().getColor(android.R.color.holo_green_light));
+            ((TextView) v.findViewById(R.id.txBalance)).setTextColor(getResources().getColor(R.color.colorAccent));
         else
-            ((TextView) v.findViewById(R.id.txBalance)).setTextColor(getResources().getColor(android.R.color.holo_red_light));
+            ((TextView) v.findViewById(R.id.txBalance)).setTextColor(getResources().getColor(R.color.colorRed));
         ((TextView) v.findViewById(R.id.txBalance)).setText(String.format("R$ %.2f", balance));
     }
 
