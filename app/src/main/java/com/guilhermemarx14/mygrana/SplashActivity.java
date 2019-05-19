@@ -2,10 +2,14 @@ package com.guilhermemarx14.mygrana;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.SystemClock;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.ImageView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -33,7 +37,8 @@ public class SplashActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
-
+        getSupportActionBar().hide();
+        final Animation animRotate = AnimationUtils.loadAnimation(this, R.anim.rotate);
         (new Thread(new Runnable() {
             @Override
             public void run() {
@@ -42,7 +47,8 @@ public class SplashActivity extends AppCompatActivity {
                 startActivity(it);
             }
         })).start();
-
+        ImageView progressView = findViewById(R.id.image_progress);
+        progressView.startAnimation(animRotate);
 
         user = getFirebaseUser();
         realm = Realm.getDefaultInstance();

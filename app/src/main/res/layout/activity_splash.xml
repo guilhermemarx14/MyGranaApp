@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -7,21 +7,13 @@
     tools:context=".SplashActivity"
     android:gravity="center_vertical">
 
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="24dp"
-        android:layout_marginEnd="32dp"
-        android:layout_marginBottom="24dp"
-        android:fontFamily="@font/bebas_neue_bold"
-        android:text="@string/text_splash"
-        android:textAlignment="center"
-        android:textSize="36sp"
-
+    <ImageView
+        android:id="@+id/image_progress"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-</LinearLayout>
+        app:layout_constraintTop_toTopOf="parent"
+        android:src="@drawable/progress_loading"/>
+</androidx.constraintlayout.widget.ConstraintLayout>
