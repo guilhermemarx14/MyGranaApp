@@ -16,6 +16,7 @@ import android.view.MenuItem;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.guilhermemarx14.mygrana.Adapters.TransactionsAdapter;
 import com.guilhermemarx14.mygrana.Dialogs.AddSubcategoryDialog;
 import com.guilhermemarx14.mygrana.Dialogs.AddTransactionDialog;
 import com.guilhermemarx14.mygrana.RealmObjects.Transaction;
@@ -27,6 +28,8 @@ import androidx.drawerlayout.widget.DrawerLayout;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.Menu;
 import android.widget.ImageView;
@@ -46,6 +49,7 @@ public class StatementsActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_statements);
         Toolbar toolbar = getToolbar();
+
         setTitle(R.string.text_statements);
         user = getFirebaseUser();
         realm = Realm.getDefaultInstance();
@@ -53,6 +57,12 @@ public class StatementsActivity extends AppCompatActivity
         setFloatingActionButton();
 
         setNavigationDrawer(toolbar);
+
+        RecyclerView rv = findViewById(R.id.rvTransactions);
+        RealmResults<Transaction> result = realm.where(Transaction.class).findAll();
+        TransactionsAdapter adapter = new TransactionsAdapter(result);
+        rv.setAdapter(adapter);
+        rv.setLayoutManager(new LinearLayoutManager(this));
     }
     private Toolbar getToolbar() {
         Toolbar toolbar = findViewById(R.id.toolbar);
