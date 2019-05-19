@@ -35,6 +35,7 @@
     <string name="text_statements">Extrato Financeiro</string>
     <string name="title_activity_statements">StatementsActivity</string>
     <string name="nav_header_title">Android Studio</string>
+    <string name="text_payd">Marcar como pago</string>
 
     <string name="menu_home">Home</string>
 

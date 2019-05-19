@@ -13,6 +13,7 @@ import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
@@ -187,11 +188,12 @@ public class AddTransactionDialog extends Dialog{
                 String desc = ((EditText) findViewById(R.id.inpDescription)).getText().toString();
                 float value = (float) num/100;
                 Transaction t;
+                CheckBox payd = findViewById(R.id.cbPayd);
                 if(!selected.getName().equals("Pensão") && !selected.getName().equals("Salário") )
                     value = -value;
                 if(selected2 == null)
-                    t = new Transaction(value,selected.getName(),desc,dateConvert(inpDate.getText().toString()));
-                else t = new Transaction(value,selected.getName(),selected2.getSubcategoryName(),desc,dateConvert(inpDate.getText().toString()));
+                    t = new Transaction(value,selected.getName(),desc,dateConvert(inpDate.getText().toString()),payd.isChecked());
+                else t = new Transaction(value,selected.getName(),selected2.getSubcategoryName(),desc,dateConvert(inpDate.getText().toString()),payd.isChecked());
                 realm.beginTransaction();
                     realm.copyToRealm(t);
                 realm.commitTransaction();

@@ -110,14 +110,14 @@
         android:layout_height="40dp"
         android:layout_marginStart="24dp"
 
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="8dp"
         android:layout_marginEnd="24dp"
         android:gravity="center"
         android:text="@string/action_confirm"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.502"
+        app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/inpDate" />
+        app:layout_constraintTop_toBottomOf="@+id/cbPayd" />
 
     <com.google.android.material.textfield.TextInputEditText
         android:id="@+id/inpValue"
@@ -162,5 +162,16 @@
         android:inputType="textPersonName"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/inpDescription" />
+
+    <CheckBox
+        android:id="@+id/cbPayd"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="8dp"
+        android:fontFamily="@font/myriad_pro_bold"
+        android:text="@string/text_payd"
+        app:layout_constraintEnd_toEndOf="@+id/inpDate"
+        app:layout_constraintTop_toBottomOf="@+id/inpDate" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -13,20 +13,39 @@ public class Transaction extends RealmObject implements Serializable {
     private String subcategory;
     private String description;
     private String date;
+    private boolean payd;
 
-    public Transaction(float value, String category, String description, String date) {
+    public Transaction(float value, String categoryName, String subcategory, String description, String date, boolean payd) {
         this.value = value;
-        this.categoryName = category;
-        this.description = description;
-        this.date = date;
-    }
-
-    public Transaction(float value, String category, String subcategory, String description, String date) {
-        this.value = value;
-        this.categoryName = category;
+        this.categoryName = categoryName;
         this.subcategory = subcategory;
         this.description = description;
         this.date = date;
+        this.payd = payd;
+    }
+
+    public Transaction(float value, String categoryName, String description, String date, boolean payd) {
+        this.value = value;
+        this.categoryName = categoryName;
+        this.description = description;
+        this.date = date;
+        this.payd = payd;
+    }
+
+    public String getCategoryName() {
+        return categoryName;
+    }
+
+    public void setCategoryName(String categoryName) {
+        this.categoryName = categoryName;
+    }
+
+    public boolean isPayd() {
+        return payd;
+    }
+
+    public void setPayd(boolean payd) {
+        this.payd = payd;
     }
 
     public String getDate() {
