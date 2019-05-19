@@ -23,18 +23,27 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.guilhermemarx14.mygrana.Dialogs.AddSubcategoryDialog;
 import com.guilhermemarx14.mygrana.Dialogs.AddTransactionDialog;
+import com.guilhermemarx14.mygrana.RealmObjects.Category;
 import com.guilhermemarx14.mygrana.RealmObjects.Transaction;
 import com.guilhermemarx14.mygrana.RealmObjects.UserProfilePhoto;
 import com.leinardi.android.speeddial.SpeedDialActionItem;
 import com.leinardi.android.speeddial.SpeedDialView;
 
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 
+import io.bloco.faker.Faker;
 import io.fabric.sdk.android.services.concurrency.AsyncTask;
 import io.realm.Realm;
 import io.realm.RealmResults;
+
+import static com.guilhermemarx14.mygrana.Utils.Constants.RENDA;
 
 public class MenuActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -43,6 +52,7 @@ public class MenuActivity extends AppCompatActivity
     Realm realm;
     Context context = this;
     float balance = 0, positive = 0, negative = 0;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,12 +62,49 @@ public class MenuActivity extends AppCompatActivity
         setTitle(R.string.app_name);
         user = getFirebaseUser();
         realm = Realm.getDefaultInstance();
-
+   //     faker();
         setFloatingActionButton();
 
         setNavigationDrawer(toolbar);
 
     }
+
+//    private void faker() {
+//        Faker faker = new Faker();
+//        RealmResults<Category> categories = realm.where(Category.class).findAll();
+//        ArrayList<Category> myfake = new ArrayList<>();
+//        myfake.addAll(categories);
+//
+//        myfake.add(0,new Category("Salário", RENDA));
+//        myfake.add(0,new Category("Salário", RENDA));
+//        myfake.add(0,new Category("Pensão", RENDA));
+//        myfake.add(0,new Category("Pensão", RENDA));
+//        for (int i = 0; i < 150; i++) {
+//            int number = faker.number.positive(0, 10000);
+//            Date date = faker.date.birthday(0, -1);
+//            String description = faker.lorem.paragraph();
+//
+//            Transaction t = new Transaction();
+//            t.setCategory(myfake.get(number % 12).getName());
+//            if(number%12>5)
+//                number=-number;
+//            t.setValue((float) number / 100);
+//            t.setDescription(description);
+//            String mDate = "" + (date.getYear()+1900) + "-" + (date.getMonth() + 1) + "-" + date.getDay();
+//            t.setDate(mDate);
+//            t.setPayd(number % 2 == 0);
+//            realm.beginTransaction();
+//            realm.insertOrUpdate(t);
+//            realm.commitTransaction();
+//
+//            FirebaseAuth mAuth = FirebaseAuth.getInstance();
+//            FirebaseUser user = mAuth.getCurrentUser();
+//            FirebaseDatabase database = FirebaseDatabase.getInstance();
+//            DatabaseReference myRef = database.getReference(user.getUid());
+//            myRef.child("transactions").push().setValue(t);
+//
+//        }
+//    }
 
     private void setNavigationDrawer(Toolbar toolbar) {
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
@@ -80,7 +127,7 @@ public class MenuActivity extends AppCompatActivity
         upp = realm.where(UserProfilePhoto.class).findFirst();
         if (upp == null) {
             new DownloadImageFromInternet(((ImageView) v.findViewById(R.id.navHeaderPhoto))).execute(user.getPhotoUrl().toString());
-        }else
+        } else
             ((ImageView) v.findViewById(R.id.navHeaderPhoto)).setImageBitmap(upp.getUserPhoto());
 
         ((TextView) v.findViewById(R.id.navHeaderTitle)).setText(user.getDisplayName());
@@ -92,12 +139,11 @@ public class MenuActivity extends AppCompatActivity
 
     private void setBalance(View v) {
         RealmResults<Transaction> result = realm.where(Transaction.class).findAll();
-        for(Transaction a: result)
-        {
-            if( a.getValue() > 0)
-                positive +=a.getValue();
+        for (Transaction a : result) {
+            if (a.getValue() > 0)
+                positive += a.getValue();
             else negative += a.getValue();
-            balance+=a.getValue();
+            balance += a.getValue();
         }
         ((TextView) v.findViewById(R.id.txPositive)).setText(String.format("R$ %.2f", positive));
         ((TextView) v.findViewById(R.id.txNegative)).setText(String.format("R$ %.2f", negative));
@@ -107,8 +153,6 @@ public class MenuActivity extends AppCompatActivity
             ((TextView) v.findViewById(R.id.txBalance)).setTextColor(getResources().getColor(R.color.colorRed));
         ((TextView) v.findViewById(R.id.txBalance)).setText(String.format("R$ %.2f", balance));
     }
-
-
 
 
     private Toolbar getToolbar() {
@@ -122,16 +166,18 @@ public class MenuActivity extends AppCompatActivity
         FirebaseAuth mAuth = FirebaseAuth.getInstance();
         return mAuth.getCurrentUser();
     }
+
     SpeedDialView fab;
+
     private void setFloatingActionButton() {
         fab = findViewById(R.id.speedDial);
-        fab.addActionItem(new SpeedDialActionItem.Builder(R.id.fab_new_subcategory,R.drawable.ic_add)
+        fab.addActionItem(new SpeedDialActionItem.Builder(R.id.fab_new_subcategory, R.drawable.ic_add)
                 .setLabel(R.string.menu_new_subcategory)
                 .setLabelBackgroundColor(getResources().getColor(android.R.color.white))
                 .setLabelColor(getResources().getColor(android.R.color.black))
                 .create());
 
-        fab.addActionItem(new SpeedDialActionItem.Builder(R.id.fab_new_transaction,R.drawable.ic_playlist_add)
+        fab.addActionItem(new SpeedDialActionItem.Builder(R.id.fab_new_transaction, R.drawable.ic_playlist_add)
                 .setLabel(R.string.title_activity_add_transaction)
                 .setLabelBackgroundColor(getResources().getColor(android.R.color.white))
                 .setLabelColor(getResources().getColor(android.R.color.black))
@@ -140,19 +186,19 @@ public class MenuActivity extends AppCompatActivity
         fab.setOnActionSelectedListener(new SpeedDialView.OnActionSelectedListener() {
             @Override
             public boolean onActionSelected(SpeedDialActionItem actionItem) {
-                switch(actionItem.getId()){
+                switch (actionItem.getId()) {
                     case R.id.fab_new_subcategory:
                         dialogNewSubcategory();
                         return false;
                     case R.id.fab_new_transaction:
                         dialogNewTransaction();
                         return false;
-                    default: return false;
+                    default:
+                        return false;
                 }
             }
         });
     }
-
 
 
     @Override
@@ -220,10 +266,12 @@ public class MenuActivity extends AppCompatActivity
         AddSubcategoryDialog asd = new AddSubcategoryDialog(this);
         asd.show();
     }
+
     private void dialogNewTransaction() {
         AddTransactionDialog add = new AddTransactionDialog(this);
         add.show();
     }
+
     private class DownloadImageFromInternet extends AsyncTask<String, Void, Bitmap> {
         ImageView imageView;
 
