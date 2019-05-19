@@ -60,7 +60,8 @@ public class StatementsActivity extends AppCompatActivity
 
         RecyclerView rv = findViewById(R.id.rvTransactions);
         RealmResults<Transaction> result = realm.where(Transaction.class).findAll();
-        TransactionsAdapter adapter = new TransactionsAdapter(result);
+
+        TransactionsAdapter adapter = new TransactionsAdapter(this, result);
         rv.setAdapter(adapter);
         rv.setLayoutManager(new LinearLayoutManager(this));
     }

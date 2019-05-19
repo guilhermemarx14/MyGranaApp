@@ -19,31 +19,21 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.guilhermemarx14.mygrana.Dialogs.AddSubcategoryDialog;
 import com.guilhermemarx14.mygrana.Dialogs.AddTransactionDialog;
-import com.guilhermemarx14.mygrana.RealmObjects.Category;
 import com.guilhermemarx14.mygrana.RealmObjects.Transaction;
 import com.guilhermemarx14.mygrana.RealmObjects.UserProfilePhoto;
 import com.leinardi.android.speeddial.SpeedDialActionItem;
 import com.leinardi.android.speeddial.SpeedDialView;
 
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 
-import io.bloco.faker.Faker;
 import io.fabric.sdk.android.services.concurrency.AsyncTask;
 import io.realm.Realm;
 import io.realm.RealmResults;
-
-import static com.guilhermemarx14.mygrana.Utils.Constants.RENDA;
 
 public class MenuActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {

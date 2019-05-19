@@ -44,4 +44,10 @@
     <style name="MySpinnerLook" parent="Widget.AppCompat.Light.DropDownItem.Spinner">
         <item name="android:textSize">2sp</item>
     </style>
+    <style name="ViewTextInput" parent="AppTheme">
+        <item name="android:layout_marginTop">-9dp</item>
+        <item name="android:background">@color/colorPinkSwan</item>
+        <item name="android:focusable">false</item>
+        <item name="android:layout_height">1dp</item>
+    </style>
 </resources>

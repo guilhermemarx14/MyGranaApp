@@ -10,7 +10,7 @@ import io.realm.RealmObject;
 public class Transaction extends RealmObject implements Serializable {
     private float value;
     private String categoryName;
-    private String subcategory;
+    private String subcategory = null;
     private String description;
     private String date;
     private boolean payd;

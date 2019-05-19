@@ -4,6 +4,7 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -18,11 +19,17 @@ import java.util.List;
  * Created by Guilherme Marx on 2019-05-19
  */
 public class TransactionsAdapter extends
-        RecyclerView.Adapter<TransactionsAdapter.ViewHolder>{
+        RecyclerView.Adapter<TransactionsAdapter.ViewHolder> {
     public class ViewHolder extends RecyclerView.ViewHolder {
         // Your holder should contain a member variable
         // for any view that will be set as you render a row
-        public TextView nameTextView;
+        public TextView valueTextView;
+        public TextView descriptionTextView;
+        public TextView dateTextView;
+        public TextView categoryTextView;
+        public TextView subcategoryTextView;
+        public ImageView payd;
+        public ImageView unpayd;
 
 
         // We also create a constructor that accepts the entire item row
@@ -32,16 +39,23 @@ public class TransactionsAdapter extends
             // to access the context from any ViewHolder instance.
             super(itemView);
 
-            nameTextView = itemView.findViewById(R.id.valueList);
+            valueTextView = itemView.findViewById(R.id.valueList);
+            descriptionTextView = itemView.findViewById(R.id.descriptionList);
+            dateTextView = itemView.findViewById(R.id.dateList);
+            categoryTextView = itemView.findViewById(R.id.categoryList);
+            payd = itemView.findViewById(R.id.payd);
+            unpayd = itemView.findViewById(R.id.unpayd);
+
         }
     }
 
 
     private List<Transaction> mTransactions;
-
+    Context context;
     // Pass in the contact array into the constructor
-    public TransactionsAdapter(List<Transaction> transactions) {
+    public TransactionsAdapter(Context context, List<Transaction> transactions) {
         mTransactions = transactions;
+        this.context = context;
     }
 
     // Usually involves inflating a layout from XML and returning the holder
@@ -62,11 +76,25 @@ public class TransactionsAdapter extends
     @Override
     public void onBindViewHolder(TransactionsAdapter.ViewHolder viewHolder, int position) {
         // Get the data model based on position
-        Transaction transition = mTransactions.get(position);
+        Transaction transaction = mTransactions.get(position);
 
         // Set item views based on your views and data model
-        TextView textView = viewHolder.nameTextView;
-        textView.setText(String.format("R$ %.2f",transition.getValue()));
+        if(transaction.getValue()>=0)
+            viewHolder.valueTextView.setTextColor(context.getResources().getColor(R.color.colorAccent));
+        else viewHolder.valueTextView.setTextColor(context.getResources().getColor(R.color.colorRed));
+
+        viewHolder.valueTextView.setText(String.format("R$ %.2f", transaction.getValue()));
+        viewHolder.descriptionTextView.setText(transaction.getDescription());
+        viewHolder.dateTextView.setText(transaction.getDate());
+        viewHolder.categoryTextView.setText(transaction.getCategory());
+        if(transaction.isPayd()) {
+            viewHolder.unpayd.setVisibility(View.GONE);
+            viewHolder.payd.setVisibility(View.VISIBLE);
+        }
+        else {
+            viewHolder.unpayd.setVisibility(View.VISIBLE);
+            viewHolder.payd.setVisibility(View.GONE);
+        }
     }
 
     // Returns the total count of items in the list
