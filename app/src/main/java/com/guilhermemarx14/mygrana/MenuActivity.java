@@ -53,6 +53,9 @@ import io.fabric.sdk.android.services.concurrency.AsyncTask;
 import io.realm.Realm;
 import io.realm.RealmResults;
 
+import static com.guilhermemarx14.mygrana.Utils.Constants.GASTO;
+import static com.guilhermemarx14.mygrana.Utils.Constants.RENDA;
+
 public class MenuActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, OnChartValueSelectedListener {
 
@@ -80,12 +83,13 @@ public class MenuActivity extends AppCompatActivity
 
         setNavigationDrawer(toolbar);
 
-        setFirstCard();
+        findViewById(R.id.chart1).setVisibility(View.GONE);
 
     }
 
-    private void setFirstCard() {
+    private void setFirstCard(int gastoOuRenda) {
         chart = findViewById(R.id.chart1);
+        chart.setVisibility(View.VISIBLE);
         chart.setUsePercentValues(true);
         chart.getDescription().setEnabled(false);
         chart.setExtraOffsets(5, 10, 5, 5);
@@ -129,10 +133,10 @@ public class MenuActivity extends AppCompatActivity
         chart.setEntryLabelColor(Color.WHITE);
 
         chart.setEntryLabelTextSize(12f);
-        setData();
+        setData(gastoOuRenda);
     }
 
-    private void setData() {
+    private void setData(int gastoOuRenda) {
         ArrayList<PieEntry> entries = new ArrayList<>();
 
         // NOTE: The order of the entries when being added to the entries array determines their position around the center of
@@ -153,10 +157,14 @@ public class MenuActivity extends AppCompatActivity
             soma[position(nome)] += valor;
         }
 
+        if (gastoOuRenda == GASTO)
+            for (int i = 2; i < 8; i++)
+                entries.add(new PieEntry(soma[i], parties[i], getResources().getDrawable(R.drawable.star)));
 
-        for (int i = 0; i < 8; i++) {
-            entries.add(new PieEntry(soma[i], parties[i], getResources().getDrawable(R.drawable.star)));
-        }
+        else
+            for (int i = 0; i < 2; i++)
+                entries.add(new PieEntry(soma[i], parties[i], getResources().getDrawable(R.drawable.star)));
+
 
         PieDataSet dataSet = new PieDataSet(entries, getString(R.string.text_category));
 
@@ -380,8 +388,10 @@ public class MenuActivity extends AppCompatActivity
         if (id == R.id.nav_statements) {
             Intent it = new Intent(this, StatementsActivity.class);
             startActivity(it);
-
-
+        } else if (id == R.id.nav_first_chart) {
+            setFirstCard(GASTO);
+        } else if (id == R.id.nav_second_chart){
+            setFirstCard(RENDA);
         } else if (id == R.id.nav_share) {
             Intent it = new Intent(this, PieChartActivity.class);
             startActivity(it);

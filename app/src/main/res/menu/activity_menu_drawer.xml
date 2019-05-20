@@ -9,6 +9,16 @@
             android:icon="@drawable/ic_playlist_add_check"
             android:title="@string/text_statements" />
 
+        <item
+            android:id="@+id/nav_first_chart"
+            android:icon="@drawable/ic_expand_more"
+            android:title="@string/text_first_chart" />
+
+        <item
+            android:id="@+id/nav_second_chart"
+            android:icon="@drawable/ic_expand_less"
+            android:title="@string/text_second_chart" />
+
     </group>
 
     <item android:title="Communicate">

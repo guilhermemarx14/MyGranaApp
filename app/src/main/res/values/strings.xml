@@ -41,7 +41,8 @@
     <string name="text_begin_filter">Data de início</string>
     <string name="text_end_filter">Data de fim</string>
     <string name="error_data_filter">As datas escolhidas estão incorretas</string>
-
+    <string name="text_first_chart">Gráfico de gastos</string>
+    <string name="text_second_chart">Gráfico de rendas</string>
 
 
 
@@ -98,4 +99,5 @@
     <string name="reportProblem">Problem Report</string>
     <string name="viewWebsite">Developer Website</string>
     <string name="actionSave">Save to Gallery</string>
+
 </resources>
