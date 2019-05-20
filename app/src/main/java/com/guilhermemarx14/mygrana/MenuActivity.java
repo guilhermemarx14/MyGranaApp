@@ -21,7 +21,6 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.github.mikephil.charting.animation.Easing;
-import com.github.mikephil.charting.charts.Chart;
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.data.Entry;
@@ -30,30 +29,22 @@ import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
 import com.github.mikephil.charting.formatter.PercentFormatter;
 import com.github.mikephil.charting.highlight.Highlight;
-import com.github.mikephil.charting.interfaces.datasets.IDataSet;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 import com.github.mikephil.charting.utils.ColorTemplate;
 import com.github.mikephil.charting.utils.MPPointF;
-import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.guilhermemarx14.mygrana.Dialogs.AddSubcategoryDialog;
 import com.guilhermemarx14.mygrana.Dialogs.AddTransactionDialog;
-import com.guilhermemarx14.mygrana.RealmObjects.Category;
 import com.guilhermemarx14.mygrana.RealmObjects.Transaction;
 import com.guilhermemarx14.mygrana.RealmObjects.UserProfilePhoto;
-import com.guilhermemarx14.mygrana.Utils.PieChartActivity;
 import com.leinardi.android.speeddial.SpeedDialActionItem;
 import com.leinardi.android.speeddial.SpeedDialView;
 
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Date;
 
-import io.bloco.faker.Faker;
 import io.fabric.sdk.android.services.concurrency.AsyncTask;
 import io.realm.Realm;
 import io.realm.RealmResults;
@@ -83,7 +74,7 @@ public class MenuActivity extends AppCompatActivity
         setTitle(R.string.app_name);
         user = getFirebaseUser();
         realm = Realm.getDefaultInstance();
-//             faker();
+
         setFloatingActionButton();
 
         setNavigationDrawer(toolbar);
@@ -285,43 +276,6 @@ public class MenuActivity extends AppCompatActivity
                 return i;
 
         return -1;
-    }
-
-    private void faker() {
-        Faker faker = new Faker();
-        RealmResults<Category> categories = realm.where(Category.class).findAll();
-        ArrayList<Category> myfake = new ArrayList<>();
-        myfake.addAll(categories);
-
-        myfake.add(0,new Category("Salário", RENDA));
-        myfake.add(0,new Category("Salário", RENDA));
-        myfake.add(0,new Category("Pensão", RENDA));
-        myfake.add(0,new Category("Pensão", RENDA));
-        for (int i = 0; i < 150; i++) {
-            int number = faker.number.positive(0, 10000);
-            Date date = faker.date.birthday(0, 1);
-            String description = faker.lorem.paragraph();
-
-            Transaction t = new Transaction();
-            t.setCategory(myfake.get(number % 12).getName());
-            if(number%12>5)
-                number=-number;
-            t.setValue((float) number / 100);
-            t.setDescription(description);
-            String mDate = "" + (date.getYear()+1900) + "-" + (date.getMonth() + 1) + "-" + (date.getDay()+1);
-            t.setDate(mDate);
-            t.setPayd(number % 2 == 0);
-            realm.beginTransaction();
-            realm.insertOrUpdate(t);
-            realm.commitTransaction();
-
-            FirebaseAuth mAuth = FirebaseAuth.getInstance();
-            FirebaseUser user = mAuth.getCurrentUser();
-            FirebaseDatabase database = FirebaseDatabase.getInstance();
-            DatabaseReference myRef = database.getReference(user.getUid());
-            myRef.child("transactions").push().setValue(t);
-
-        }
     }
 
     private void setNavigationDrawer(Toolbar toolbar) {
