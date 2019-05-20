@@ -137,6 +137,7 @@ public class SplashActivity extends AppCompatActivity {
         realm.insertOrUpdate(new Category("Vestimenta", GASTO));
         realm.insertOrUpdate(new Category("Transporte", GASTO));
         realm.insertOrUpdate(new Category("Investimentos", GASTO));
+        realm.insertOrUpdate(new Category("Saúde", GASTO));
         realm.commitTransaction();
 
         mDatabase = FirebaseDatabase.getInstance().getReference();

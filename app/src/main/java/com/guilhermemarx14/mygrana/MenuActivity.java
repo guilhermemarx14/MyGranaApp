@@ -37,6 +37,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.guilhermemarx14.mygrana.Dialogs.AddSubcategoryDialog;
 import com.guilhermemarx14.mygrana.Dialogs.AddTransactionDialog;
+import com.guilhermemarx14.mygrana.RealmObjects.Category;
 import com.guilhermemarx14.mygrana.RealmObjects.Transaction;
 import com.guilhermemarx14.mygrana.RealmObjects.UserProfilePhoto;
 import com.leinardi.android.speeddial.SpeedDialActionItem;
@@ -57,7 +58,7 @@ public class MenuActivity extends AppCompatActivity
 
 
     protected final String[] parties = new String[]{
-            "Salário", "Pensão", "Moradia", "Alimentação", "Lazer", "Vestimenta", "Transporte", "Investimentos"
+            "Salário", "Pensão", "Moradia", "Alimentação", "Lazer", "Vestimenta", "Transporte", "Investimentos", "Saúde"
     };
     FirebaseUser user;
     UserProfilePhoto upp;
@@ -74,7 +75,6 @@ public class MenuActivity extends AppCompatActivity
         setTitle(R.string.app_name);
         user = getFirebaseUser();
         realm = Realm.getDefaultInstance();
-
         setFloatingActionButton();
 
         setNavigationDrawer(toolbar);
@@ -83,8 +83,6 @@ public class MenuActivity extends AppCompatActivity
     }
 
     private void setUpLinearLayoutHome() {
-        findViewById(R.id.chart1).setVisibility(View.GONE);
-        findViewById(R.id.noValueChart).setVisibility(View.GONE);
         RealmResults<Transaction> result = realm.where(Transaction.class).findAll();
 
         float gastoEfetivado=0, gastoInadimplente=0, rendaEfetivada=0, rendaInadimplente=0;
@@ -197,7 +195,7 @@ public class MenuActivity extends AppCompatActivity
         float valor;
         String nome;
 
-        float soma[] = new float[8];
+        float soma[] = new float[9];
         for (int i = 0; i < 8; i++)
             soma[i] = 0;
         for (int i = 0; i < list.size(); i++) {
@@ -210,7 +208,7 @@ public class MenuActivity extends AppCompatActivity
         String subs;
 
         if (gastoOuRenda == GASTO) {
-            for (int i = 2; i < 8; i++) {
+            for (int i = 2; i < 9; i++) {
                 entries.add(new PieEntry(soma[i], parties[i], getResources().getDrawable(R.drawable.star)));
                 if(soma[i]!=0){
                     hasvalue = true;
@@ -432,6 +430,7 @@ public class MenuActivity extends AppCompatActivity
         } else if (id == R.id.nav_home) {
             findViewById(R.id.linearLayoutHome).setVisibility(View.VISIBLE);
             findViewById(R.id.chart1).setVisibility(View.GONE);
+            findViewById(R.id.noValueChart).setVisibility(View.GONE);
         } else if (id == R.id.nav_send) {
 
         }
