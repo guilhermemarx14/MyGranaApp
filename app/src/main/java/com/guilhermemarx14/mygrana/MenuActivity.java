@@ -83,6 +83,8 @@ public class MenuActivity extends AppCompatActivity
     }
 
     private void setUpLinearLayoutHome() {
+        findViewById(R.id.chart1).setVisibility(View.GONE);
+        findViewById(R.id.noValueChart).setVisibility(View.GONE);
         RealmResults<Transaction> result = realm.where(Transaction.class).findAll();
 
         float gastoEfetivado=0, gastoInadimplente=0, rendaEfetivada=0, rendaInadimplente=0;
