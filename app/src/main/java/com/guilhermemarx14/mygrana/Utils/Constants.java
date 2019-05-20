@@ -15,7 +15,6 @@ import io.realm.RealmResults;
 public class Constants {
     public static final int GASTO = 0;
     public static final int RENDA = 1;
-
     public static ArrayList<String> getListCategories(){
         Realm realm = Realm.getDefaultInstance();
         RealmResults<Category> results = realm.where(Category.class).findAll();

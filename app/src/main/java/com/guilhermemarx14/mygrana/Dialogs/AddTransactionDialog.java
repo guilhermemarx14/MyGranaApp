@@ -183,8 +183,11 @@ public class AddTransactionDialog extends Dialog{
                     return;
                 }
                 EditText et = findViewById(R.id.inpValue);
-                int num = Integer.parseInt(et.getText().toString().replaceAll(".","").replaceAll(",","").
-                        replaceAll("R$","").replaceAll(" ",""));
+                String numero = et.getText().toString().substring(2);
+                numero = numero.replaceAll("[.]","");
+                numero = numero.replaceAll(",","");
+                numero = numero.replaceAll(" ","");
+                int num = Integer.parseInt(numero);
                 String desc = ((EditText) findViewById(R.id.inpDescription)).getText().toString();
                 float value = (float) num/100;
                 Transaction t;

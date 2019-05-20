@@ -43,10 +43,15 @@
     <string name="error_data_filter">As datas escolhidas estão incorretas</string>
     <string name="text_first_chart">Gráfico de gastos</string>
     <string name="text_second_chart">Gráfico de rendas</string>
-
-
-
-
+    <string name="text_home">Voltar para a tela inicial</string>
+    <string name="effective_total">Saldo efetivado:</string>
+    <string name="not_effective_total">Saldo inadimplente:</string>
+    <string name="effective">Efetivado</string>
+    <string name="not_effective">Inadimplente</string>
+    <string name="empty_chart">Voce precisa adicionar %s para visualizar o gráfico</string>
+    <string name="title_basic_data">Precisamos de sua Universidade:</string>
+    <string name="university">Universidade: </string>
+    <string name="campus">Campus: </string>
 
 
 

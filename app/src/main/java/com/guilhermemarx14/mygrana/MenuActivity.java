@@ -38,8 +38,11 @@ import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.guilhermemarx14.mygrana.Dialogs.AddSubcategoryDialog;
 import com.guilhermemarx14.mygrana.Dialogs.AddTransactionDialog;
+import com.guilhermemarx14.mygrana.RealmObjects.Category;
 import com.guilhermemarx14.mygrana.RealmObjects.Transaction;
 import com.guilhermemarx14.mygrana.RealmObjects.UserProfilePhoto;
 import com.guilhermemarx14.mygrana.Utils.PieChartActivity;
@@ -48,7 +51,9 @@ import com.leinardi.android.speeddial.SpeedDialView;
 
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Date;
 
+import io.bloco.faker.Faker;
 import io.fabric.sdk.android.services.concurrency.AsyncTask;
 import io.realm.Realm;
 import io.realm.RealmResults;
@@ -78,16 +83,68 @@ public class MenuActivity extends AppCompatActivity
         setTitle(R.string.app_name);
         user = getFirebaseUser();
         realm = Realm.getDefaultInstance();
-        //     faker();
+//             faker();
         setFloatingActionButton();
 
         setNavigationDrawer(toolbar);
 
-        findViewById(R.id.chart1).setVisibility(View.GONE);
+        setUpLinearLayoutHome();
+    }
+
+    private void setUpLinearLayoutHome() {
+        RealmResults<Transaction> result = realm.where(Transaction.class).findAll();
+
+        float gastoEfetivado=0, gastoInadimplente=0, rendaEfetivada=0, rendaInadimplente=0;
+
+        for(Transaction t: result){
+            if(t.isPayd()){
+                if(position(t.getCategoryName())== 0 || position(t.getCategoryName())==1)
+                    rendaEfetivada+=t.getValue();
+                else gastoEfetivado-=t.getValue();
+            }else{
+                if(position(t.getCategoryName())== 0 || position(t.getCategoryName())==1)
+                    rendaInadimplente+=t.getValue();
+                else gastoInadimplente-=t.getValue();
+            }
+        }
+
+        TextView tvGastoEfetivado,tvGastoInadimplente,tvRendaEfetivada,tvRendaInadimplente;
+        tvGastoEfetivado = findViewById(R.id.tvGastoEfetivado);
+        tvGastoInadimplente = findViewById(R.id.tvGastoInadimplente);
+        tvRendaEfetivada = findViewById(R.id.tvRendaEfetivada);
+        tvRendaInadimplente = findViewById(R.id.tvRendaInadimplente);
+
+        tvGastoEfetivado.setText(String.format("R$ %.2f",gastoEfetivado));
+        tvGastoInadimplente.setText(String.format("R$ %.2f",gastoInadimplente));
+        tvRendaEfetivada.setText(String.format("R$ %.2f",rendaEfetivada));
+        tvRendaInadimplente.setText(String.format("R$ %.2f",rendaInadimplente));
+
+
+
+
+        float saldoEfetivado, saldoInadimplente;
+        saldoEfetivado = rendaEfetivada - gastoEfetivado;
+        saldoInadimplente = rendaInadimplente - gastoInadimplente;
+
+        TextView tvSaldoEfetivado, tvSaldoInadimplente;
+        tvSaldoEfetivado = findViewById(R.id.tvSaldoEfetivado);
+        tvSaldoInadimplente = findViewById(R.id.tvSaldoInadimplente);
+
+        if(saldoEfetivado>=0)
+            tvSaldoEfetivado.setTextColor(getResources().getColor(R.color.colorAccent));
+        else tvSaldoEfetivado.setTextColor(getResources().getColor(R.color.colorRed));
+
+        if(saldoInadimplente>=0)
+            tvSaldoInadimplente.setTextColor(getResources().getColor(R.color.colorAccent));
+        else tvSaldoInadimplente.setTextColor(getResources().getColor(R.color.colorRed));
+
+        tvSaldoEfetivado.setText(String.format("R$ %.2f",saldoEfetivado));
+        tvSaldoInadimplente.setText(String.format("R$ %.2f",saldoInadimplente));
 
     }
 
     private void setFirstCard(int gastoOuRenda) {
+        findViewById(R.id.noValueChart).setVisibility(View.GONE);
         chart = findViewById(R.id.chart1);
         chart.setVisibility(View.VISIBLE);
         chart.setUsePercentValues(true);
@@ -156,16 +213,38 @@ public class MenuActivity extends AppCompatActivity
             nome = list.get(i).getCategoryName();
             soma[position(nome)] += valor;
         }
+        boolean hasvalue = false;
+        String subs;
 
-        if (gastoOuRenda == GASTO)
-            for (int i = 2; i < 8; i++)
+        if (gastoOuRenda == GASTO) {
+            for (int i = 2; i < 8; i++) {
                 entries.add(new PieEntry(soma[i], parties[i], getResources().getDrawable(R.drawable.star)));
-
-        else
-            for (int i = 0; i < 2; i++)
+                if(soma[i]!=0){
+                    hasvalue = true;
+            }}
+            if(!hasvalue)
+            {
+                TextView novalue = findViewById(R.id.noValueChart);
+                novalue.setVisibility(View.VISIBLE);
+                chart.setVisibility(View.GONE);
+                novalue.setText(getString(R.string.empty_chart,"um gasto"));
+            }
+        }
+        else {
+            for (int i = 0; i < 2; i++) {
                 entries.add(new PieEntry(soma[i], parties[i], getResources().getDrawable(R.drawable.star)));
-
-
+                if (soma[i] != 0) {
+                    hasvalue = true;
+                }
+            }
+            if(!hasvalue)
+            {
+                TextView novalue = findViewById(R.id.noValueChart);
+                novalue.setVisibility(View.VISIBLE);
+                chart.setVisibility(View.GONE);
+                novalue.setText(getString(R.string.empty_chart,"uma renda"));
+            }
+        }
         PieDataSet dataSet = new PieDataSet(entries, getString(R.string.text_category));
 
         dataSet.setDrawIcons(false);
@@ -208,42 +287,42 @@ public class MenuActivity extends AppCompatActivity
         return -1;
     }
 
-//    private void faker() {
-//        Faker faker = new Faker();
-//        RealmResults<Category> categories = realm.where(Category.class).findAll();
-//        ArrayList<Category> myfake = new ArrayList<>();
-//        myfake.addAll(categories);
-//
-//        myfake.add(0,new Category("Salário", RENDA));
-//        myfake.add(0,new Category("Salário", RENDA));
-//        myfake.add(0,new Category("Pensão", RENDA));
-//        myfake.add(0,new Category("Pensão", RENDA));
-//        for (int i = 0; i < 150; i++) {
-//            int number = faker.number.positive(0, 10000);
-//            Date date = faker.date.birthday(0, -1);
-//            String description = faker.lorem.paragraph();
-//
-//            Transaction t = new Transaction();
-//            t.setCategory(myfake.get(number % 12).getName());
-//            if(number%12>5)
-//                number=-number;
-//            t.setValue((float) number / 100);
-//            t.setDescription(description);
-//            String mDate = "" + (date.getYear()+1900) + "-" + (date.getMonth() + 1) + "-" + date.getDay();
-//            t.setDate(mDate);
-//            t.setPayd(number % 2 == 0);
-//            realm.beginTransaction();
-//            realm.insertOrUpdate(t);
-//            realm.commitTransaction();
-//
-//            FirebaseAuth mAuth = FirebaseAuth.getInstance();
-//            FirebaseUser user = mAuth.getCurrentUser();
-//            FirebaseDatabase database = FirebaseDatabase.getInstance();
-//            DatabaseReference myRef = database.getReference(user.getUid());
-//            myRef.child("transactions").push().setValue(t);
-//
-//        }
-//    }
+    private void faker() {
+        Faker faker = new Faker();
+        RealmResults<Category> categories = realm.where(Category.class).findAll();
+        ArrayList<Category> myfake = new ArrayList<>();
+        myfake.addAll(categories);
+
+        myfake.add(0,new Category("Salário", RENDA));
+        myfake.add(0,new Category("Salário", RENDA));
+        myfake.add(0,new Category("Pensão", RENDA));
+        myfake.add(0,new Category("Pensão", RENDA));
+        for (int i = 0; i < 150; i++) {
+            int number = faker.number.positive(0, 10000);
+            Date date = faker.date.birthday(0, 1);
+            String description = faker.lorem.paragraph();
+
+            Transaction t = new Transaction();
+            t.setCategory(myfake.get(number % 12).getName());
+            if(number%12>5)
+                number=-number;
+            t.setValue((float) number / 100);
+            t.setDescription(description);
+            String mDate = "" + (date.getYear()+1900) + "-" + (date.getMonth() + 1) + "-" + (date.getDay()+1);
+            t.setDate(mDate);
+            t.setPayd(number % 2 == 0);
+            realm.beginTransaction();
+            realm.insertOrUpdate(t);
+            realm.commitTransaction();
+
+            FirebaseAuth mAuth = FirebaseAuth.getInstance();
+            FirebaseUser user = mAuth.getCurrentUser();
+            FirebaseDatabase database = FirebaseDatabase.getInstance();
+            DatabaseReference myRef = database.getReference(user.getUid());
+            myRef.child("transactions").push().setValue(t);
+
+        }
+    }
 
     private void setNavigationDrawer(Toolbar toolbar) {
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
@@ -389,12 +468,14 @@ public class MenuActivity extends AppCompatActivity
             Intent it = new Intent(this, StatementsActivity.class);
             startActivity(it);
         } else if (id == R.id.nav_first_chart) {
+            findViewById(R.id.linearLayoutHome).setVisibility(View.GONE);
             setFirstCard(GASTO);
         } else if (id == R.id.nav_second_chart){
+            findViewById(R.id.linearLayoutHome).setVisibility(View.GONE);
             setFirstCard(RENDA);
-        } else if (id == R.id.nav_share) {
-            Intent it = new Intent(this, PieChartActivity.class);
-            startActivity(it);
+        } else if (id == R.id.nav_home) {
+            findViewById(R.id.linearLayoutHome).setVisibility(View.VISIBLE);
+            findViewById(R.id.chart1).setVisibility(View.GONE);
         } else if (id == R.id.nav_send) {
 
         }
