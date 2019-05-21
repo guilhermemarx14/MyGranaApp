@@ -1,5 +1,9 @@
 package com.guilhermemarx14.mygrana.RealmObjects;
 
+
+
+import com.google.firebase.database.Exclude;
+
 import java.io.Serializable;
 
 import io.realm.RealmObject;
@@ -7,13 +11,15 @@ import io.realm.RealmObject;
 /**
  * Created by Guilherme Marx on 2019-05-18
  */
-public class Transaction extends RealmObject implements Serializable, Comparable<Transaction> {
+
+public class Transaction extends RealmObject implements Serializable {
     private float value;
     private String categoryName;
     private String subcategory = null;
     private String description;
     private String date;
     private boolean payd;
+
 
     public Transaction(float value, String categoryName, String subcategory, String description, String date, boolean payd) {
         this.value = value;
@@ -91,8 +97,5 @@ public class Transaction extends RealmObject implements Serializable, Comparable
         this.description = description;
     }
 
-    @Override
-    public int compareTo(Transaction o) {
-        return -this.date.compareTo(o.date);
-    }
+
 }

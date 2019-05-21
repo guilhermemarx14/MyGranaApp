@@ -1,6 +1,7 @@
 package com.guilhermemarx14.mygrana.Adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.guilhermemarx14.mygrana.R;
 import com.guilhermemarx14.mygrana.RealmObjects.Transaction;
+import com.guilhermemarx14.mygrana.StatementDetailActivity;
 
 import java.util.List;
 
@@ -47,7 +49,14 @@ public class TransactionsAdapter extends
             categoryTextView = itemView.findViewById(R.id.categoryList);
             payd = itemView.findViewById(R.id.payd);
             unpayd = itemView.findViewById(R.id.unpayd);
-
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent it = new Intent(context, StatementDetailActivity.class);
+                    it.putExtra("position",getAdapterPosition());
+                    context.startActivity(it);
+                }
+            });
         }
     }
 

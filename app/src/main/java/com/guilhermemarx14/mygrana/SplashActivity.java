@@ -53,9 +53,11 @@ public class SplashActivity extends AppCompatActivity {
                 SystemClock.sleep(4000);
                 if (!firstTime) {
                     Intent it = new Intent(context, MenuActivity.class);
+                    it.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     startActivity(it);
                 } else {
                     Intent it = new Intent(context, FirstUserActivity.class);
+                    it.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     startActivity(it);
                 }
             }

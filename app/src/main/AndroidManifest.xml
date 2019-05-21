@@ -10,7 +10,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".FirstUserActivity"></activity>
-        <activity android:name=".Utils.PieChartActivity" />
+        <activity android:name="StatementDetailActivity" />
         <activity
             android:name=".StatementsActivity"
             android:label="@string/title_activity_statements"

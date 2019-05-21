@@ -8,8 +8,6 @@ import android.view.View;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.crashlytics.android.Crashlytics;
-import com.crashlytics.android.ndk.CrashlyticsNdk;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -23,11 +21,7 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
-import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-
-import io.fabric.sdk.android.Fabric;
-import io.realm.Realm;
 
 public class LoginActivity extends AppCompatActivity {
     public static final int RC_SIGN_IN = 1;
@@ -37,7 +31,8 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        Fabric.with(this, new Crashlytics(), new CrashlyticsNdk());
+        FirebaseDatabase.getInstance().setPersistenceEnabled(true);
+        //Fabric.with(this, new Crashlytics(), new CrashlyticsNdk());
 
         //FirebaseAuth.getInstance().signOut();
         mAuth = FirebaseAuth.getInstance();
