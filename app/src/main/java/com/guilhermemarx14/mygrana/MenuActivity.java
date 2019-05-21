@@ -455,8 +455,6 @@ public class MenuActivity extends AppCompatActivity
             findViewById(R.id.linearLayoutHome).setVisibility(View.VISIBLE);
             findViewById(R.id.chart1).setVisibility(View.GONE);
             findViewById(R.id.noValueChart).setVisibility(View.GONE);
-        } else if (id == R.id.nav_send) {
-
         }
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
