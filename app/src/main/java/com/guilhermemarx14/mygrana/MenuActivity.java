@@ -359,6 +359,11 @@ public class MenuActivity extends AppCompatActivity
     private FirebaseUser getFirebaseUser() {
         //get active user
         FirebaseAuth mAuth = FirebaseAuth.getInstance();
+        if(mAuth.getCurrentUser() == null){
+            Intent it = new Intent(this, LoginActivity.class);
+            it.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(it);
+        }
         return mAuth.getCurrentUser();
     }
 
