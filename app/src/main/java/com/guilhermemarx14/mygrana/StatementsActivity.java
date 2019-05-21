@@ -66,6 +66,7 @@ public class StatementsActivity extends AppCompatActivity
         RealmResults<Transaction> result = realm.where(Transaction.class).findAll();
         ArrayList<Transaction> myList = new ArrayList<>();
         myList.addAll(result);
+        Collections.sort(myList);
         adapter = new TransactionsAdapter(this, myList);
         rv.setAdapter(adapter);
         rv.setLayoutManager(new LinearLayoutManager(this));

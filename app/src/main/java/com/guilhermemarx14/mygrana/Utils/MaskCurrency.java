@@ -40,7 +40,7 @@ public class MaskCurrency implements TextWatcher {
         }
         isUpdating = true;
         String str = s.toString();
-        str = str.replace(",", "").replace("R$","").replace(".","");
+        str = str.replaceAll(",", "").replace("R$","").replaceAll("[.]","");
 
         try{
             str = nf.format((double) (Float.parseFloat(str)/100));

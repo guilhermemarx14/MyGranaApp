@@ -14,7 +14,7 @@ import static com.guilhermemarx14.mygrana.Utils.Constants.getTransactionId;
  * Created by Guilherme Marx on 2019-05-18
  */
 
-public class Transaction extends RealmObject implements Serializable {
+public class Transaction extends RealmObject implements Serializable, Comparable<Transaction> {
     private long id;
     private float value;
     private String categoryName;
@@ -115,4 +115,8 @@ public class Transaction extends RealmObject implements Serializable {
     }
 
 
+    @Override
+    public int compareTo(Transaction o) {
+        return -this.date.compareTo(o.getDate());
+    }
 }

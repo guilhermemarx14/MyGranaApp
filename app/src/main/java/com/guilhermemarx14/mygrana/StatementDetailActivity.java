@@ -119,10 +119,14 @@ public class StatementDetailActivity extends AppCompatActivity {
 
         value = findViewById(R.id.inpValue);
 
+
+        int mvalue =(int) (chosen.getValue()*100);
+
         value.addTextChangedListener(new MaskCurrency(value));
         if (chosen.getValue() > 0)
-            value.setText("" + chosen.getValue() * 10);
-        else value.setText("" + (-chosen.getValue() * 10));
+            value.setText("" + mvalue);
+        else value.setText("" + (-mvalue));
+
         final EditText inpDate = findViewById(R.id.inpDateEnd);
         inpDate.setFocusable(false);
         String mDay = chosen.getDate().split("-")[2];

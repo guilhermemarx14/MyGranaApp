@@ -150,6 +150,7 @@ public class SelectDateFilterStatements extends Dialog {
                     if(t.getDate().compareTo(end)==-1 && t.getDate().compareTo(begin)==1)
                         myList.add(t);
                 }
+                Collections.sort(myList);
                 ((StatementsActivity) act).adapter = new TransactionsAdapter(act,myList);
                 ((StatementsActivity) act).rv.setAdapter(((StatementsActivity) act).adapter);
                 ((StatementsActivity) act).rv.setLayoutManager(new LinearLayoutManager(act));
