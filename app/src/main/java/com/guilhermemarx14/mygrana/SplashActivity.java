@@ -31,6 +31,7 @@ import io.realm.Realm;
 
 import static com.guilhermemarx14.mygrana.Utils.Constants.GASTO;
 import static com.guilhermemarx14.mygrana.Utils.Constants.RENDA;
+import static com.guilhermemarx14.mygrana.Utils.Constants.setTransactionId;
 
 public class SplashActivity extends AppCompatActivity {
     Context context = this;
@@ -45,7 +46,7 @@ public class SplashActivity extends AppCompatActivity {
         setContentView(R.layout.activity_splash);
         Realm.init(this);
         getSupportActionBar().hide();
-
+        setTransactionId();
         final Animation animRotate = AnimationUtils.loadAnimation(this, R.anim.rotate);
         (new Thread(new Runnable() {
             @Override

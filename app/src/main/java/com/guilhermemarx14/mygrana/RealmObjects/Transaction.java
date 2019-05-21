@@ -2,17 +2,21 @@ package com.guilhermemarx14.mygrana.RealmObjects;
 
 
 
-import com.google.firebase.database.Exclude;
+import com.google.firebase.database.PropertyName;
 
 import java.io.Serializable;
 
 import io.realm.RealmObject;
+
+import static com.guilhermemarx14.mygrana.Utils.Constants.getTransactionId;
 
 /**
  * Created by Guilherme Marx on 2019-05-18
  */
 
 public class Transaction extends RealmObject implements Serializable {
+    @PropertyName("id")
+    private int id;
     private float value;
     private String categoryName;
     private String subcategory = null;
@@ -21,7 +25,10 @@ public class Transaction extends RealmObject implements Serializable {
     private boolean payd;
 
 
-    public Transaction(float value, String categoryName, String subcategory, String description, String date, boolean payd) {
+    public Transaction(int i, float value, String categoryName, String subcategory, String description, String date, boolean payd) {
+        if(i==0)
+            this.id = getTransactionId();
+        else this.id =i;
         this.value = value;
         this.categoryName = categoryName;
         this.subcategory = subcategory;
@@ -30,7 +37,10 @@ public class Transaction extends RealmObject implements Serializable {
         this.payd = payd;
     }
 
-    public Transaction(float value, String categoryName, String description, String date, boolean payd) {
+    public Transaction(int i, float value, String categoryName, String description, String date, boolean payd) {
+        if(i==0)
+            this.id = getTransactionId();
+        else this.id =i;
         this.value = value;
         this.categoryName = categoryName;
         this.description = description;
@@ -67,6 +77,14 @@ public class Transaction extends RealmObject implements Serializable {
 
     public float getValue() {
         return value;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public void setValue(float value) {

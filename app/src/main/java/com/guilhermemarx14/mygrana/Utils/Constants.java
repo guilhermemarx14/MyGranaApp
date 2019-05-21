@@ -2,6 +2,7 @@ package com.guilhermemarx14.mygrana.Utils;
 
 import com.guilhermemarx14.mygrana.RealmObjects.Category;
 import com.guilhermemarx14.mygrana.RealmObjects.Subcategory;
+import com.guilhermemarx14.mygrana.RealmObjects.Transaction;
 
 import java.util.ArrayList;
 
@@ -15,6 +16,23 @@ import io.realm.RealmResults;
 public class Constants {
     public static final int GASTO = 0;
     public static final int RENDA = 1;
+    public static int ID;
+
+
+    public static void setTransactionId(){
+        Realm realm = Realm.getDefaultInstance();
+        try {
+            ID = (int) realm.where(Transaction.class).max("id");
+        }catch (Exception e){
+            ID=0;
+        }
+    }
+
+    public static int getTransactionId(){
+        ID++;
+        return ID;
+    }
+
     public static ArrayList<String> getListCategories(){
         Realm realm = Realm.getDefaultInstance();
         RealmResults<Category> results = realm.where(Category.class).findAll();

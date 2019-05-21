@@ -36,6 +36,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
@@ -203,9 +204,9 @@ public class StatementDetailActivity extends AppCompatActivity {
                 if (!selected.getName().equals("Pensão") && !selected.getName().equals("Salário"))
                     value = -value;
                 if (selected2 == null)
-                    chosen = new Transaction(value, selected.getName(), desc, dateConvert(inpDate.getText().toString()), payd.isChecked());
+                    chosen = new Transaction(chosen.getId(), value, selected.getName(), desc, dateConvert(inpDate.getText().toString()), payd.isChecked());
                 else
-                    chosen = new Transaction(value, selected.getName(), selected2.getSubcategoryName(), desc, dateConvert(inpDate.getText().toString()), payd.isChecked());
+                    chosen = new Transaction(chosen.getId(), value, selected.getName(), selected2.getSubcategoryName(), desc, dateConvert(inpDate.getText().toString()), payd.isChecked());
                     realm.beginTransaction();
                     result.get(position).deleteFromRealm();
                     realm.commitTransaction();
@@ -216,12 +217,9 @@ public class StatementDetailActivity extends AppCompatActivity {
                 FirebaseUser user = mAuth.getCurrentUser();
                 FirebaseDatabase database = FirebaseDatabase.getInstance();
                 myRef = database.getReference(user.getUid());
-                myRef.child("transactions").removeValue();
-                result = realm.where(Transaction.class).findAll();
-                myList = new ArrayList<>();
-                myList.addAll(result);
-
-                myRef.child("transactions").setValue(result);
+                HashMap<String, Object> map = new HashMap<>();
+                map.put(""+chosen.getId(),chosen);
+                myRef.child("transactions").updateChildren(map);
 
 
                 Intent it = new Intent(context, StatementsActivity.class);
@@ -242,11 +240,11 @@ public class StatementDetailActivity extends AppCompatActivity {
         FirebaseAuth mAuth = FirebaseAuth.getInstance();
         FirebaseUser user = mAuth.getCurrentUser();
         FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference myRef = database.getReference(user.getUid());
-        RealmResults<Transaction> result = realm.where(Transaction.class).findAll();
-        myRef.child("transactions").setValue(result.get(0));
-        for(int i=1; i< result.size();i++)
-            myRef.child("transactions").push().setValue(result.get(i));
+        myRef = database.getReference(user.getUid());
+        HashMap<String, Object> map = new HashMap<>();
+        map.put(""+chosen.getId(),chosen);
+        myRef.child("transactions").push().updateChildren(map);
+
 
         super.onBackPressed();
     }

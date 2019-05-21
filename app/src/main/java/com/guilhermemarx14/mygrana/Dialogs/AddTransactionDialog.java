@@ -33,6 +33,7 @@ import com.guilhermemarx14.mygrana.RealmObjects.Transaction;
 import com.guilhermemarx14.mygrana.Utils.MaskCurrency;
 
 import java.util.Calendar;
+import java.util.HashMap;
 
 import io.realm.Realm;
 import io.realm.RealmList;
@@ -195,8 +196,8 @@ public class AddTransactionDialog extends Dialog{
                 if(!selected.getName().equals("Pensão") && !selected.getName().equals("Salário") )
                     value = -value;
                 if(selected2 == null)
-                    t = new Transaction(value,selected.getName(),desc,dateConvert(inpDate.getText().toString()),payd.isChecked());
-                else t = new Transaction(value,selected.getName(),selected2.getSubcategoryName(),desc,dateConvert(inpDate.getText().toString()),payd.isChecked());
+                    t = new Transaction(0, value,selected.getName(),desc,dateConvert(inpDate.getText().toString()),payd.isChecked());
+                else t = new Transaction(0, value,selected.getName(),selected2.getSubcategoryName(),desc,dateConvert(inpDate.getText().toString()),payd.isChecked());
                 realm.beginTransaction();
                     realm.copyToRealm(t);
                 realm.commitTransaction();
@@ -204,7 +205,9 @@ public class AddTransactionDialog extends Dialog{
                 FirebaseUser user = mAuth.getCurrentUser();
                 FirebaseDatabase database = FirebaseDatabase.getInstance();
                 DatabaseReference myRef = database.getReference(user.getUid());
-                myRef.child("transactions").push().setValue(t);
+                HashMap<String, Object> map = new HashMap<>();
+                map.put(""+t.getId(),t);
+                myRef.child("transactions").updateChildren(map);
 
                 Intent it = new Intent(act, MenuActivity.class);
                 it.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
