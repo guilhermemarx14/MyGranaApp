@@ -70,12 +70,16 @@ public class StatementsActivity extends AppCompatActivity
 
         rv = findViewById(R.id.rvTransactions);
         RealmResults<Transaction> result = realm.where(Transaction.class).findAll();
-        ArrayList<Transaction> myList = new ArrayList<>();
-        myList.addAll(result);
-        Collections.sort(myList);
-        adapter = new TransactionsAdapter(this, myList);
-        rv.setAdapter(adapter);
-        rv.setLayoutManager(new LinearLayoutManager(this));
+        if(result.size()==0)
+            findViewById(R.id.tvlistEmpty).setVisibility(View.VISIBLE);
+        else {
+            ArrayList<Transaction> myList = new ArrayList<>();
+            myList.addAll(result);
+            Collections.sort(myList);
+            adapter = new TransactionsAdapter(this, myList);
+            rv.setAdapter(adapter);
+            rv.setLayoutManager(new LinearLayoutManager(this));
+        }
     }
     private Toolbar getToolbar() {
         Toolbar toolbar = findViewById(R.id.toolbar);

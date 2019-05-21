@@ -50,7 +50,7 @@
     <string name="not_effective_total">Saldo inadimplente:</string>
     <string name="effective">Efetivado</string>
     <string name="not_effective">Inadimplente</string>
-    <string name="empty_chart">Voce precisa adicionar %s para visualizar o gráfico</string>
+    <string name="empty_chart">Você precisa adicionar %s para visualizar o gráfico</string>
     <string name="title_basic_data">Precisamos de sua Universidade:</string>
     <string name="university">Universidade: </string>
     <string name="campus">Campus: </string>
@@ -59,7 +59,7 @@
     <string name="near_by_count">Próximos Vencimentos</string>
     <string name="no_incomings">Você não possui lançamentos futuros.</string>
     <string name="to_start">Para começar, você deve fazer login com uma conta do Google.</string>
-
+    <string name="text_no_transactions">Você não cadastrou nenhuma transação ainda.</string>
 
 
 
