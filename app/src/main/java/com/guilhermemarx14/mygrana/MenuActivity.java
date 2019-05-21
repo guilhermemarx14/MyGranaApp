@@ -230,7 +230,7 @@ public class MenuActivity extends AppCompatActivity
         if (gastoOuRenda == GASTO) {
             for (int i = 2; i < 9; i++) {
                 if (nonZeroPositions.contains(i)) {
-                    entries.add(new PieEntry(soma[i], parties[i], getResources().getDrawable(R.drawable.star)));
+                    entries.add(new PieEntry(soma[i], parties[i], null));
                     if (soma[i] != 0) {
                         hasvalue = true;
                     }
@@ -246,7 +246,7 @@ public class MenuActivity extends AppCompatActivity
             }
         } else {
             for (int i = 0; i < 2; i++) {
-                entries.add(new PieEntry(soma[i], parties[i], getResources().getDrawable(R.drawable.star)));
+                entries.add(new PieEntry(soma[i], parties[i], null));
                 if (soma[i] != 0) {
                     hasvalue = true;
                 }
