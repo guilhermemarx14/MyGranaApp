@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.SystemClock;
+import android.util.Log;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
@@ -76,7 +77,7 @@ public class SplashActivity extends AppCompatActivity {
         ValueEventListener eventListener4 = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                if (!dataSnapshot.hasChildren()){
+                if (!dataSnapshot.child("university").hasChildren()){
                     firstTime = true;
                     setUpFirstTimeUser();
                 }

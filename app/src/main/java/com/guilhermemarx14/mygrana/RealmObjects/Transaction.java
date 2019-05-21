@@ -7,6 +7,7 @@ import com.google.firebase.database.PropertyName;
 import java.io.Serializable;
 
 import io.realm.RealmObject;
+import io.realm.annotations.PrimaryKey;
 
 import static com.guilhermemarx14.mygrana.Utils.Constants.getTransactionId;
 
@@ -15,6 +16,7 @@ import static com.guilhermemarx14.mygrana.Utils.Constants.getTransactionId;
  */
 
 public class Transaction extends RealmObject implements Serializable, Comparable<Transaction> {
+    @PrimaryKey
     private long id;
     private float value;
     private String categoryName;

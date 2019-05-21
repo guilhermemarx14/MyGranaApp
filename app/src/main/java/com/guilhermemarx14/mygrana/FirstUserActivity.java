@@ -54,7 +54,7 @@ public class FirstUserActivity extends AppCompatActivity {
                 FirebaseUser user = mAuth.getCurrentUser();
                 FirebaseDatabase database = FirebaseDatabase.getInstance();
                 DatabaseReference myRef = database.getReference(user.getUid());
-                myRef.child("university").setValue(spinner.getSelectedItem());
+                myRef.child("university").push().setValue(spinner.getSelectedItem());
 
                 Intent it = new Intent (context, MenuActivity.class);
                 it.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
