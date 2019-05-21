@@ -102,6 +102,7 @@ public class MenuActivity extends AppCompatActivity
         else {
             findViewById(R.id.textView19).setVisibility(View.GONE);
             Collections.sort(myList);
+            Collections.reverse(myList);
             TransactionsAdapter adapter = new TransactionsAdapter(this, myList);
             rv.setAdapter(adapter);
             rv.setLayoutManager(new LinearLayoutManager(this));
