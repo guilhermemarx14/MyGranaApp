@@ -84,32 +84,30 @@ public class MenuActivity extends AppCompatActivity
     private void setUpLinearLayoutHome() {
         RealmResults<Transaction> result = realm.where(Transaction.class).findAll();
 
-        float gastoEfetivado=0, gastoInadimplente=0, rendaEfetivada=0, rendaInadimplente=0;
+        float gastoEfetivado = 0, gastoInadimplente = 0, rendaEfetivada = 0, rendaInadimplente = 0;
 
-        for(Transaction t: result){
-            if(t.isPayd()){
-                if(position(t.getCategoryName())== 0 || position(t.getCategoryName())==1)
-                    rendaEfetivada+=t.getValue();
-                else gastoEfetivado-=t.getValue();
-            }else{
-                if(position(t.getCategoryName())== 0 || position(t.getCategoryName())==1)
-                    rendaInadimplente+=t.getValue();
-                else gastoInadimplente-=t.getValue();
+        for (Transaction t : result) {
+            if (t.isPayd()) {
+                if (position(t.getCategoryName()) == 0 || position(t.getCategoryName()) == 1)
+                    rendaEfetivada += t.getValue();
+                else gastoEfetivado -= t.getValue();
+            } else {
+                if (position(t.getCategoryName()) == 0 || position(t.getCategoryName()) == 1)
+                    rendaInadimplente += t.getValue();
+                else gastoInadimplente -= t.getValue();
             }
         }
 
-        TextView tvGastoEfetivado,tvGastoInadimplente,tvRendaEfetivada,tvRendaInadimplente;
+        TextView tvGastoEfetivado, tvGastoInadimplente, tvRendaEfetivada, tvRendaInadimplente;
         tvGastoEfetivado = findViewById(R.id.tvGastoEfetivado);
         tvGastoInadimplente = findViewById(R.id.tvGastoInadimplente);
         tvRendaEfetivada = findViewById(R.id.tvRendaEfetivada);
         tvRendaInadimplente = findViewById(R.id.tvRendaInadimplente);
 
-        tvGastoEfetivado.setText(String.format("R$ %.2f",gastoEfetivado));
-        tvGastoInadimplente.setText(String.format("R$ %.2f",gastoInadimplente));
-        tvRendaEfetivada.setText(String.format("R$ %.2f",rendaEfetivada));
-        tvRendaInadimplente.setText(String.format("R$ %.2f",rendaInadimplente));
-
-
+        tvGastoEfetivado.setText(String.format("R$ %.2f", gastoEfetivado));
+        tvGastoInadimplente.setText(String.format("R$ %.2f", gastoInadimplente));
+        tvRendaEfetivada.setText(String.format("R$ %.2f", rendaEfetivada));
+        tvRendaInadimplente.setText(String.format("R$ %.2f", rendaInadimplente));
 
 
         float saldoEfetivado, saldoInadimplente;
@@ -120,16 +118,16 @@ public class MenuActivity extends AppCompatActivity
         tvSaldoEfetivado = findViewById(R.id.tvSaldoEfetivado);
         tvSaldoInadimplente = findViewById(R.id.tvSaldoInadimplente);
 
-        if(saldoEfetivado>=0)
+        if (saldoEfetivado >= 0)
             tvSaldoEfetivado.setTextColor(getResources().getColor(R.color.colorAccent));
         else tvSaldoEfetivado.setTextColor(getResources().getColor(R.color.colorRed));
 
-        if(saldoInadimplente>=0)
+        if (saldoInadimplente >= 0)
             tvSaldoInadimplente.setTextColor(getResources().getColor(R.color.colorAccent));
         else tvSaldoInadimplente.setTextColor(getResources().getColor(R.color.colorRed));
 
-        tvSaldoEfetivado.setText(String.format("R$ %.2f",saldoEfetivado));
-        tvSaldoInadimplente.setText(String.format("R$ %.2f",saldoInadimplente));
+        tvSaldoEfetivado.setText(String.format("R$ %.2f", saldoEfetivado));
+        tvSaldoInadimplente.setText(String.format("R$ %.2f", saldoInadimplente));
 
     }
 
@@ -193,7 +191,7 @@ public class MenuActivity extends AppCompatActivity
         list.addAll(result);
         float valor;
         String nome;
-
+        ArrayList<Integer> nonZeroPositions = new ArrayList<>();
         float soma[] = new float[9];
         for (int i = 0; i < 8; i++)
             soma[i] = 0;
@@ -202,37 +200,40 @@ public class MenuActivity extends AppCompatActivity
             if (valor < 0) valor = -valor;
             nome = list.get(i).getCategoryName();
             soma[position(nome)] += valor;
+            nonZeroPositions.add(position(nome));
         }
         boolean hasvalue = false;
-        String subs;
+
 
         if (gastoOuRenda == GASTO) {
             for (int i = 2; i < 9; i++) {
-                entries.add(new PieEntry(soma[i], parties[i], getResources().getDrawable(R.drawable.star)));
-                if(soma[i]!=0){
-                    hasvalue = true;
-            }}
-            if(!hasvalue)
-            {
+                if (nonZeroPositions.contains(i)) {
+                    entries.add(new PieEntry(soma[i], parties[i], getResources().getDrawable(R.drawable.star)));
+                    if (soma[i] != 0) {
+                        hasvalue = true;
+                    }
+                }
+
+
+            }
+            if (!hasvalue) {
                 TextView novalue = findViewById(R.id.noValueChart);
                 novalue.setVisibility(View.VISIBLE);
                 chart.setVisibility(View.GONE);
-                novalue.setText(getString(R.string.empty_chart,"um gasto"));
+                novalue.setText(getString(R.string.empty_chart, "um gasto"));
             }
-        }
-        else {
+        } else {
             for (int i = 0; i < 2; i++) {
                 entries.add(new PieEntry(soma[i], parties[i], getResources().getDrawable(R.drawable.star)));
                 if (soma[i] != 0) {
                     hasvalue = true;
                 }
             }
-            if(!hasvalue)
-            {
+            if (!hasvalue) {
                 TextView novalue = findViewById(R.id.noValueChart);
                 novalue.setVisibility(View.VISIBLE);
                 chart.setVisibility(View.GONE);
-                novalue.setText(getString(R.string.empty_chart,"uma renda"));
+                novalue.setText(getString(R.string.empty_chart, "uma renda"));
             }
         }
         PieDataSet dataSet = new PieDataSet(entries, getString(R.string.text_category));
@@ -423,7 +424,7 @@ public class MenuActivity extends AppCompatActivity
         } else if (id == R.id.nav_first_chart) {
             findViewById(R.id.linearLayoutHome).setVisibility(View.GONE);
             setFirstCard(GASTO);
-        } else if (id == R.id.nav_second_chart){
+        } else if (id == R.id.nav_second_chart) {
             findViewById(R.id.linearLayoutHome).setVisibility(View.GONE);
             setFirstCard(RENDA);
         } else if (id == R.id.nav_home) {
