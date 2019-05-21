@@ -59,12 +59,14 @@ public class StatementDetailActivity extends AppCompatActivity {
 
         realm = Realm.getDefaultInstance();
         Bundle extras = getIntent().getExtras();
-        position = (int) extras.get("position");
+        long id = (long) extras.get("id");
         context = this;
         result = realm.where(Transaction.class).findAll();
         ArrayList<Transaction> mylist = new ArrayList<>();
         mylist.addAll(result);
-        chosen = mylist.get(position);
+        for(Transaction t: result)
+            if(t.getId() == id)
+                chosen = t;
 
         findViewById(R.id.textSubcategoryName).setVisibility(View.INVISIBLE);
         findViewById(R.id.spinnerSubcategory).setVisibility(View.INVISIBLE);
@@ -164,7 +166,7 @@ public class StatementDetailActivity extends AppCompatActivity {
         payd = findViewById(R.id.cbPayd);
         payd.setChecked(chosen.isPayd());
 
-        confirm = findViewById(R.id.buttonDelete);
+        confirm = findViewById(R.id.buttonConfirm);
 
         confirm.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -199,10 +201,7 @@ public class StatementDetailActivity extends AppCompatActivity {
                 else
                     chosen = new Transaction(chosen.getId(), value, selected.getName(), selected2.getSubcategoryName(), desc, dateConvert(inpDate.getText().toString()), payd.isChecked());
                 realm.beginTransaction();
-                result.get(position).deleteFromRealm();
-                realm.commitTransaction();
-                realm.beginTransaction();
-                realm.copyToRealm(chosen);
+                realm.insertOrUpdate(chosen);
                 realm.commitTransaction();
                 FirebaseAuth mAuth = FirebaseAuth.getInstance();
                 FirebaseUser user = mAuth.getCurrentUser();
@@ -213,7 +212,7 @@ public class StatementDetailActivity extends AppCompatActivity {
                 myRef.child("transactions").updateChildren(map);
 
 
-                Intent it = new Intent(context, StatementsActivity.class);
+                Intent it = new Intent(context, MenuActivity.class);
                 it.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 context.startActivity(it);
             }
@@ -230,11 +229,14 @@ public class StatementDetailActivity extends AppCompatActivity {
                 HashMap<String, Object> map = new HashMap<>();
                 map.put(""+chosen.getId(),null);
                 myRef.child("transactions").updateChildren(map);
+                for(int i =0; i<result.size();i++)
+                    if(result.get(i).getId() == chosen.getId())
+                        position = i;
                 realm.beginTransaction();
                 result.get(position).deleteFromRealm();
                 realm.commitTransaction();
 
-                Intent it = new Intent(context, StatementsActivity.class);
+                Intent it = new Intent(context, MenuActivity.class);
                 it.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 context.startActivity(it);
             }

@@ -53,7 +53,9 @@ public class TransactionsAdapter extends
                 @Override
                 public void onClick(View v) {
                     Intent it = new Intent(context, StatementDetailActivity.class);
-                    it.putExtra("position",getAdapterPosition());
+
+                    it.putExtra("id",mTransactions.get(getAdapterPosition()).getId());
+
                     context.startActivity(it);
                 }
             });

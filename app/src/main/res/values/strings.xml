@@ -56,6 +56,8 @@
     <string name="campus">Campus: </string>
     <string name="title_edit_statement">Editar Transação</string>
     <string name="delete">Excluir</string>
+    <string name="near_by_count">Próximos Vencimentos</string>
+    <string name="no_incomings">Você não possui lançamentos futuros.</string>
 
 
 

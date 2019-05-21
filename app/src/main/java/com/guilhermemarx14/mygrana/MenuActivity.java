@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -20,6 +21,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.github.mikephil.charting.animation.Easing;
 import com.github.mikephil.charting.charts.PieChart;
@@ -36,6 +39,7 @@ import com.github.mikephil.charting.utils.MPPointF;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.guilhermemarx14.mygrana.Adapters.TransactionsAdapter;
 import com.guilhermemarx14.mygrana.Dialogs.AddSubcategoryDialog;
 import com.guilhermemarx14.mygrana.Dialogs.AddTransactionDialog;
 import com.guilhermemarx14.mygrana.RealmObjects.Transaction;
@@ -45,6 +49,7 @@ import com.leinardi.android.speeddial.SpeedDialView;
 
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Collections;
 
 import io.realm.Realm;
 import io.realm.RealmResults;
@@ -86,7 +91,21 @@ public class MenuActivity extends AppCompatActivity
 
     private void setUpLinearLayoutHome() {
         RealmResults<Transaction> result = realm.where(Transaction.class).findAll();
+        RecyclerView rv = findViewById(R.id.rvNext);
+        ArrayList<Transaction> myList = new ArrayList<>();
 
+        for(Transaction t: result)
+            if(!t.isPayd())
+                myList.add(t);
+        if(myList.isEmpty())
+            findViewById(R.id.textView19).setVisibility(View.VISIBLE);
+        else {
+            findViewById(R.id.textView19).setVisibility(View.GONE);
+            Collections.sort(myList);
+            TransactionsAdapter adapter = new TransactionsAdapter(this, myList);
+            rv.setAdapter(adapter);
+            rv.setLayoutManager(new LinearLayoutManager(this));
+        }
         float gastoEfetivado = 0, gastoInadimplente = 0, rendaEfetivada = 0, rendaInadimplente = 0;
 
         for (Transaction t : result) {

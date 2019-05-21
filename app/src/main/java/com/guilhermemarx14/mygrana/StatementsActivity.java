@@ -77,7 +77,6 @@ public class StatementsActivity extends AppCompatActivity
         setSupportActionBar(toolbar);
         return toolbar;
     }
-
     private FirebaseUser getFirebaseUser() {
         //get active user
         FirebaseAuth mAuth = FirebaseAuth.getInstance();
@@ -136,7 +135,9 @@ public class StatementsActivity extends AppCompatActivity
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
-            super.onBackPressed();
+            Intent it = new Intent(this, MenuActivity.class);
+            startActivity(it);
+
         }
     }
 
