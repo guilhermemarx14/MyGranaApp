@@ -20,6 +20,7 @@ import com.guilhermemarx14.mygrana.RealmObjects.University;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 
 import io.realm.Realm;
 import io.realm.RealmObject;
@@ -54,13 +55,20 @@ public class FirstUserActivity extends AppCompatActivity {
                 FirebaseUser user = mAuth.getCurrentUser();
                 FirebaseDatabase database = FirebaseDatabase.getInstance();
                 DatabaseReference myRef = database.getReference(user.getUid());
-                myRef.child("university").push().setValue(spinner.getSelectedItem());
+                HashMap<String, Object> map = new HashMap<>();
+                map.put("0",spinner.getSelectedItem());
+                myRef.child("university").updateChildren(map);
 
                 Intent it = new Intent (context, MenuActivity.class);
                 it.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(it);
             }
         });
+
+    }
+
+    @Override
+    public void onBackPressed() {
 
     }
 }

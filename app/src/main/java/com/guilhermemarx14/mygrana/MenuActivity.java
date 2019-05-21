@@ -66,6 +66,9 @@ public class MenuActivity extends AppCompatActivity
     float balance = 0, positive = 0, negative = 0;
     private PieChart chart;
 
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -281,7 +284,8 @@ public class MenuActivity extends AppCompatActivity
     private void setNavigationDrawer(Toolbar toolbar) {
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
-
+        for(int i=0;i<navigationView.getMenu().size();i++)
+            navigationView.getMenu().getItem(i).setCheckable(false);
         setUpNavigationHeader(navigationView);
 
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -380,6 +384,7 @@ public class MenuActivity extends AppCompatActivity
             drawer.closeDrawer(GravityCompat.START);
         } else {
             super.onBackPressed();
+
         }
     }
 

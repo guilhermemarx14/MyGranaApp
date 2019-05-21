@@ -86,7 +86,8 @@ public class StatementsActivity extends AppCompatActivity
     private void setNavigationDrawer(Toolbar toolbar) {
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
-
+        for(int i=0;i<navigationView.getMenu().size();i++)
+            navigationView.getMenu().getItem(i).setCheckable(false);
         setUpNavigationHeader(navigationView);
 
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
