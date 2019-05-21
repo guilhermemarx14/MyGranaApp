@@ -64,8 +64,8 @@ public class StatementDetailActivity extends AppCompatActivity {
         result = realm.where(Transaction.class).findAll();
         ArrayList<Transaction> mylist = new ArrayList<>();
         mylist.addAll(result);
-        for(Transaction t: result)
-            if(t.getId() == id)
+        for (Transaction t : result)
+            if (t.getId() == id)
                 chosen = t;
 
         findViewById(R.id.textSubcategoryName).setVisibility(View.INVISIBLE);
@@ -122,7 +122,7 @@ public class StatementDetailActivity extends AppCompatActivity {
         value = findViewById(R.id.inpValue);
 
 
-        int mvalue =(int) (chosen.getValue()*100);
+        int mvalue = (int) (chosen.getValue() * 100);
 
         value.addTextChangedListener(new MaskCurrency(value));
         if (chosen.getValue() > 0)
@@ -227,10 +227,10 @@ public class StatementDetailActivity extends AppCompatActivity {
                 FirebaseDatabase database = FirebaseDatabase.getInstance();
                 myRef = database.getReference(user.getUid());
                 HashMap<String, Object> map = new HashMap<>();
-                map.put(""+chosen.getId(),null);
+                map.put("" + chosen.getId(), null);
                 myRef.child("transactions").updateChildren(map);
-                for(int i =0; i<result.size();i++)
-                    if(result.get(i).getId() == chosen.getId())
+                for (int i = 0; i < result.size(); i++)
+                    if (result.get(i).getId() == chosen.getId())
                         position = i;
                 realm.beginTransaction();
                 result.get(position).deleteFromRealm();

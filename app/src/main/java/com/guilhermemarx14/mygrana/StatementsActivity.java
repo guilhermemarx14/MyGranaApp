@@ -1,45 +1,32 @@
 package com.guilhermemarx14.mygrana;
 
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
-
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
-
 import android.util.Log;
-import android.view.View;
-
-import androidx.core.view.GravityCompat;
-import androidx.appcompat.app.ActionBarDrawerToggle;
-
+import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
+
+import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.guilhermemarx14.mygrana.Adapters.TransactionsAdapter;
-import com.guilhermemarx14.mygrana.Dialogs.AddSubcategoryDialog;
-import com.guilhermemarx14.mygrana.Dialogs.AddTransactionDialog;
 import com.guilhermemarx14.mygrana.Dialogs.SelectDateFilterStatements;
 import com.guilhermemarx14.mygrana.RealmObjects.Transaction;
 import com.guilhermemarx14.mygrana.RealmObjects.UserProfilePhoto;
-import com.leinardi.android.speeddial.SpeedDialActionItem;
-import com.leinardi.android.speeddial.SpeedDialView;
-
-import androidx.drawerlayout.widget.DrawerLayout;
-
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
-import android.view.Menu;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -56,6 +43,7 @@ public class StatementsActivity extends AppCompatActivity
     public RecyclerView rv;
     float balance = 0, positive = 0, negative = 0;
     public TransactionsAdapter adapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -70,7 +58,7 @@ public class StatementsActivity extends AppCompatActivity
 
         rv = findViewById(R.id.rvTransactions);
         RealmResults<Transaction> result = realm.where(Transaction.class).findAll();
-        if(result.size()==0)
+        if (result.size() == 0)
             findViewById(R.id.tvlistEmpty).setVisibility(View.VISIBLE);
         else {
             ArrayList<Transaction> myList = new ArrayList<>();
@@ -81,15 +69,17 @@ public class StatementsActivity extends AppCompatActivity
             rv.setLayoutManager(new LinearLayoutManager(this));
         }
     }
+
     private Toolbar getToolbar() {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         return toolbar;
     }
+
     private FirebaseUser getFirebaseUser() {
         //get active user
         FirebaseAuth mAuth = FirebaseAuth.getInstance();
-        if(mAuth.getCurrentUser() == null){
+        if (mAuth.getCurrentUser() == null) {
             Intent it = new Intent(this, LoginActivity.class);
             it.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(it);
@@ -97,10 +87,11 @@ public class StatementsActivity extends AppCompatActivity
 
         return mAuth.getCurrentUser();
     }
+
     private void setNavigationDrawer(Toolbar toolbar) {
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
-        for(int i=0;i<navigationView.getMenu().size();i++)
+        for (int i = 0; i < navigationView.getMenu().size(); i++)
             navigationView.getMenu().getItem(i).setCheckable(false);
         setUpNavigationHeader(navigationView);
 
@@ -130,12 +121,11 @@ public class StatementsActivity extends AppCompatActivity
 
     private void setBalance(View v) {
         RealmResults<Transaction> result = realm.where(Transaction.class).findAll();
-        for(Transaction a: result)
-        {
-            if( a.getValue() > 0)
-                positive +=a.getValue();
+        for (Transaction a : result) {
+            if (a.getValue() > 0)
+                positive += a.getValue();
             else negative += a.getValue();
-            balance+=a.getValue();
+            balance += a.getValue();
         }
         ((TextView) v.findViewById(R.id.txPositive)).setText(String.format("R$ %.2f", positive));
         ((TextView) v.findViewById(R.id.txNegative)).setText(String.format("R$ %.2f", negative));
@@ -185,7 +175,7 @@ public class StatementsActivity extends AppCompatActivity
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
-        if (id == R.id.nav_statements){
+        if (id == R.id.nav_statements) {
             RealmResults<Transaction> result = realm.where(Transaction.class).findAll();
             ArrayList<Transaction> myList = new ArrayList<>();
             myList.addAll(result);
@@ -193,15 +183,15 @@ public class StatementsActivity extends AppCompatActivity
             adapter = new TransactionsAdapter(this, myList);
             rv.setAdapter(adapter);
             rv.setLayoutManager(new LinearLayoutManager(this));
-        }else if (id == R.id.nav_date_filter) {
+        } else if (id == R.id.nav_date_filter) {
             SelectDateFilterStatements sdfs = new SelectDateFilterStatements(this);
             sdfs.show();
         } else if (id == R.id.nav_payd_filter) {
             RealmResults<Transaction> result = realm.where(Transaction.class).findAll();
             ArrayList<Transaction> myList = new ArrayList<>();
-            for(int i = 0; i< result.size();i++)
-                if(result.get(i).isPayd())
-                   myList.add(result.get(i));
+            for (int i = 0; i < result.size(); i++)
+                if (result.get(i).isPayd())
+                    myList.add(result.get(i));
             Collections.sort(myList);
             adapter = new TransactionsAdapter(this, myList);
             rv.setAdapter(adapter);
@@ -209,8 +199,8 @@ public class StatementsActivity extends AppCompatActivity
         } else if (id == R.id.nav_unpayd_filter) {
             RealmResults<Transaction> result = realm.where(Transaction.class).findAll();
             ArrayList<Transaction> myList = new ArrayList<>();
-            for(int i = 0; i< result.size();i++)
-                if(!result.get(i).isPayd())
+            for (int i = 0; i < result.size(); i++)
+                if (!result.get(i).isPayd())
                     myList.add(result.get(i));
             Collections.sort(myList);
             adapter = new TransactionsAdapter(this, myList);
@@ -226,6 +216,7 @@ public class StatementsActivity extends AppCompatActivity
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+
     private class DownloadImageFromInternet extends AsyncTask<String, Void, Bitmap> {
         ImageView imageView;
 

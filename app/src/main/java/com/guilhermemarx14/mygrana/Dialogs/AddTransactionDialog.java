@@ -44,7 +44,7 @@ import static com.guilhermemarx14.mygrana.Utils.Constants.getListSubcategories;
 /**
  * Created by Guilherme Marx on 2019-05-14
  */
-public class AddTransactionDialog extends Dialog{
+public class AddTransactionDialog extends Dialog {
 
 
     Activity act;
@@ -52,11 +52,12 @@ public class AddTransactionDialog extends Dialog{
     Category selected;
     Subcategory selected2;
     TextInputEditText value;
+
     public AddTransactionDialog(@NonNull Context context) {
         super(context);
-        act =(Activity) context;
-        selected=null;
-        selected2=null;
+        act = (Activity) context;
+        selected = null;
+        selected2 = null;
     }
 
 
@@ -70,29 +71,28 @@ public class AddTransactionDialog extends Dialog{
         findViewById(R.id.textSubcategoryName).setVisibility(View.INVISIBLE);
         findViewById(R.id.spinnerSubcategory).setVisibility(View.INVISIBLE);
         final Spinner category = findViewById(R.id.spinnerCategory);
-        final ArrayAdapter<String> arrayAdapterCategory = new ArrayAdapter<>(act,R.layout.spinners,getListCategories());
+        final ArrayAdapter<String> arrayAdapterCategory = new ArrayAdapter<>(act, R.layout.spinners, getListCategories());
         category.setAdapter(arrayAdapterCategory);
 
         category.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {//seta os spinners
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 String categorySelected = arrayAdapterCategory.getItem(i);
-                selected = realm.where(Category.class).equalTo("name",categorySelected).findFirst();
-                RealmList<Subcategory> list= realm.where(Category.class).equalTo("name",categorySelected).findFirst().getSubcategories();
+                selected = realm.where(Category.class).equalTo("name", categorySelected).findFirst();
+                RealmList<Subcategory> list = realm.where(Category.class).equalTo("name", categorySelected).findFirst().getSubcategories();
 
-                if (list.size()>0)
-                {
+                if (list.size() > 0) {
                     findViewById(R.id.textSubcategoryName).setVisibility(View.VISIBLE);
                     findViewById(R.id.spinnerSubcategory).setVisibility(View.VISIBLE);
                     final Spinner subcategory = findViewById(R.id.spinnerSubcategory);
-                    final ArrayAdapter<String> arrayAdapterSubcategory = new ArrayAdapter<>(act,R.layout.spinners,getListSubcategories(categorySelected));
+                    final ArrayAdapter<String> arrayAdapterSubcategory = new ArrayAdapter<>(act, R.layout.spinners, getListSubcategories(categorySelected));
                     subcategory.setAdapter(arrayAdapterSubcategory);
 
                     subcategory.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                         @Override
                         public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                             String subcategorySelected = arrayAdapterSubcategory.getItem(position);
-                            selected2 = realm.where(Subcategory.class).equalTo("subcategoryName",subcategorySelected).findFirst();
+                            selected2 = realm.where(Subcategory.class).equalTo("subcategoryName", subcategorySelected).findFirst();
                         }
 
                         @Override
@@ -101,7 +101,7 @@ public class AddTransactionDialog extends Dialog{
                         }
                     });
 
-                }else{
+                } else {
                     findViewById(R.id.textSubcategoryName).setVisibility(View.INVISIBLE);
                     findViewById(R.id.spinnerSubcategory).setVisibility(View.INVISIBLE);
                     selected2 = null;
@@ -129,16 +129,16 @@ public class AddTransactionDialog extends Dialog{
         Calendar c = Calendar.getInstance();
         String mDay;
         String mMonth;
-        if(c.get(Calendar.DAY_OF_MONTH)<=9)
-            mDay = "0"+c.get(Calendar.DAY_OF_MONTH);
+        if (c.get(Calendar.DAY_OF_MONTH) <= 9)
+            mDay = "0" + c.get(Calendar.DAY_OF_MONTH);
         else mDay = "" + c.get(Calendar.DAY_OF_MONTH);
 
-        int month = c.get(Calendar.MONTH)+1;
-        if(month<=9)
-            mMonth = "0"+month;
+        int month = c.get(Calendar.MONTH) + 1;
+        if (month <= 9)
+            mMonth = "0" + month;
         else mMonth = "" + month;
 
-        inpDate.setText(String.format("%s/%s/%d",mDay,mMonth,c.get(Calendar.YEAR)));
+        inpDate.setText(String.format("%s/%s/%d", mDay, mMonth, c.get(Calendar.YEAR)));
         inpDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -148,16 +148,16 @@ public class AddTransactionDialog extends Dialog{
                     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
                         String mDay;
                         String mMonth;
-                        if(dayOfMonth<=9)
-                            mDay = "0"+dayOfMonth;
+                        if (dayOfMonth <= 9)
+                            mDay = "0" + dayOfMonth;
                         else mDay = "" + dayOfMonth;
 
-                        month = month+1;
-                        if(month<=9)
-                            mMonth = "0"+month;
+                        month = month + 1;
+                        if (month <= 9)
+                            mMonth = "0" + month;
                         else mMonth = "" + month;
 
-                        inpDate.setText(String.format("%s/%s/%d",mDay,mMonth,year));
+                        inpDate.setText(String.format("%s/%s/%d", mDay, mMonth, year));
                     }
                 }, c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH));
                 dpd.show();
@@ -171,7 +171,7 @@ public class AddTransactionDialog extends Dialog{
         confirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(value.getText().toString().trim().isEmpty()) {
+                if (value.getText().toString().trim().isEmpty()) {
                     AlertDialog.Builder builder = new AlertDialog.Builder(act);
                     builder.setTitle(act.getResources().getString(R.string.error));
                     builder.setMessage(act.getResources().getString(R.string.text_no_value));
@@ -185,28 +185,29 @@ public class AddTransactionDialog extends Dialog{
                 }
                 EditText et = findViewById(R.id.inpValue);
                 String numero = et.getText().toString().substring(2);
-                numero = numero.replaceAll("[.]","");
-                numero = numero.replaceAll(",","");
-                numero = numero.replaceAll(" ","");
+                numero = numero.replaceAll("[.]", "");
+                numero = numero.replaceAll(",", "");
+                numero = numero.replaceAll(" ", "");
                 int num = Integer.parseInt(numero);
                 String desc = ((EditText) findViewById(R.id.inpDescription)).getText().toString();
-                float value = (float) num/100;
+                float value = (float) num / 100;
                 Transaction t;
                 CheckBox payd = findViewById(R.id.cbPayd);
-                if(!selected.getName().equals("Pensão") && !selected.getName().equals("Salário") )
+                if (!selected.getName().equals("Pensão") && !selected.getName().equals("Salário"))
                     value = -value;
-                if(selected2 == null)
-                    t = new Transaction(0, value,selected.getName(),desc,dateConvert(inpDate.getText().toString()),payd.isChecked());
-                else t = new Transaction(0, value,selected.getName(),selected2.getSubcategoryName(),desc,dateConvert(inpDate.getText().toString()),payd.isChecked());
+                if (selected2 == null)
+                    t = new Transaction(0, value, selected.getName(), desc, dateConvert(inpDate.getText().toString()), payd.isChecked());
+                else
+                    t = new Transaction(0, value, selected.getName(), selected2.getSubcategoryName(), desc, dateConvert(inpDate.getText().toString()), payd.isChecked());
                 realm.beginTransaction();
-                    realm.copyToRealm(t);
+                realm.copyToRealm(t);
                 realm.commitTransaction();
                 FirebaseAuth mAuth = FirebaseAuth.getInstance();
                 FirebaseUser user = mAuth.getCurrentUser();
                 FirebaseDatabase database = FirebaseDatabase.getInstance();
                 DatabaseReference myRef = database.getReference(user.getUid());
                 HashMap<String, Object> map = new HashMap<>();
-                map.put(""+t.getId(),t);
+                map.put("" + t.getId(), t);
                 myRef.child("transactions").updateChildren(map);
 
                 Intent it = new Intent(act, MenuActivity.class);
@@ -217,7 +218,7 @@ public class AddTransactionDialog extends Dialog{
         });
     }
 
-    public String dateConvert(String date){
+    public String dateConvert(String date) {
         String day = date.split("/")[0];
         String month = date.split("/")[1];
         String year = date.split("/")[2];

@@ -36,6 +36,7 @@ import static com.guilhermemarx14.mygrana.Utils.Constants.isBefore;
 public class SelectDateFilterStatements extends Dialog {
     Activity act;
     Realm realm;
+
     public SelectDateFilterStatements(@NonNull Activity context) {
         super(context);
         act = context;
@@ -46,7 +47,7 @@ public class SelectDateFilterStatements extends Dialog {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-         realm = Realm.getDefaultInstance();
+        realm = Realm.getDefaultInstance();
 
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.layout_date_filter_statements);
@@ -58,17 +59,17 @@ public class SelectDateFilterStatements extends Dialog {
         Calendar c = Calendar.getInstance();
         String mDay;
         String mMonth;
-        if(c.get(Calendar.DAY_OF_MONTH)<=9)
-            mDay = "0"+c.get(Calendar.DAY_OF_MONTH);
+        if (c.get(Calendar.DAY_OF_MONTH) <= 9)
+            mDay = "0" + c.get(Calendar.DAY_OF_MONTH);
         else mDay = "" + c.get(Calendar.DAY_OF_MONTH);
 
-        int month = c.get(Calendar.MONTH)+1;
-        if(month<=9)
-            mMonth = "0"+month;
+        int month = c.get(Calendar.MONTH) + 1;
+        if (month <= 9)
+            mMonth = "0" + month;
         else mMonth = "" + month;
 
-        inpDateBegin.setText(String.format("%s/%s/%d",mDay,mMonth,c.get(Calendar.YEAR)));
-        inpDateEnd.setText(String.format("%s/%s/%d",mDay,mMonth,c.get(Calendar.YEAR)));
+        inpDateBegin.setText(String.format("%s/%s/%d", mDay, mMonth, c.get(Calendar.YEAR)));
+        inpDateEnd.setText(String.format("%s/%s/%d", mDay, mMonth, c.get(Calendar.YEAR)));
         inpDateBegin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -78,16 +79,16 @@ public class SelectDateFilterStatements extends Dialog {
                     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
                         String mDay;
                         String mMonth;
-                        if(dayOfMonth<=9)
-                            mDay = "0"+dayOfMonth;
+                        if (dayOfMonth <= 9)
+                            mDay = "0" + dayOfMonth;
                         else mDay = "" + dayOfMonth;
 
-                        month = month+1;
-                        if(month<=9)
-                            mMonth = "0"+month;
+                        month = month + 1;
+                        if (month <= 9)
+                            mMonth = "0" + month;
                         else mMonth = "" + month;
 
-                        inpDateBegin.setText(String.format("%s/%s/%d",mDay,mMonth,year));
+                        inpDateBegin.setText(String.format("%s/%s/%d", mDay, mMonth, year));
                     }
                 }, c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH));
                 dpd.show();
@@ -105,16 +106,16 @@ public class SelectDateFilterStatements extends Dialog {
                     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
                         String mDay;
                         String mMonth;
-                        if(dayOfMonth<=9)
-                            mDay = "0"+dayOfMonth;
+                        if (dayOfMonth <= 9)
+                            mDay = "0" + dayOfMonth;
                         else mDay = "" + dayOfMonth;
 
-                        month = month+1;
-                        if(month<=9)
-                            mMonth = "0"+month;
+                        month = month + 1;
+                        if (month <= 9)
+                            mMonth = "0" + month;
                         else mMonth = "" + month;
 
-                        inpDateEnd.setText(String.format("%s/%s/%d",mDay,mMonth,year));
+                        inpDateEnd.setText(String.format("%s/%s/%d", mDay, mMonth, year));
                     }
                 }, c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH));
                 dpd.show();
@@ -126,8 +127,7 @@ public class SelectDateFilterStatements extends Dialog {
         confirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(!isBefore(inpDateBegin.getText().toString(), inpDateEnd.getText().toString()))
-                {
+                if (!isBefore(inpDateBegin.getText().toString(), inpDateEnd.getText().toString())) {
                     AlertDialog.Builder builder = new AlertDialog.Builder(act);
                     builder.setTitle(act.getResources().getString(R.string.error));
                     builder.setMessage(act.getResources().getString(R.string.error_data_filter));
@@ -143,15 +143,15 @@ public class SelectDateFilterStatements extends Dialog {
                 RealmResults<Transaction> result = realm.where(Transaction.class).findAll();
                 ArrayList<Transaction> myList = new ArrayList<>();
                 String begin = inpDateBegin.getText().toString();
-                begin = begin.split("/")[2] + "-"+begin.split("/")[1] + "-"+begin.split("/")[0];
+                begin = begin.split("/")[2] + "-" + begin.split("/")[1] + "-" + begin.split("/")[0];
                 String end = inpDateEnd.getText().toString();
-                end = end.split("/")[2] + "-"+end.split("/")[1] + "-"+end.split("/")[0];
-                for(Transaction t: result){
-                    if(t.getDate().compareTo(end)==-1 && t.getDate().compareTo(begin)==1)
+                end = end.split("/")[2] + "-" + end.split("/")[1] + "-" + end.split("/")[0];
+                for (Transaction t : result) {
+                    if (t.getDate().compareTo(end) == -1 && t.getDate().compareTo(begin) == 1)
                         myList.add(t);
                 }
                 Collections.sort(myList);
-                ((StatementsActivity) act).adapter = new TransactionsAdapter(act,myList);
+                ((StatementsActivity) act).adapter = new TransactionsAdapter(act, myList);
                 ((StatementsActivity) act).rv.setAdapter(((StatementsActivity) act).adapter);
                 ((StatementsActivity) act).rv.setLayoutManager(new LinearLayoutManager(act));
                 dismiss();

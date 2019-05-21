@@ -24,8 +24,6 @@ import com.guilhermemarx14.mygrana.R;
 import com.guilhermemarx14.mygrana.RealmObjects.Category;
 import com.guilhermemarx14.mygrana.RealmObjects.Subcategory;
 
-import java.util.HashMap;
-
 import io.realm.Realm;
 import io.realm.RealmResults;
 
@@ -80,8 +78,8 @@ public class AddSubcategoryDialog extends Dialog {
                 realm.beginTransaction();
                 RealmResults<Category> categories = realm.where(Category.class).findAll();
                 Category category = new Category();
-                for(int i=0;i<categories.size();i++)
-                    if(categories.get(i).getName().equals(categoryAdd.getSelectedItem())){
+                for (int i = 0; i < categories.size(); i++)
+                    if (categories.get(i).getName().equals(categoryAdd.getSelectedItem())) {
                         category = categories.get(i);
                         break;
                     }

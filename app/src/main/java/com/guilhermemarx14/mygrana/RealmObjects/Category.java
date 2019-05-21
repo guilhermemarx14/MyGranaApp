@@ -16,8 +16,6 @@ public class Category extends RealmObject implements Serializable {
     RealmList<Subcategory> subcategories;
 
 
-
-
     public Category() {
         subcategories = new RealmList<>();
     }

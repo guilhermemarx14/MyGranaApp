@@ -12,19 +12,21 @@ import io.realm.RealmObject;
  */
 public class UserProfilePhoto extends RealmObject {
     private byte[] userPhoto;
-    public UserProfilePhoto(){}
 
-    public UserProfilePhoto(Bitmap bimage){
+    public UserProfilePhoto() {
+    }
+
+    public UserProfilePhoto(Bitmap bimage) {
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
         bimage.compress(Bitmap.CompressFormat.PNG, 100, stream);
         this.userPhoto = stream.toByteArray();
     }
 
-    public void setUserPhoto(byte[] photo){
+    public void setUserPhoto(byte[] photo) {
         this.userPhoto = photo;
     }
 
-    public Bitmap getUserPhoto(){
+    public Bitmap getUserPhoto() {
         return BitmapFactory.decodeByteArray(this.userPhoto, 0, this.userPhoto.length);
     }
 

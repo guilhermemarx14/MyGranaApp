@@ -11,7 +11,6 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -72,8 +71,6 @@ public class MenuActivity extends AppCompatActivity
     private PieChart chart;
 
 
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -94,10 +91,10 @@ public class MenuActivity extends AppCompatActivity
         RecyclerView rv = findViewById(R.id.rvNext);
         ArrayList<Transaction> myList = new ArrayList<>();
 
-        for(Transaction t: result)
-            if(!t.isPayd())
+        for (Transaction t : result)
+            if (!t.isPayd())
                 myList.add(t);
-        if(myList.isEmpty())
+        if (myList.isEmpty())
             findViewById(R.id.textView19).setVisibility(View.VISIBLE);
         else {
             findViewById(R.id.textView19).setVisibility(View.GONE);
@@ -304,7 +301,7 @@ public class MenuActivity extends AppCompatActivity
     private void setNavigationDrawer(Toolbar toolbar) {
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
-        for(int i=0;i<navigationView.getMenu().size();i++)
+        for (int i = 0; i < navigationView.getMenu().size(); i++)
             navigationView.getMenu().getItem(i).setCheckable(false);
         setUpNavigationHeader(navigationView);
 
@@ -360,7 +357,7 @@ public class MenuActivity extends AppCompatActivity
     private FirebaseUser getFirebaseUser() {
         //get active user
         FirebaseAuth mAuth = FirebaseAuth.getInstance();
-        if(mAuth.getCurrentUser() == null){
+        if (mAuth.getCurrentUser() == null) {
             Intent it = new Intent(this, LoginActivity.class);
             it.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(it);

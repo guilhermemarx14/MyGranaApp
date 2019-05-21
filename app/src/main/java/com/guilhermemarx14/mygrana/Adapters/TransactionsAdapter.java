@@ -8,7 +8,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.guilhermemarx14.mygrana.R;
@@ -54,7 +53,7 @@ public class TransactionsAdapter extends
                 public void onClick(View v) {
                     Intent it = new Intent(context, StatementDetailActivity.class);
 
-                    it.putExtra("id",mTransactions.get(getAdapterPosition()).getId());
+                    it.putExtra("id", mTransactions.get(getAdapterPosition()).getId());
 
                     context.startActivity(it);
                 }
@@ -65,6 +64,7 @@ public class TransactionsAdapter extends
 
     private List<Transaction> mTransactions;
     Context context;
+
     // Pass in the contact array into the constructor
     public TransactionsAdapter(Context context, List<Transaction> transactions) {
         mTransactions = transactions;
@@ -92,19 +92,19 @@ public class TransactionsAdapter extends
         Transaction transaction = mTransactions.get(position);
 
         // Set item views based on your views and data model
-        if(transaction.getValue()>=0)
+        if (transaction.getValue() >= 0)
             viewHolder.valueTextView.setTextColor(context.getResources().getColor(R.color.colorAccent));
-        else viewHolder.valueTextView.setTextColor(context.getResources().getColor(R.color.colorRed));
+        else
+            viewHolder.valueTextView.setTextColor(context.getResources().getColor(R.color.colorRed));
 
         viewHolder.valueTextView.setText(String.format("R$ %.2f", transaction.getValue()));
         viewHolder.descriptionTextView.setText(transaction.getDescription());
         viewHolder.dateTextView.setText(convertDateForExibition(transaction.getDate()));
         viewHolder.categoryTextView.setText(transaction.getCategory());
-        if(transaction.isPayd()) {
+        if (transaction.isPayd()) {
             viewHolder.unpayd.setVisibility(View.GONE);
             viewHolder.payd.setVisibility(View.VISIBLE);
-        }
-        else {
+        } else {
             viewHolder.unpayd.setVisibility(View.VISIBLE);
             viewHolder.payd.setVisibility(View.GONE);
         }

@@ -1,9 +1,6 @@
 package com.guilhermemarx14.mygrana.RealmObjects;
 
 
-
-import com.google.firebase.database.PropertyName;
-
 import java.io.Serializable;
 
 import io.realm.RealmObject;
@@ -27,9 +24,9 @@ public class Transaction extends RealmObject implements Serializable, Comparable
 
 
     public Transaction(long i, float value, String categoryName, String subcategory, String description, String date, boolean payd) {
-        if(i==0)
+        if (i == 0)
             this.id = getTransactionId();
-        else this.id =i;
+        else this.id = i;
         this.value = value;
         this.categoryName = categoryName;
         this.subcategory = subcategory;
@@ -39,9 +36,9 @@ public class Transaction extends RealmObject implements Serializable, Comparable
     }
 
     public Transaction(long i, float value, String categoryName, String description, String date, boolean payd) {
-        if(i==0)
+        if (i == 0)
             this.id = getTransactionId();
-        else this.id =i;
+        else this.id = i;
         this.value = value;
         this.categoryName = categoryName;
         this.description = description;

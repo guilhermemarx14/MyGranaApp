@@ -1,16 +1,14 @@
 package com.guilhermemarx14.mygrana;
 
-import androidx.appcompat.app.AppCompatActivity;
-
-import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.SystemClock;
-import android.util.Log;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -24,9 +22,6 @@ import com.guilhermemarx14.mygrana.RealmObjects.Subcategory;
 import com.guilhermemarx14.mygrana.RealmObjects.Transaction;
 import com.guilhermemarx14.mygrana.RealmObjects.University;
 import com.guilhermemarx14.mygrana.RealmObjects.UserProfilePhoto;
-
-import java.util.Collection;
-import java.util.Collections;
 
 import io.realm.Realm;
 
@@ -49,8 +44,8 @@ public class SplashActivity extends AppCompatActivity {
         getSupportActionBar().hide();
         user = getFirebaseUser();
         realm = Realm.getDefaultInstance();
-        if(realm.where(Transaction.class).max("id")!=null)
-        setTransactionId((long) realm.where(Transaction.class).max("id"));
+        if (realm.where(Transaction.class).max("id") != null)
+            setTransactionId((long) realm.where(Transaction.class).max("id"));
         else setTransactionId(0);
         final Animation animRotate = AnimationUtils.loadAnimation(this, R.anim.rotate);
         realm.beginTransaction();
@@ -88,7 +83,7 @@ public class SplashActivity extends AppCompatActivity {
         ValueEventListener eventListener4 = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                if (!dataSnapshot.child("university").hasChildren()){
+                if (!dataSnapshot.child("university").hasChildren()) {
                     firstTime = true;
 
                     setUpFirstTimeUser();
@@ -146,7 +141,6 @@ public class SplashActivity extends AppCompatActivity {
         myquery.addListenerForSingleValueEvent(eventListener2);
 
 
-
         mDatabase = FirebaseDatabase.getInstance().getReference();
         myquery = mDatabase.child(user.getUid()).child("subcategories");
         ValueEventListener eventListener = new ValueEventListener() {
@@ -175,7 +169,7 @@ public class SplashActivity extends AppCompatActivity {
     private FirebaseUser getFirebaseUser() {
         //get active user
         FirebaseAuth mAuth = FirebaseAuth.getInstance();
-        if(mAuth.getCurrentUser() == null)
+        if (mAuth.getCurrentUser() == null)
             finish();
         return mAuth.getCurrentUser();
     }

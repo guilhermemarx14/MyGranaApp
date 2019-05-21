@@ -2,7 +2,6 @@ package com.guilhermemarx14.mygrana;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.SystemClock;
 import android.util.Log;
 import android.view.View;
 
@@ -32,6 +31,7 @@ public class LoginActivity extends AppCompatActivity {
     public static final int RC_SIGN_IN = 1;
     GoogleSignInClient mGoogleSignInClient;
     private FirebaseAuth mAuth;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,9 +42,9 @@ public class LoginActivity extends AppCompatActivity {
         //FirebaseAuth.getInstance().signOut();
         mAuth = FirebaseAuth.getInstance();
 
-        if(mAuth.getCurrentUser()!= null  ){
+        if (mAuth.getCurrentUser() != null) {
 
-            Intent it = new Intent(this,SplashActivity.class);
+            Intent it = new Intent(this, SplashActivity.class);
             startActivity(it);
         }
         // Configure Google Sign In
@@ -91,6 +91,7 @@ public class LoginActivity extends AppCompatActivity {
             }
         }
     }
+
     private void firebaseAuthWithGoogle(GoogleSignInAccount acct) {
         Log.d("pxt", "firebaseAuthWithGoogle:" + acct.getId());
 
@@ -115,15 +116,15 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void updateUI(Object o) {
-        if(o!= null){
-            Intent it = new Intent(this ,SplashActivity.class);
+        if (o != null) {
+            Intent it = new Intent(this, SplashActivity.class);
             startActivity(it);
         }
 
     }
 
     @Override
-    protected void onStart(){
+    protected void onStart() {
         super.onStart();
 
         // Check for existing Google Sign In account, if the user is already signed in
