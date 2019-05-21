@@ -2,11 +2,15 @@ package com.guilhermemarx14.mygrana;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
 import android.os.Bundle;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
+import android.util.Log;
 import android.view.View;
 
 import androidx.core.view.GravityCompat;
@@ -37,6 +41,7 @@ import android.view.Menu;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -101,8 +106,10 @@ public class StatementsActivity extends AppCompatActivity
         View v = navigationView.getHeaderView(0);
 
         upp = realm.where(UserProfilePhoto.class).findFirst();
-
-        ((ImageView) v.findViewById(R.id.navHeaderPhoto)).setImageBitmap(upp.getUserPhoto());
+        if (upp == null) {
+            new DownloadImageFromInternet(((ImageView) v.findViewById(R.id.navHeaderPhoto))).execute(user.getPhotoUrl().toString());
+        } else
+            ((ImageView) v.findViewById(R.id.navHeaderPhoto)).setImageBitmap(upp.getUserPhoto());
 
         ((TextView) v.findViewById(R.id.navHeaderTitle)).setText(user.getDisplayName());
 
@@ -208,5 +215,38 @@ public class StatementsActivity extends AppCompatActivity
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+    private class DownloadImageFromInternet extends AsyncTask<String, Void, Bitmap> {
+        ImageView imageView;
+
+        private DownloadImageFromInternet(ImageView imageView) {
+            this.imageView = imageView;
+        }
+
+        protected Bitmap doInBackground(String... urls) {
+            String imageURL = urls[0];
+            Bitmap bimage = null;
+            Realm realm = Realm.getDefaultInstance();
+            try {
+                InputStream in = new java.net.URL(imageURL).openStream();
+                bimage = BitmapFactory.decodeStream(in);
+
+            } catch (Exception e) {
+                Log.e("Error Message", e.getMessage());
+                e.printStackTrace();
+            }
+            upp = new UserProfilePhoto(bimage);
+            realm.beginTransaction();
+            realm.copyToRealm(upp);
+            realm.commitTransaction();
+            return bimage;
+        }
+
+        protected void onPostExecute(Bitmap result) {
+            if (result != null) {
+                imageView.setImageBitmap(result);
+
+            }
+        }
     }
 }
