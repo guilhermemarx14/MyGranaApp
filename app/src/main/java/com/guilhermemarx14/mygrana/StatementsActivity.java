@@ -1,6 +1,7 @@
 package com.guilhermemarx14.mygrana;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -165,16 +166,41 @@ public class StatementsActivity extends AppCompatActivity
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
-
-        if (id == R.id.nav_date_filter) {
+        if (id == R.id.nav_statements){
+            RealmResults<Transaction> result = realm.where(Transaction.class).findAll();
+            ArrayList<Transaction> myList = new ArrayList<>();
+            myList.addAll(result);
+            Collections.sort(myList);
+            adapter = new TransactionsAdapter(this, myList);
+            rv.setAdapter(adapter);
+            rv.setLayoutManager(new LinearLayoutManager(this));
+        }else if (id == R.id.nav_date_filter) {
             SelectDateFilterStatements sdfs = new SelectDateFilterStatements(this);
             sdfs.show();
-        } else if (id == R.id.nav_gallery) {
-
-        } else if (id == R.id.nav_slideshow) {
-
-        } else if (id == R.id.nav_tools) {
-
+        } else if (id == R.id.nav_payd_filter) {
+            RealmResults<Transaction> result = realm.where(Transaction.class).findAll();
+            ArrayList<Transaction> myList = new ArrayList<>();
+            for(int i = 0; i< result.size();i++)
+                if(result.get(i).isPayd())
+                   myList.add(result.get(i));
+            Collections.sort(myList);
+            adapter = new TransactionsAdapter(this, myList);
+            rv.setAdapter(adapter);
+            rv.setLayoutManager(new LinearLayoutManager(this));
+        } else if (id == R.id.nav_unpayd_filter) {
+            RealmResults<Transaction> result = realm.where(Transaction.class).findAll();
+            ArrayList<Transaction> myList = new ArrayList<>();
+            for(int i = 0; i< result.size();i++)
+                if(!result.get(i).isPayd())
+                    myList.add(result.get(i));
+            Collections.sort(myList);
+            adapter = new TransactionsAdapter(this, myList);
+            rv.setAdapter(adapter);
+            rv.setLayoutManager(new LinearLayoutManager(this));
+        } else if (id == R.id.nav_home) {
+            Intent it = new Intent(this, MenuActivity.class);
+            it.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(it);
         } else if (id == R.id.nav_share) {
 
         } else if (id == R.id.nav_send) {

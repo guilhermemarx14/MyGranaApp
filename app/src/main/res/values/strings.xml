@@ -37,6 +37,8 @@
     <string name="nav_header_title">Android Studio</string>
     <string name="text_payd">Marcar como pago</string>
     <string name="text_date_filter">Filtrar por data</string>
+    <string name="text_payd_filter">Filtrar por efetivados</string>
+    <string name="text_unpayd_filter">Filtrar por inadimplentes</string>
     <string name="menu_home">Home</string>
     <string name="text_begin_filter">Data de início</string>
     <string name="text_end_filter">Data de fim</string>
