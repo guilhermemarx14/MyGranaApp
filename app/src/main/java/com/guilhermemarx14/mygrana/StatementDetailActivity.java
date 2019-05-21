@@ -1,18 +1,12 @@
 package com.guilhermemarx14.mygrana;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.SystemClock;
 import android.view.View;
-import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -21,12 +15,13 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.guilhermemarx14.mygrana.Dialogs.AddTransactionDialog;
 import com.guilhermemarx14.mygrana.RealmObjects.Category;
 import com.guilhermemarx14.mygrana.RealmObjects.Subcategory;
 import com.guilhermemarx14.mygrana.RealmObjects.Transaction;
@@ -34,12 +29,7 @@ import com.guilhermemarx14.mygrana.Utils.MaskCurrency;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.ListIterator;
 
 import io.realm.Realm;
 import io.realm.RealmList;
@@ -56,12 +46,11 @@ public class StatementDetailActivity extends AppCompatActivity {
     Context context;
     CheckBox payd;
     Transaction chosen;
-     Realm realm;
+    Realm realm;
     int position;
-    int h=0;
-    ArrayList<Transaction> myList;
     DatabaseReference myRef;
     RealmResults<Transaction> result;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -70,7 +59,7 @@ public class StatementDetailActivity extends AppCompatActivity {
 
         realm = Realm.getDefaultInstance();
         Bundle extras = getIntent().getExtras();
-         position = (int) extras.get("position");
+        position = (int) extras.get("position");
         context = this;
         result = realm.where(Transaction.class).findAll();
         ArrayList<Transaction> mylist = new ArrayList<>();
@@ -169,8 +158,7 @@ public class StatementDetailActivity extends AppCompatActivity {
         });
         ((EditText) findViewById(R.id.inpDescription)).setText(chosen.getDescription());
         payd = findViewById(R.id.cbPayd);
-        if (chosen.isPayd())
-            payd.isChecked();
+        payd.setChecked(chosen.isPayd());
 
         confirm = findViewById(R.id.buttonConfirmFilter);
 
@@ -200,16 +188,15 @@ public class StatementDetailActivity extends AppCompatActivity {
                 float value = (float) num / 100;
 
 
-
                 if (!selected.getName().equals("Pensão") && !selected.getName().equals("Salário"))
                     value = -value;
                 if (selected2 == null)
                     chosen = new Transaction(chosen.getId(), value, selected.getName(), desc, dateConvert(inpDate.getText().toString()), payd.isChecked());
                 else
                     chosen = new Transaction(chosen.getId(), value, selected.getName(), selected2.getSubcategoryName(), desc, dateConvert(inpDate.getText().toString()), payd.isChecked());
-                    realm.beginTransaction();
-                    result.get(position).deleteFromRealm();
-                    realm.commitTransaction();
+                realm.beginTransaction();
+                result.get(position).deleteFromRealm();
+                realm.commitTransaction();
                 realm.beginTransaction();
                 realm.copyToRealm(chosen);
                 realm.commitTransaction();
@@ -218,7 +205,7 @@ public class StatementDetailActivity extends AppCompatActivity {
                 FirebaseDatabase database = FirebaseDatabase.getInstance();
                 myRef = database.getReference(user.getUid());
                 HashMap<String, Object> map = new HashMap<>();
-                map.put(""+chosen.getId(),chosen);
+                map.put("" + chosen.getId(), chosen);
                 myRef.child("transactions").updateChildren(map);
 
 
@@ -227,26 +214,6 @@ public class StatementDetailActivity extends AppCompatActivity {
                 context.startActivity(it);
             }
         });
-    }
-
-    @Override
-    public void onBackPressed() {
-        realm.beginTransaction();
-        result.get(position).deleteFromRealm();
-        realm.commitTransaction();
-        realm.beginTransaction();
-        realm.copyToRealm(chosen);
-        realm.commitTransaction();
-        FirebaseAuth mAuth = FirebaseAuth.getInstance();
-        FirebaseUser user = mAuth.getCurrentUser();
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        myRef = database.getReference(user.getUid());
-        HashMap<String, Object> map = new HashMap<>();
-        map.put(""+chosen.getId(),chosen);
-        myRef.child("transactions").push().updateChildren(map);
-
-
-        super.onBackPressed();
     }
 
     public String dateConvert(String date) {
