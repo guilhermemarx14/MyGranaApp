@@ -121,7 +121,7 @@ public class SelectDateFilterStatements extends Dialog {
             }
         });
 
-        Button confirm = findViewById(R.id.buttonConfirmFilter);
+        Button confirm = findViewById(R.id.buttonDelete);
 
         confirm.setOnClickListener(new View.OnClickListener() {
             @Override

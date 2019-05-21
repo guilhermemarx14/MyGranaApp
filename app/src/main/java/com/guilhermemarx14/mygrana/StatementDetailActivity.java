@@ -164,7 +164,7 @@ public class StatementDetailActivity extends AppCompatActivity {
         payd = findViewById(R.id.cbPayd);
         payd.setChecked(chosen.isPayd());
 
-        confirm = findViewById(R.id.buttonConfirmFilter);
+        confirm = findViewById(R.id.buttonDelete);
 
         confirm.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -212,6 +212,27 @@ public class StatementDetailActivity extends AppCompatActivity {
                 map.put("" + chosen.getId(), chosen);
                 myRef.child("transactions").updateChildren(map);
 
+
+                Intent it = new Intent(context, StatementsActivity.class);
+                it.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                context.startActivity(it);
+            }
+        });
+
+        Button buttonDelete = findViewById(R.id.buttonDelete);
+        buttonDelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FirebaseAuth mAuth = FirebaseAuth.getInstance();
+                FirebaseUser user = mAuth.getCurrentUser();
+                FirebaseDatabase database = FirebaseDatabase.getInstance();
+                myRef = database.getReference(user.getUid());
+                HashMap<String, Object> map = new HashMap<>();
+                map.put(""+chosen.getId(),null);
+                myRef.child("transactions").updateChildren(map);
+                realm.beginTransaction();
+                result.get(position).deleteFromRealm();
+                realm.commitTransaction();
 
                 Intent it = new Intent(context, StatementsActivity.class);
                 it.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);

@@ -166,7 +166,7 @@ public class AddTransactionDialog extends Dialog{
 
 
 //
-        confirm = findViewById(R.id.buttonConfirmFilter);
+        confirm = findViewById(R.id.buttonDelete);
 //
         confirm.setOnClickListener(new View.OnClickListener() {
             @Override

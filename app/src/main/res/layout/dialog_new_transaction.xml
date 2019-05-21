@@ -104,7 +104,7 @@
         app:layout_constraintTop_toTopOf="@+id/inpValue" />
 
     <Button
-        android:id="@+id/buttonConfirmFilter"
+        android:id="@+id/buttonDelete"
         style="@style/ButtonOrange"
         android:layout_width="150dp"
         android:layout_height="40dp"

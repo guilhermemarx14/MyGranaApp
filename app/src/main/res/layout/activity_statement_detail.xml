@@ -1,12 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="24dp"
-    >
+    android:paddingBottom="24dp">
 
 
     <TextView
@@ -102,19 +100,33 @@
         app:layout_constraintTop_toTopOf="@+id/inpValue" />
 
     <Button
-        android:id="@+id/buttonConfirmFilter"
+        android:id="@+id/buttonDelete"
         style="@style/ButtonOrange"
         android:layout_width="150dp"
         android:layout_height="40dp"
-        android:layout_marginStart="24dp"
 
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:gravity="center"
+        android:text="@string/delete"
+        app:layout_constraintEnd_toStartOf="@+id/guideline2"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cbPayd" />
+
+    <Button
+        android:id="@+id/buttonConfirmFilter2"
+        style="@style/ButtonOrange"
+        android:layout_width="150dp"
+        android:layout_height="40dp"
+
+        android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="24dp"
         android:gravity="center"
         android:text="@string/action_confirm"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/guideline2"
         app:layout_constraintTop_toBottomOf="@+id/cbPayd" />
 
     <com.google.android.material.textfield.TextInputEditText
@@ -171,5 +183,12 @@
         android:text="@string/text_payd"
         app:layout_constraintEnd_toEndOf="@+id/inpDateEnd"
         app:layout_constraintTop_toBottomOf="@+id/inpDateEnd" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.50121653" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
