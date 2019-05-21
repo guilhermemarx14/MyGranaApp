@@ -323,9 +323,10 @@ public class MenuActivity extends AppCompatActivity
         } else
             ((ImageView) v.findViewById(R.id.navHeaderPhoto)).setImageBitmap(upp.getUserPhoto());
 
-        ((TextView) v.findViewById(R.id.navHeaderTitle)).setText(user.getDisplayName());
+        String nome = user.getDisplayName().split(" ")[0];
+        nome = nome.substring(0,1).toUpperCase() + nome.substring(1).toLowerCase();
+        ((TextView) v.findViewById(R.id.navHeaderTitle)).setText("Olá, " + nome);
 
-        ((TextView) v.findViewById(R.id.navHeaderEmail)).setText(user.getEmail());
 
         setBalance(v);
     }
