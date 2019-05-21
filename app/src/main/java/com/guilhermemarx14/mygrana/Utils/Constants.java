@@ -16,19 +16,14 @@ import io.realm.RealmResults;
 public class Constants {
     public static final int GASTO = 0;
     public static final int RENDA = 1;
-    public static int ID;
+    public static long ID;
 
 
-    public static void setTransactionId(){
-        Realm realm = Realm.getDefaultInstance();
-        try {
-            ID = (int) realm.where(Transaction.class).max("id");
-        }catch (Exception e){
-            ID=0;
-        }
+    public static void setTransactionId(long id){
+        ID = id;
     }
 
-    public static int getTransactionId(){
+    public static long getTransactionId(){
         ID++;
         return ID;
     }

@@ -15,8 +15,7 @@ import static com.guilhermemarx14.mygrana.Utils.Constants.getTransactionId;
  */
 
 public class Transaction extends RealmObject implements Serializable {
-    @PropertyName("id")
-    private int id;
+    private long id;
     private float value;
     private String categoryName;
     private String subcategory = null;
@@ -25,7 +24,7 @@ public class Transaction extends RealmObject implements Serializable {
     private boolean payd;
 
 
-    public Transaction(int i, float value, String categoryName, String subcategory, String description, String date, boolean payd) {
+    public Transaction(long i, float value, String categoryName, String subcategory, String description, String date, boolean payd) {
         if(i==0)
             this.id = getTransactionId();
         else this.id =i;
@@ -37,7 +36,7 @@ public class Transaction extends RealmObject implements Serializable {
         this.payd = payd;
     }
 
-    public Transaction(int i, float value, String categoryName, String description, String date, boolean payd) {
+    public Transaction(long i, float value, String categoryName, String description, String date, boolean payd) {
         if(i==0)
             this.id = getTransactionId();
         else this.id =i;
@@ -79,11 +78,11 @@ public class Transaction extends RealmObject implements Serializable {
         return value;
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 

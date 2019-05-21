@@ -46,7 +46,11 @@ public class SplashActivity extends AppCompatActivity {
         setContentView(R.layout.activity_splash);
         Realm.init(this);
         getSupportActionBar().hide();
-        setTransactionId();
+        user = getFirebaseUser();
+        realm = Realm.getDefaultInstance();
+        if(realm.where(Transaction.class).max("id")!=null)
+        setTransactionId((long) realm.where(Transaction.class).max("id"));
+        else setTransactionId(0);
         final Animation animRotate = AnimationUtils.loadAnimation(this, R.anim.rotate);
         (new Thread(new Runnable() {
             @Override
@@ -66,8 +70,7 @@ public class SplashActivity extends AppCompatActivity {
         ImageView progressView = findViewById(R.id.image_progress);
         progressView.startAnimation(animRotate);
 
-        user = getFirebaseUser();
-        realm = Realm.getDefaultInstance();
+
         DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
         DatabaseReference myquery = mDatabase.child(user.getUid());
         ValueEventListener eventListener4 = new ValueEventListener() {
