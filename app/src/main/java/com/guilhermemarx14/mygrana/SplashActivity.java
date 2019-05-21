@@ -57,20 +57,7 @@ public class SplashActivity extends AppCompatActivity {
             @Override
             public void run() {
                 SystemClock.sleep(4000);
-                realm.beginTransaction();
-                realm.deleteAll();
-                realm.commitTransaction();
-                realm.beginTransaction();
-                realm.insertOrUpdate(new Category("Salário", RENDA));
-                realm.insertOrUpdate(new Category("Pensão", RENDA));
-                realm.insertOrUpdate(new Category("Moradia", GASTO));
-                realm.insertOrUpdate(new Category("Alimentação", GASTO));
-                realm.insertOrUpdate(new Category("Lazer", GASTO));
-                realm.insertOrUpdate(new Category("Vestimenta", GASTO));
-                realm.insertOrUpdate(new Category("Transporte", GASTO));
-                realm.insertOrUpdate(new Category("Investimentos", GASTO));
-                realm.insertOrUpdate(new Category("Saúde", GASTO));
-                realm.commitTransaction();
+
                 if (!firstTime) {
                     Intent it = new Intent(context, MenuActivity.class);
                     it.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -93,6 +80,20 @@ public class SplashActivity extends AppCompatActivity {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (!dataSnapshot.child("university").hasChildren()){
                     firstTime = true;
+                    realm.beginTransaction();
+                    realm.deleteAll();
+                    realm.commitTransaction();
+                    realm.beginTransaction();
+                    realm.insertOrUpdate(new Category("Salário", RENDA));
+                    realm.insertOrUpdate(new Category("Pensão", RENDA));
+                    realm.insertOrUpdate(new Category("Moradia", GASTO));
+                    realm.insertOrUpdate(new Category("Alimentação", GASTO));
+                    realm.insertOrUpdate(new Category("Lazer", GASTO));
+                    realm.insertOrUpdate(new Category("Vestimenta", GASTO));
+                    realm.insertOrUpdate(new Category("Transporte", GASTO));
+                    realm.insertOrUpdate(new Category("Investimentos", GASTO));
+                    realm.insertOrUpdate(new Category("Saúde", GASTO));
+                    realm.commitTransaction();
                     setUpFirstTimeUser();
                 }
 
