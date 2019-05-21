@@ -53,6 +53,17 @@ public class SplashActivity extends AppCompatActivity {
         setTransactionId((long) realm.where(Transaction.class).max("id"));
         else setTransactionId(0);
         final Animation animRotate = AnimationUtils.loadAnimation(this, R.anim.rotate);
+        realm.beginTransaction();
+        realm.insertOrUpdate(new Category("Salário", RENDA));
+        realm.insertOrUpdate(new Category("Pensão", RENDA));
+        realm.insertOrUpdate(new Category("Moradia", GASTO));
+        realm.insertOrUpdate(new Category("Alimentação", GASTO));
+        realm.insertOrUpdate(new Category("Lazer", GASTO));
+        realm.insertOrUpdate(new Category("Vestimenta", GASTO));
+        realm.insertOrUpdate(new Category("Transporte", GASTO));
+        realm.insertOrUpdate(new Category("Investimentos", GASTO));
+        realm.insertOrUpdate(new Category("Saúde", GASTO));
+        realm.commitTransaction();
         (new Thread(new Runnable() {
             @Override
             public void run() {
@@ -72,7 +83,6 @@ public class SplashActivity extends AppCompatActivity {
         ImageView progressView = findViewById(R.id.image_progress);
         progressView.startAnimation(animRotate);
 
-
         DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
         DatabaseReference myquery = mDatabase.child(user.getUid());
         ValueEventListener eventListener4 = new ValueEventListener() {
@@ -80,20 +90,7 @@ public class SplashActivity extends AppCompatActivity {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (!dataSnapshot.child("university").hasChildren()){
                     firstTime = true;
-                    realm.beginTransaction();
-                    realm.deleteAll();
-                    realm.commitTransaction();
-                    realm.beginTransaction();
-                    realm.insertOrUpdate(new Category("Salário", RENDA));
-                    realm.insertOrUpdate(new Category("Pensão", RENDA));
-                    realm.insertOrUpdate(new Category("Moradia", GASTO));
-                    realm.insertOrUpdate(new Category("Alimentação", GASTO));
-                    realm.insertOrUpdate(new Category("Lazer", GASTO));
-                    realm.insertOrUpdate(new Category("Vestimenta", GASTO));
-                    realm.insertOrUpdate(new Category("Transporte", GASTO));
-                    realm.insertOrUpdate(new Category("Investimentos", GASTO));
-                    realm.insertOrUpdate(new Category("Saúde", GASTO));
-                    realm.commitTransaction();
+
                     setUpFirstTimeUser();
                 }
 
@@ -108,6 +105,7 @@ public class SplashActivity extends AppCompatActivity {
     }
 
     private void setUpFirstTimeUser() {
+
         DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
         DatabaseReference myquery = mDatabase.child("Universidades").child("universities");
         ValueEventListener eventListener3 = new ValueEventListener() {

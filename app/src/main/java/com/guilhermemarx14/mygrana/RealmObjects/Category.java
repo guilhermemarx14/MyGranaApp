@@ -10,6 +10,7 @@ import io.realm.annotations.PrimaryKey;
  * Created by Guilherme Marx on 2019-05-13
  */
 public class Category extends RealmObject implements Serializable {
+    @PrimaryKey
     String name;
     int type;
     RealmList<Subcategory> subcategories;

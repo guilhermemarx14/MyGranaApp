@@ -2,6 +2,7 @@ package com.guilhermemarx14.mygrana;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.util.Log;
 import android.view.View;
 
@@ -35,7 +36,7 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-
+        FirebaseDatabase.getInstance().setPersistenceEnabled(true);
         Fabric.with(this, new Crashlytics(), new CrashlyticsNdk());
 
         //FirebaseAuth.getInstance().signOut();
