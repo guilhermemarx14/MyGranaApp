@@ -24,6 +24,7 @@ import com.guilhermemarx14.mygrana.RealmObjects.University;
 import com.guilhermemarx14.mygrana.RealmObjects.UserProfilePhoto;
 
 import io.realm.Realm;
+import io.realm.RealmConfiguration;
 
 import static com.guilhermemarx14.mygrana.Utils.Constants.GASTO;
 import static com.guilhermemarx14.mygrana.Utils.Constants.RENDA;
@@ -41,6 +42,10 @@ public class SplashActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
         Realm.init(this);
+        RealmConfiguration config = new RealmConfiguration
+                .Builder()
+                .deleteRealmIfMigrationNeeded()
+                .build();
         getSupportActionBar().hide();
         user = getFirebaseUser();
         realm = Realm.getDefaultInstance();

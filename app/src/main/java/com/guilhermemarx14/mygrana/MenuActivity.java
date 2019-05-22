@@ -51,6 +51,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 import io.realm.Realm;
+import io.realm.RealmConfiguration;
 import io.realm.RealmResults;
 
 import static com.guilhermemarx14.mygrana.Utils.Constants.GASTO;
@@ -77,6 +78,10 @@ public class MenuActivity extends AppCompatActivity
         setContentView(R.layout.activity_menu);
         Toolbar toolbar = getToolbar();
         Realm.init(this);
+        RealmConfiguration config = new RealmConfiguration
+                .Builder()
+                .deleteRealmIfMigrationNeeded()
+                .build();
         setTitle(R.string.app_name);
         user = getFirebaseUser();
         realm = Realm.getDefaultInstance();
