@@ -15,11 +15,11 @@
       },
       "oauth_client": [
         {
-          "client_id": "88879468167-pa02eckmn7rfcao5fvu3h7ir5a3hpbkg.apps.googleusercontent.com",
+          "client_id": "88879468167-4rtp03trscih4tohj78l5k847os8t2l2.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.guilhermemarx14.mygrana",
-            "certificate_hash": "4be0fed95c7a5fc2280441df475995c0287349df"
+            "certificate_hash": "96c178a527c4e69098bcd109896ca5f54e64357c"
           }
         },
         {
@@ -29,14 +29,14 @@
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyCj6hCpynqEfdT33aPDKRQriEGwc3Gqt_w"
+          "current_key": "AIzaSyAjJTdy3z1z1JhC8mCwChtpm4V64aO-sSw"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "88879468167-tn906vft5gi72n45f5hhqfscn5hslv5j.apps.googleusercontent.com",
+              "client_id": "88879468167-smhjpbi8k98ucf6aoimr4rg970qb1b1q.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
