@@ -38,10 +38,20 @@ public class MaskCurrency implements TextWatcher {
             field.setText(str);
             return;
         }
-        isUpdating = true;
-        String str = s.toString();
-        str = str.replaceAll(",", "").replace("R$","").replaceAll("[.]","");
+        String str = s.toString().replaceAll("\\s", "")
+                .replaceAll(",", "")
+                .replace("R$","").replaceAll("[.]","");
 
+
+        int numberOfZeros = 0;
+        for(int i=0;i<str.length();i++)
+        {
+            if (str.charAt(i)=='0' || str.charAt(i)==' ')
+                numberOfZeros++;
+            else break;
+        }
+        str = str.substring(numberOfZeros);
+        isUpdating = true;
         try{
             str = nf.format((double) (Float.parseFloat(str)/100));
             str = str.replace("$","$ ");
@@ -50,7 +60,6 @@ public class MaskCurrency implements TextWatcher {
         }catch (Exception e){
             e.printStackTrace();
         }
-
     }
 
     @Override
