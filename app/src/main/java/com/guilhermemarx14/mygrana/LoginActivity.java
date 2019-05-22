@@ -39,7 +39,6 @@ public class LoginActivity extends AppCompatActivity {
         FirebaseDatabase.getInstance().setPersistenceEnabled(true);
         Fabric.with(this, new Crashlytics(), new CrashlyticsNdk());
 
-        //FirebaseAuth.getInstance().signOut();
         mAuth = FirebaseAuth.getInstance();
 
         if (mAuth.getCurrentUser() != null) {
