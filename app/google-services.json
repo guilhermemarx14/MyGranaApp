@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "88879468167-j8onc52e3a3hmb9cuh2cdthj2gauroqo.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.guilhermemarx14.mygrana",
+            "certificate_hash": "a689bcebbe9f774bea94f7ea0a23735d92fd2dd0"
+          }
+        },
+        {
           "client_id": "88879468167-4rtp03trscih4tohj78l5k847os8t2l2.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
