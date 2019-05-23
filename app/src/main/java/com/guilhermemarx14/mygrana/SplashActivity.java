@@ -24,8 +24,6 @@ import com.guilhermemarx14.mygrana.RealmObjects.Transaction;
 import com.guilhermemarx14.mygrana.RealmObjects.University;
 import com.guilhermemarx14.mygrana.RealmObjects.UserProfilePhoto;
 
-import java.util.HashMap;
-
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
 
@@ -114,12 +112,15 @@ public class SplashActivity extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for (DataSnapshot ds : dataSnapshot.getChildren()) {
-                    Pair<String,String> s = ds.getValue(Pair.class);
-
-                    University uni = new University(s);
-                    realm.beginTransaction();
-                    realm.insertOrUpdate(uni);
-                    realm.commitTransaction();
+                    Pair s = ds.getValue(Pair.class);
+                    try {
+                        University uni = new University(s);
+                        realm.beginTransaction();
+                        realm.insertOrUpdate(uni);
+                        realm.commitTransaction();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                 }
 
             }
@@ -136,11 +137,15 @@ public class SplashActivity extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for (DataSnapshot ds : dataSnapshot.getChildren()) {
-                    Pair<String,Transaction> map = ds.getValue(Pair.class);
-                    Transaction s = new Transaction(map);
-                    realm.beginTransaction();
-                    realm.insertOrUpdate(s);
-                    realm.commitTransaction();
+                    Pair map = ds.getValue(Pair.class);
+                    try {
+                        Transaction s = new Transaction(map);
+                        realm.beginTransaction();
+                        realm.insertOrUpdate(s);
+                        realm.commitTransaction();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
 
                 }
             }
@@ -158,13 +163,17 @@ public class SplashActivity extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for (DataSnapshot ds : dataSnapshot.getChildren()) {
-                    Pair<String,Subcategory> s = ds.getValue(Pair.class);
-                    realm.beginTransaction();
-                    Category category = realm.where(Category.class).equalTo("name", (String) s.second.getCategory()).findFirst();
-                    realm.insertOrUpdate(s.second);
-                    category.getSubcategories().add(s.second);
-                    realm.insertOrUpdate(category);
-                    realm.commitTransaction();
+                    Pair s = ds.getValue(Pair.class);
+                    try {
+                        realm.beginTransaction();
+                        Category category = realm.where(Category.class).equalTo("name", (String) ((Subcategory) s.second).getCategory()).findFirst();
+                        realm.insertOrUpdate(((Subcategory) s.second));
+                        category.getSubcategories().add(((Subcategory) s.second);
+                        realm.insertOrUpdate(category);
+                        realm.commitTransaction();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
 
                 }
 
