@@ -2,6 +2,7 @@ package com.guilhermemarx14.mygrana.RealmObjects;
 
 
 import java.io.Serializable;
+import java.util.HashMap;
 
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
@@ -22,7 +23,16 @@ public class Transaction extends RealmObject implements Serializable, Comparable
     private String date;
     private boolean payd;
 
+    public Transaction(HashMap<String,Transaction> map) {
+        this.id = Integer.parseInt((String) map.keySet().toArray()[0]);
+        this.value =  map.get("" + id).value;
+        this.categoryName =  map.get("" + id).categoryName;
+        this.subcategory =  map.get("" + id).subcategory;
+        this.description =  map.get("" + id).description;
+        this.date =  map.get("" + id).date;
+        this.payd =  map.get("" + id).payd;
 
+    }
     public Transaction(long i, float value, String categoryName, String subcategory, String description, String date, boolean payd) {
         if (i == 0)
             this.id = getTransactionId();

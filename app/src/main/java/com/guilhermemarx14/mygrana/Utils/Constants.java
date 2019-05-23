@@ -17,16 +17,9 @@ public class Constants {
     public static final int GASTO = 0;
     public static final int RENDA = 1;
     public static long TRANSACTION_ID;
-    public static long UNIVERSITY_ID;
 
-    public static void setUniversityId(long id){
-        UNIVERSITY_ID = id;
-    }
 
-    public static long getUniversityId(){
-        UNIVERSITY_ID++;
-        return UNIVERSITY_ID;
-    }
+
     public static void setTransactionId(long id){
         TRANSACTION_ID = id;
     }

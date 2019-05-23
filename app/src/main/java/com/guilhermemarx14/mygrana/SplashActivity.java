@@ -31,7 +31,6 @@ import io.realm.RealmConfiguration;
 import static com.guilhermemarx14.mygrana.Utils.Constants.GASTO;
 import static com.guilhermemarx14.mygrana.Utils.Constants.RENDA;
 import static com.guilhermemarx14.mygrana.Utils.Constants.setTransactionId;
-import static com.guilhermemarx14.mygrana.Utils.Constants.setUniversityId;
 
 public class SplashActivity extends AppCompatActivity {
     Context context = this;
@@ -56,9 +55,6 @@ public class SplashActivity extends AppCompatActivity {
             setTransactionId((long) realm.where(Transaction.class).max("id"));
         else setTransactionId(0);
 
-        if (realm.where(University.class).max("id") != null)
-            setUniversityId((long) realm.where(University.class).max("id"));
-        else setUniversityId(0);
         final Animation animRotate = AnimationUtils.loadAnimation(this, R.anim.rotate);
         realm.beginTransaction();
         realm.insertOrUpdate(new Category("Salário", RENDA));
@@ -96,8 +92,6 @@ public class SplashActivity extends AppCompatActivity {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (!dataSnapshot.child("university").hasChildren()) {
                     firstTime = true;
-
-                    setUpFirstTimeUser();
                 }
 
             }
@@ -108,6 +102,7 @@ public class SplashActivity extends AppCompatActivity {
         };
         myquery.addListenerForSingleValueEvent(eventListener4);
         upp = realm.where(UserProfilePhoto.class).findFirst();
+        setUpFirstTimeUser();
     }
 
     private void setUpFirstTimeUser() {
@@ -118,9 +113,9 @@ public class SplashActivity extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for (DataSnapshot ds : dataSnapshot.getChildren()) {
-                    String s = ds.getValue(String.class);
-                    String key = ds.getKey();
-                    University uni = new University(Integer.parseInt(key),s);
+                    HashMap<String,String> s = ds.getValue(HashMap.class);
+
+                    University uni = new University(s);
                     realm.beginTransaction();
                     realm.insertOrUpdate(uni);
                     realm.commitTransaction();
@@ -140,7 +135,8 @@ public class SplashActivity extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for (DataSnapshot ds : dataSnapshot.getChildren()) {
-                    Transaction s = ds.getValue(Transaction.class);
+                    HashMap<String,Transaction> map = ds.getValue(HashMap.class);
+                    Transaction s = new Transaction(map);
                     realm.beginTransaction();
                     realm.insertOrUpdate(s);
                     realm.commitTransaction();
@@ -178,6 +174,7 @@ public class SplashActivity extends AppCompatActivity {
             }
         };
         myquery.addListenerForSingleValueEvent(eventListener);
+
     }
 
     private FirebaseUser getFirebaseUser() {
