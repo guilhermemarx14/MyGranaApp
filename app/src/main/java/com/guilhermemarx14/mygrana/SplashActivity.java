@@ -168,7 +168,7 @@ public class SplashActivity extends AppCompatActivity {
                         realm.beginTransaction();
                         Category category = realm.where(Category.class).equalTo("name", (String) ((Subcategory) s.second).getCategory()).findFirst();
                         realm.insertOrUpdate(((Subcategory) s.second));
-                        category.getSubcategories().add(((Subcategory) s.second);
+                        category.getSubcategories().add((Subcategory) s.second);
                         realm.insertOrUpdate(category);
                         realm.commitTransaction();
                     } catch (Exception e) {
