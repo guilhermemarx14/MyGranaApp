@@ -26,7 +26,7 @@ import io.realm.RealmResults;
 
 public class FirstUserActivity extends AppCompatActivity {
     Context context;
-
+    ArrayList<String> universities;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,8 +34,8 @@ public class FirstUserActivity extends AppCompatActivity {
         Realm realm = Realm.getDefaultInstance();
         context = this;
         final Spinner spinner = findViewById(R.id.spinnerUniversity);
-        RealmResults<University> result = realm.where(University.class).findAll();
-        ArrayList<String> universities = new ArrayList<>();
+       final  RealmResults<University> result = realm.where(University.class).findAll();
+        universities = new ArrayList<>();
         for (University u : result)
             universities.add(u.getName());
 
@@ -53,7 +53,11 @@ public class FirstUserActivity extends AppCompatActivity {
                 FirebaseDatabase database = FirebaseDatabase.getInstance();
                 DatabaseReference myRef = database.getReference(user.getUid());
                 HashMap<String, Object> map = new HashMap<>();
-                map.put("0", spinner.getSelectedItem());
+                for (University u : result)
+                    if(u.getName().equals(spinner.getSelectedItem())) {
+                        map.put("" + u.getId(), spinner.getSelectedItem());
+                        break;
+                    }
                 myRef.child("university").updateChildren(map);
 
                 Intent it = new Intent(context, MenuActivity.class);
