@@ -36,7 +36,8 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        FirebaseDatabase.getInstance().setPersistenceEnabled(true);
+        if(savedInstanceState == null)
+            FirebaseDatabase.getInstance().setPersistenceEnabled(true);
         Fabric.with(this, new Crashlytics(), new CrashlyticsNdk());
 
         mAuth = FirebaseAuth.getInstance();
