@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.SystemClock;
+import android.util.Pair;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
@@ -113,7 +114,7 @@ public class SplashActivity extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for (DataSnapshot ds : dataSnapshot.getChildren()) {
-                    HashMap<String,String> s = ds.getValue(HashMap.class);
+                    Pair<String,String> s = ds.getValue(Pair.class);
 
                     University uni = new University(s);
                     realm.beginTransaction();
@@ -135,7 +136,7 @@ public class SplashActivity extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for (DataSnapshot ds : dataSnapshot.getChildren()) {
-                    HashMap<String,Transaction> map = ds.getValue(HashMap.class);
+                    Pair<String,Transaction> map = ds.getValue(Pair.class);
                     Transaction s = new Transaction(map);
                     realm.beginTransaction();
                     realm.insertOrUpdate(s);
@@ -157,11 +158,11 @@ public class SplashActivity extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for (DataSnapshot ds : dataSnapshot.getChildren()) {
-                    Subcategory s = ds.getValue(Subcategory.class);
+                    Pair<String,Subcategory> s = ds.getValue(Pair.class);
                     realm.beginTransaction();
-                    Category category = realm.where(Category.class).equalTo("name", (String) s.getCategory()).findFirst();
-                    realm.insertOrUpdate(s);
-                    category.getSubcategories().add(s);
+                    Category category = realm.where(Category.class).equalTo("name", (String) s.second.getCategory()).findFirst();
+                    realm.insertOrUpdate(s.second);
+                    category.getSubcategories().add(s.second);
                     realm.insertOrUpdate(category);
                     realm.commitTransaction();
 

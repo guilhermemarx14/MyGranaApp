@@ -1,6 +1,6 @@
 package com.guilhermemarx14.mygrana.RealmObjects;
 
-import java.util.HashMap;
+import android.util.Pair;
 
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
@@ -14,9 +14,9 @@ public class University extends RealmObject {
     long id;
     String name;
 
-    public University(HashMap<String,String> map) {
-        this.id = Integer.parseInt((String) map.keySet().toArray()[0]);
-        this.name = map.get("" + id);
+    public University(Pair<String,String> map) {
+        this.id = Integer.parseInt(map.first);
+        this.name = map.second;
     }
 
     public University() {

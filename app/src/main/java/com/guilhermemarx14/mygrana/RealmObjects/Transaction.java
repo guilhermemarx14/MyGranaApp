@@ -1,6 +1,8 @@
 package com.guilhermemarx14.mygrana.RealmObjects;
 
 
+import android.util.Pair;
+
 import java.io.Serializable;
 import java.util.HashMap;
 
@@ -23,14 +25,14 @@ public class Transaction extends RealmObject implements Serializable, Comparable
     private String date;
     private boolean payd;
 
-    public Transaction(HashMap<String,Transaction> map) {
-        this.id = Integer.parseInt((String) map.keySet().toArray()[0]);
-        this.value =  map.get("" + id).value;
-        this.categoryName =  map.get("" + id).categoryName;
-        this.subcategory =  map.get("" + id).subcategory;
-        this.description =  map.get("" + id).description;
-        this.date =  map.get("" + id).date;
-        this.payd =  map.get("" + id).payd;
+    public Transaction(Pair<String,Transaction> map) {
+        this.id = Integer.parseInt(map.first);
+        this.value =  map.second.value;
+        this.categoryName =  map.second.categoryName;
+        this.subcategory =  map.second.subcategory;
+        this.description =  map.second.description;
+        this.date =  map.second.date;
+        this.payd = map.second.payd;
 
     }
     public Transaction(long i, float value, String categoryName, String subcategory, String description, String date, boolean payd) {
