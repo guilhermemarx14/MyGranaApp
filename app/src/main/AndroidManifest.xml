@@ -16,8 +16,16 @@
         <activity
             android:name=".StatementsActivity"
             android:label="@string/title_activity_statements"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".SplashActivity" />
+            android:theme="@style/AppTheme.NoActionBar" >
+
+        </activity>
+        <activity android:name=".SplashActivity" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".MenuActivity"
             android:label="@string/title_activity_menu"
@@ -27,11 +35,7 @@
                 android:name="firebase_crashlytics_collection_enabled"
                 android:value="false" />
 
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
     </application>
 

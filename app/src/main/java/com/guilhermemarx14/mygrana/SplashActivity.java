@@ -23,12 +23,15 @@ import com.guilhermemarx14.mygrana.RealmObjects.Transaction;
 import com.guilhermemarx14.mygrana.RealmObjects.University;
 import com.guilhermemarx14.mygrana.RealmObjects.UserProfilePhoto;
 
+import java.util.HashMap;
+
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
 
 import static com.guilhermemarx14.mygrana.Utils.Constants.GASTO;
 import static com.guilhermemarx14.mygrana.Utils.Constants.RENDA;
 import static com.guilhermemarx14.mygrana.Utils.Constants.setTransactionId;
+import static com.guilhermemarx14.mygrana.Utils.Constants.setUniversityId;
 
 public class SplashActivity extends AppCompatActivity {
     Context context = this;
@@ -52,6 +55,10 @@ public class SplashActivity extends AppCompatActivity {
         if (realm.where(Transaction.class).max("id") != null)
             setTransactionId((long) realm.where(Transaction.class).max("id"));
         else setTransactionId(0);
+
+        if (realm.where(University.class).max("id") != null)
+            setUniversityId((long) realm.where(University.class).max("id"));
+        else setUniversityId(0);
         final Animation animRotate = AnimationUtils.loadAnimation(this, R.anim.rotate);
         realm.beginTransaction();
         realm.insertOrUpdate(new Category("Salário", RENDA));
@@ -82,7 +89,6 @@ public class SplashActivity extends AppCompatActivity {
         })).start();
         ImageView progressView = findViewById(R.id.image_progress);
         progressView.startAnimation(animRotate);
-
         DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
         DatabaseReference myquery = mDatabase.child(user.getUid());
         ValueEventListener eventListener4 = new ValueEventListener() {
@@ -107,14 +113,16 @@ public class SplashActivity extends AppCompatActivity {
     private void setUpFirstTimeUser() {
 
         DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
-        DatabaseReference myquery = mDatabase.child("Universidades").child("universities");
+        DatabaseReference myquery = mDatabase.child("Universidades");
         ValueEventListener eventListener3 = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for (DataSnapshot ds : dataSnapshot.getChildren()) {
                     String s = ds.getValue(String.class);
+                    String key = ds.getKey();
+                    University uni = new University(Integer.parseInt(key),s);
                     realm.beginTransaction();
-                    realm.insertOrUpdate(new University(s));
+                    realm.insertOrUpdate(uni);
                     realm.commitTransaction();
                 }
 
@@ -136,6 +144,7 @@ public class SplashActivity extends AppCompatActivity {
                     realm.beginTransaction();
                     realm.insertOrUpdate(s);
                     realm.commitTransaction();
+
                 }
             }
 
