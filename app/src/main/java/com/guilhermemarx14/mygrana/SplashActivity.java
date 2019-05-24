@@ -4,8 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.SystemClock;
-import android.util.Log;
-import android.util.Pair;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
@@ -49,6 +47,8 @@ public class SplashActivity extends AppCompatActivity {
                 .Builder()
                 .deleteRealmIfMigrationNeeded()
                 .build();
+        Realm.setDefaultConfiguration(config);
+        Realm.getInstance(config);
         getSupportActionBar().hide();
         user = getFirebaseUser();
         realm = Realm.getDefaultInstance();
@@ -117,17 +117,15 @@ public class SplashActivity extends AppCompatActivity {
         ValueEventListener eventListener3 = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                for (int i=1; i<dataSnapshot.getChildrenCount(); i++) {
+                for (int i = 1; i < dataSnapshot.getChildrenCount(); i++) {
                     University university = new University();
-                    university.setName((String) dataSnapshot.child(""+i).getValue());
+                    university.setName((String) dataSnapshot.child("" + i).getValue());
                     university.setId(i);
-                    try {
-                        realm.beginTransaction();
-                        realm.insertOrUpdate(university);
-                        realm.commitTransaction();
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
+
+                    realm.beginTransaction();
+                    realm.insertOrUpdate(university);
+                    realm.commitTransaction();
+
                 }
 
             }
@@ -143,17 +141,18 @@ public class SplashActivity extends AppCompatActivity {
         ValueEventListener eventListener2 = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                for (int i=1; i<=dataSnapshot.getChildrenCount(); i++) {
-                    Transaction transaction = new Transaction();
-                    transaction.setCategory(dataSnapshot.child(""+i).getValue(Transaction.class).getCategory());
-                    transaction.setId(i);
-                    transaction.setSubcategory(dataSnapshot.child(""+i).getValue(Transaction.class).getSubcategory());
-                    transaction.setDescription(dataSnapshot.child(""+i).getValue(Transaction.class).getDescription());
-                    transaction.setDate(dataSnapshot.child(""+i).getValue(Transaction.class).getDate());
-                    transaction.setPayd(dataSnapshot.child(""+i).getValue(Transaction.class).isPayd());
-                    transaction.setCategoryName(dataSnapshot.child(""+i).getValue(Transaction.class).getCategoryName());
-                    transaction.setValue(dataSnapshot.child(""+i).getValue(Transaction.class).getValue());
+                for (int i = 1; i <= dataSnapshot.getChildrenCount(); i++) {
                     try {
+                        Transaction transaction = new Transaction();
+                        transaction.setCategory(dataSnapshot.child("" + i).getValue(Transaction.class).getCategory());
+                        transaction.setId(i);
+                        transaction.setSubcategory(dataSnapshot.child("" + i).getValue(Transaction.class).getSubcategory());
+                        transaction.setDescription(dataSnapshot.child("" + i).getValue(Transaction.class).getDescription());
+                        transaction.setDate(dataSnapshot.child("" + i).getValue(Transaction.class).getDate());
+                        transaction.setPayd(dataSnapshot.child("" + i).getValue(Transaction.class).isPayd());
+                        transaction.setCategoryName(dataSnapshot.child("" + i).getValue(Transaction.class).getCategoryName());
+                        transaction.setValue(dataSnapshot.child("" + i).getValue(Transaction.class).getValue());
+
                         realm.beginTransaction();
                         realm.insertOrUpdate(transaction);
                         realm.commitTransaction();
@@ -176,13 +175,13 @@ public class SplashActivity extends AppCompatActivity {
         ValueEventListener eventListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                for (int i=1; i<=dataSnapshot.getChildrenCount(); i++) {
-                    Subcategory subcategory = new Subcategory();
-                    subcategory.setCategory(dataSnapshot.child(""+i).getValue(Subcategory.class).getCategory());
-                    subcategory.setSubcategoryName(dataSnapshot.child(""+i).getValue(Subcategory.class).getSubcategoryName());
-                    subcategory.setCategoryName(dataSnapshot.child(""+i).getValue(Subcategory.class).getCategoryName());
-                    subcategory.setId(i);
+                for (int i = 1; i <= dataSnapshot.getChildrenCount(); i++) {
                     try {
+                        Subcategory subcategory = new Subcategory();
+                        subcategory.setCategory(dataSnapshot.child("" + i).getValue(Subcategory.class).getCategory());
+                        subcategory.setSubcategoryName(dataSnapshot.child("" + i).getValue(Subcategory.class).getSubcategoryName());
+                        subcategory.setCategoryName(dataSnapshot.child("" + i).getValue(Subcategory.class).getCategoryName());
+                        subcategory.setId(i);
                         realm.beginTransaction();
                         Category category = realm.where(Category.class).equalTo("name", (String) subcategory.getCategory()).findFirst();
                         realm.insertOrUpdate(subcategory);
