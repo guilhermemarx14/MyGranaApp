@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.SystemClock;
+import android.util.Log;
 import android.util.Pair;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -115,6 +116,7 @@ public class SplashActivity extends AppCompatActivity {
                     University university = new University();
                     university.setName((String) dataSnapshot.child(""+i).getValue());
                     university.setId(i);
+                    Log.d("pxt",university.getName());
                     try {
                         realm.beginTransaction();
                         realm.insertOrUpdate(university);
@@ -138,14 +140,8 @@ public class SplashActivity extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for (int i=1; i<=dataSnapshot.getChildrenCount(); i++) {
-                    Transaction transaction = new Transaction();
-                    transaction.setCategory(dataSnapshot.child(""+i).getValue(Transaction.class).getCategory());
-                    transaction.setId(i);
-                    transaction.setSubcategory(dataSnapshot.child(""+i).getValue(Transaction.class).getSubcategory());
-                    transaction.setDescription(dataSnapshot.child(""+i).getValue(Transaction.class).getDescription());
-                    transaction.setDate(dataSnapshot.child(""+i).getValue(Transaction.class).getDate());
-                    transaction.setPayd(dataSnapshot.child(""+i).getValue(Transaction.class).isPayd());
-                    transaction.setCategoryName(dataSnapshot.child(""+i).getValue(Transaction.class).getCategoryName());
+                    Transaction transaction = (Transaction) dataSnapshot.child(""+i).getValue();
+                    Log.d("pxt",transaction.getCategory());
                     try {
                         realm.beginTransaction();
                         realm.insertOrUpdate(transaction);
@@ -170,9 +166,8 @@ public class SplashActivity extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for (int i=1; i<=dataSnapshot.getChildrenCount(); i++) {
-                    Subcategory subcategory = new Subcategory();
-                    subcategory.setSubcategoryName(dataSnapshot.child(""+i).getValue(Subcategory.class).getSubcategoryName());
-                    subcategory.setCategory(dataSnapshot.child(""+i).getValue(Subcategory.class).getCategory());
+                    Subcategory subcategory =(Subcategory) dataSnapshot.child(""+i).getValue();
+                    Log.d("pxt",subcategory.getSubcategoryName());
                     try {
                         realm.beginTransaction();
                         Category category = realm.where(Category.class).equalTo("name", (String) subcategory.getCategory()).findFirst();
