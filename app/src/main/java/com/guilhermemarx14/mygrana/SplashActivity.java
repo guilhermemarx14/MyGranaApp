@@ -111,12 +111,13 @@ public class SplashActivity extends AppCompatActivity {
         ValueEventListener eventListener3 = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                for (DataSnapshot ds : dataSnapshot.getChildren()) {
-                    Pair s = ds.getValue(Pair.class);
+                for (int i=1; i<=dataSnapshot.getChildrenCount(); i++) {
+                    University university = new University();
+                    university.setName(dataSnapshot.child(""+i).getValue(University.class).getName());
+                    university.setId(i);
                     try {
-                        University uni = new University(s);
                         realm.beginTransaction();
-                        realm.insertOrUpdate(uni);
+                        realm.insertOrUpdate(university);
                         realm.commitTransaction();
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -136,12 +137,18 @@ public class SplashActivity extends AppCompatActivity {
         ValueEventListener eventListener2 = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                for (DataSnapshot ds : dataSnapshot.getChildren()) {
-                    Pair map = ds.getValue(Pair.class);
+                for (int i=1; i<=dataSnapshot.getChildrenCount(); i++) {
+                    Transaction transaction = new Transaction();
+                    transaction.setCategory(dataSnapshot.child(""+i).getValue(Transaction.class).getCategory());
+                    transaction.setId(i);
+                    transaction.setSubcategory(dataSnapshot.child(""+i).getValue(Transaction.class).getSubcategory());
+                    transaction.setDescription(dataSnapshot.child(""+i).getValue(Transaction.class).getDescription());
+                    transaction.setDate(dataSnapshot.child(""+i).getValue(Transaction.class).getDate());
+                    transaction.setPayd(dataSnapshot.child(""+i).getValue(Transaction.class).isPayd());
+                    transaction.setCategoryName(dataSnapshot.child(""+i).getValue(Transaction.class).getCategoryName());
                     try {
-                        Transaction s = new Transaction(map);
                         realm.beginTransaction();
-                        realm.insertOrUpdate(s);
+                        realm.insertOrUpdate(transaction);
                         realm.commitTransaction();
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -162,13 +169,15 @@ public class SplashActivity extends AppCompatActivity {
         ValueEventListener eventListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                for (DataSnapshot ds : dataSnapshot.getChildren()) {
-                    Pair s = ds.getValue(Pair.class);
+                for (int i=1; i<=dataSnapshot.getChildrenCount(); i++) {
+                    Subcategory subcategory = new Subcategory();
+                    subcategory.setSubcategoryName(dataSnapshot.child(""+i).getValue(Subcategory.class).getSubcategoryName());
+                    subcategory.setCategory(dataSnapshot.child(""+i).getValue(Subcategory.class).getCategory());
                     try {
                         realm.beginTransaction();
-                        Category category = realm.where(Category.class).equalTo("name", (String) ((Subcategory) s.second).getCategory()).findFirst();
-                        realm.insertOrUpdate(((Subcategory) s.second));
-                        category.getSubcategories().add((Subcategory) s.second);
+                        Category category = realm.where(Category.class).equalTo("name", (String) subcategory.getCategory()).findFirst();
+                        realm.insertOrUpdate(subcategory);
+                        category.getSubcategories().add(subcategory);
                         realm.insertOrUpdate(category);
                         realm.commitTransaction();
                     } catch (Exception e) {
