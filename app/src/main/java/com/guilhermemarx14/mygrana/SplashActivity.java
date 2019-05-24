@@ -113,7 +113,7 @@ public class SplashActivity extends AppCompatActivity {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for (int i=1; i<=dataSnapshot.getChildrenCount(); i++) {
                     University university = new University();
-                    university.setName(dataSnapshot.child(""+i).getValue(University.class).getName());
+                    university.setName((String) dataSnapshot.child(""+i).getValue());
                     university.setId(i);
                     try {
                         realm.beginTransaction();
