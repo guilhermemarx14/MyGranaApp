@@ -17,8 +17,16 @@ public class Constants {
     public static final int GASTO = 0;
     public static final int RENDA = 1;
     public static long TRANSACTION_ID;
+    public static long SUBCATEGORY_ID;
 
+    public static void setSubcategoryId(long id){
+        SUBCATEGORY_ID = id;
+    }
 
+    public static long getSubcategoryId(){
+        SUBCATEGORY_ID++;
+        return SUBCATEGORY_ID;
+    }
 
     public static void setTransactionId(long id){
         TRANSACTION_ID = id;

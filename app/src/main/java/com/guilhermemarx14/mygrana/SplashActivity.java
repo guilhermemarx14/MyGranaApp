@@ -30,6 +30,7 @@ import io.realm.RealmConfiguration;
 
 import static com.guilhermemarx14.mygrana.Utils.Constants.GASTO;
 import static com.guilhermemarx14.mygrana.Utils.Constants.RENDA;
+import static com.guilhermemarx14.mygrana.Utils.Constants.setSubcategoryId;
 import static com.guilhermemarx14.mygrana.Utils.Constants.setTransactionId;
 
 public class SplashActivity extends AppCompatActivity {
@@ -54,6 +55,10 @@ public class SplashActivity extends AppCompatActivity {
         if (realm.where(Transaction.class).max("id") != null)
             setTransactionId((long) realm.where(Transaction.class).max("id"));
         else setTransactionId(0);
+
+        if (realm.where(Subcategory.class).max("id") != null)
+            setSubcategoryId((long) realm.where(Transaction.class).max("id"));
+        else setSubcategoryId(0);
 
         final Animation animRotate = AnimationUtils.loadAnimation(this, R.anim.rotate);
         realm.beginTransaction();
@@ -116,7 +121,6 @@ public class SplashActivity extends AppCompatActivity {
                     University university = new University();
                     university.setName((String) dataSnapshot.child(""+i).getValue());
                     university.setId(i);
-                    Log.d("pxt",university.getName());
                     try {
                         realm.beginTransaction();
                         realm.insertOrUpdate(university);
@@ -149,7 +153,6 @@ public class SplashActivity extends AppCompatActivity {
                     transaction.setPayd(dataSnapshot.child(""+i).getValue(Transaction.class).isPayd());
                     transaction.setCategoryName(dataSnapshot.child(""+i).getValue(Transaction.class).getCategoryName());
                     transaction.setValue(dataSnapshot.child(""+i).getValue(Transaction.class).getValue());
-                    Log.d("pxt","" + transaction.getValue());
                     try {
                         realm.beginTransaction();
                         realm.insertOrUpdate(transaction);
@@ -168,33 +171,37 @@ public class SplashActivity extends AppCompatActivity {
         myquery.addListenerForSingleValueEvent(eventListener2);
 
 
-//        mDatabase = FirebaseDatabase.getInstance().getReference();
-//        myquery = mDatabase.child(user.getUid()).child("subcategories");
-//        ValueEventListener eventListener = new ValueEventListener() {
-//            @Override
-//            public void onDataChange(DataSnapshot dataSnapshot) {
-//                for (int i=1; i<=dataSnapshot.getChildrenCount(); i++) {
-//                    Subcategory subcategory =(Subcategory) dataSnapshot.child(""+i).getValue();
-//                    try {
-//                        realm.beginTransaction();
-//                        Category category = realm.where(Category.class).equalTo("name", (String) subcategory.getCategory()).findFirst();
-//                        realm.insertOrUpdate(subcategory);
-//                        category.getSubcategories().add(subcategory);
-//                        realm.insertOrUpdate(category);
-//                        realm.commitTransaction();
-//                    } catch (Exception e) {
-//                        e.printStackTrace();
-//                    }
-//
-//                }
-//
-//            }
-//
-//            @Override
-//            public void onCancelled(DatabaseError databaseError) {
-//            }
-//        };
-//        myquery.addListenerForSingleValueEvent(eventListener);
+        mDatabase = FirebaseDatabase.getInstance().getReference();
+        myquery = mDatabase.child(user.getUid()).child("subcategories");
+        ValueEventListener eventListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (int i=1; i<=dataSnapshot.getChildrenCount(); i++) {
+                    Subcategory subcategory = new Subcategory();
+                    subcategory.setCategory(dataSnapshot.child(""+i).getValue(Subcategory.class).getCategory());
+                    subcategory.setSubcategoryName(dataSnapshot.child(""+i).getValue(Subcategory.class).getSubcategoryName());
+                    subcategory.setCategoryName(dataSnapshot.child(""+i).getValue(Subcategory.class).getCategoryName());
+                    subcategory.setId(i);
+                    try {
+                        realm.beginTransaction();
+                        Category category = realm.where(Category.class).equalTo("name", (String) subcategory.getCategory()).findFirst();
+                        realm.insertOrUpdate(subcategory);
+                        category.getSubcategories().add(subcategory);
+                        realm.insertOrUpdate(category);
+                        realm.commitTransaction();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+
+                }
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+            }
+        };
+        myquery.addListenerForSingleValueEvent(eventListener);
 
     }
 

@@ -24,6 +24,8 @@ import com.guilhermemarx14.mygrana.R;
 import com.guilhermemarx14.mygrana.RealmObjects.Category;
 import com.guilhermemarx14.mygrana.RealmObjects.Subcategory;
 
+import java.util.HashMap;
+
 import io.realm.Realm;
 import io.realm.RealmResults;
 
@@ -92,7 +94,11 @@ public class AddSubcategoryDialog extends Dialog {
                 FirebaseUser user = mAuth.getCurrentUser();
                 FirebaseDatabase database = FirebaseDatabase.getInstance();
                 DatabaseReference myRef = database.getReference(user.getUid());
-                myRef.child("subcategories").push().setValue(new Subcategory(et.getText().toString(), category.getName()));
+                Subcategory subcategory = new Subcategory(et.getText().toString(), category.getName());
+                HashMap<String, Object> map = new HashMap();
+                map.put(""+subcategory.getId(),subcategory);
+
+                myRef.child("subcategories").updateChildren(map);
 
                 Intent it = new Intent(act, MenuActivity.class);
                 it.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
