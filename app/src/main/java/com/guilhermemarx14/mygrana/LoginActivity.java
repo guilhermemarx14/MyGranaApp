@@ -27,6 +27,8 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import io.fabric.sdk.android.Fabric;
 
+import static com.guilhermemarx14.mygrana.Utils.Constants.PERSISTENCE;
+
 public class LoginActivity extends AppCompatActivity {
     public static final int RC_SIGN_IN = 1;
     GoogleSignInClient mGoogleSignInClient;
@@ -36,8 +38,10 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        if(savedInstanceState == null)
+        if(savedInstanceState == null && !PERSISTENCE) {
             FirebaseDatabase.getInstance().setPersistenceEnabled(true);
+            PERSISTENCE = true;
+        }
         Fabric.with(this, new Crashlytics(), new CrashlyticsNdk());
 
         mAuth = FirebaseAuth.getInstance();
