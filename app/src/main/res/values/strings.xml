@@ -58,7 +58,7 @@
     <string name="no_incomings">Você não possui lançamentos futuros.</string>
     <string name="to_start">Para começar, você deve fazer login com uma conta do Google.</string>
     <string name="text_no_transactions">Você não cadastrou nenhuma transação ainda.</string>
-
+<string name="university_not_in_list">Se sua universidade ou campus não aparece na lista, entrar em contato com guilhermemarx14@gmail.com</string>
 
 
     <string name="animateX">Animate X</string>
