@@ -16,8 +16,8 @@
     <string name="menu_gallery">Gallery</string>
     <string name="menu_slideshow">Slideshow</string>
     <string name="menu_tools">Tools</string>
-    <string name="menu_share">Share</string>
-    <string name="menu_send">Send</string>
+    <string name="menu_share">Compartilhar App</string>
+    <string name="menu_send">Precisando organizar suas finanças? Aqui vai um app pra você: \nhttps://play.google.com/store/apps/details?id=com.guilhermemarx14.mygrana</string>
     <string name="title_activity_add_transaction">Nova Transação</string>
     <string name="text_value_transaction">Valor: </string>
     <string name="text_category">Categoria</string>

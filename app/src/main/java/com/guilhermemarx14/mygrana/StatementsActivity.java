@@ -210,6 +210,12 @@ public class StatementsActivity extends AppCompatActivity
             Intent it = new Intent(this, MenuActivity.class);
             it.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(it);
+        }if (id == R.id.nav_share){
+            Intent share = new Intent(Intent.ACTION_SEND);
+            share.setType("text/plain");
+            share.putExtra(Intent.EXTRA_SUBJECT,getString(R.string.app_name));
+            share.putExtra(Intent.EXTRA_TEXT, getString(R.string.menu_send));
+            startActivity(Intent.createChooser(share,getString(R.string.app_name)));
         }
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);

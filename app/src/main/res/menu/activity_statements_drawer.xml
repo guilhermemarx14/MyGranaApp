@@ -25,6 +25,11 @@
             android:icon="@drawable/ic_close_grey"
             android:title="@string/text_unpayd_filter" />
 
+        <item
+            android:id="@+id/nav_share"
+            android:icon="@drawable/ic_share"
+            android:title="@string/menu_share" />
+
     </group>
 
 </menu>

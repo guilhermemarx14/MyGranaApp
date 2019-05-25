@@ -473,6 +473,12 @@ public class MenuActivity extends AppCompatActivity
             findViewById(R.id.linearLayoutHome).setVisibility(View.VISIBLE);
             findViewById(R.id.chart1).setVisibility(View.GONE);
             findViewById(R.id.noValueChart).setVisibility(View.GONE);
+        } if (id == R.id.nav_share){
+            Intent share = new Intent(Intent.ACTION_SEND);
+            share.setType("text/plain");
+            share.putExtra(Intent.EXTRA_SUBJECT,getString(R.string.app_name));
+            share.putExtra(Intent.EXTRA_TEXT, getString(R.string.menu_send));
+            startActivity(Intent.createChooser(share,getString(R.string.app_name)));
         }
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);

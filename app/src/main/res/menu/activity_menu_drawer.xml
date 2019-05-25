@@ -23,6 +23,11 @@
             android:icon="@drawable/ic_expand_less"
             android:title="@string/text_second_chart" />
 
+        <item
+            android:id="@+id/nav_share"
+            android:icon="@drawable/ic_share"
+            android:title="@string/menu_share" />
+
     </group>
 
 
