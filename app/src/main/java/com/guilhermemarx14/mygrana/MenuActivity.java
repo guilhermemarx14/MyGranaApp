@@ -41,6 +41,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.guilhermemarx14.mygrana.Adapters.TransactionsAdapter;
 import com.guilhermemarx14.mygrana.Dialogs.AddSubcategoryDialog;
 import com.guilhermemarx14.mygrana.Dialogs.AddTransactionDialog;
+import com.guilhermemarx14.mygrana.RealmObjects.Subcategory;
 import com.guilhermemarx14.mygrana.RealmObjects.Transaction;
 import com.guilhermemarx14.mygrana.RealmObjects.UserProfilePhoto;
 import com.leinardi.android.speeddial.SpeedDialActionItem;
@@ -56,6 +57,8 @@ import io.realm.RealmResults;
 
 import static com.guilhermemarx14.mygrana.Utils.Constants.GASTO;
 import static com.guilhermemarx14.mygrana.Utils.Constants.RENDA;
+import static com.guilhermemarx14.mygrana.Utils.Constants.setSubcategoryId;
+import static com.guilhermemarx14.mygrana.Utils.Constants.setTransactionId;
 
 public class MenuActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, OnChartValueSelectedListener {
@@ -78,10 +81,6 @@ public class MenuActivity extends AppCompatActivity
         setContentView(R.layout.activity_menu);
         Toolbar toolbar = getToolbar();
         Realm.init(this);
-        RealmConfiguration config = new RealmConfiguration
-                .Builder()
-                .deleteRealmIfMigrationNeeded()
-                .build();
         setTitle(R.string.app_name);
         user = getFirebaseUser();
         realm = Realm.getDefaultInstance();
@@ -90,6 +89,14 @@ public class MenuActivity extends AppCompatActivity
         setNavigationDrawer(toolbar);
 
         setUpLinearLayoutHome();
+
+        if (realm.where(Transaction.class).max("id") != null)
+            setTransactionId((long) realm.where(Transaction.class).max("id"));
+        else setTransactionId(0);
+
+        if (realm.where(Subcategory.class).max("id") != null)
+            setSubcategoryId((long) realm.where(Transaction.class).max("id"));
+        else setSubcategoryId(0);
     }
 
     private void setUpLinearLayoutHome() {

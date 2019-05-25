@@ -52,13 +52,7 @@ public class SplashActivity extends AppCompatActivity {
         getSupportActionBar().hide();
         user = getFirebaseUser();
         realm = Realm.getDefaultInstance();
-        if (realm.where(Transaction.class).max("id") != null)
-            setTransactionId((long) realm.where(Transaction.class).max("id"));
-        else setTransactionId(0);
 
-        if (realm.where(Subcategory.class).max("id") != null)
-            setSubcategoryId((long) realm.where(Transaction.class).max("id"));
-        else setSubcategoryId(0);
 
         final Animation animRotate = AnimationUtils.loadAnimation(this, R.anim.rotate);
         realm.beginTransaction();
