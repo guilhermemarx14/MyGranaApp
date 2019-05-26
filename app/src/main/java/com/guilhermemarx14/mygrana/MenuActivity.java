@@ -121,6 +121,27 @@ public class MenuActivity extends AppCompatActivity
         else setSubcategoryId(0);
         setUpBarChartEfetivado();
         setUpBarChartInadimplente();
+        setUpNextCharges();
+    }
+
+    private void setUpNextCharges() {
+        RealmResults<Transaction> result = realm.where(Transaction.class).findAll();
+        RecyclerView rv = findViewById(R.id.rvNext);
+        ArrayList<Transaction> myList = new ArrayList<>();
+
+        for (Transaction t : result)
+            if (!t.isPayd())
+                myList.add(t);
+        if (myList.isEmpty())
+            findViewById(R.id.textView19).setVisibility(View.VISIBLE);
+        else {
+            findViewById(R.id.textView19).setVisibility(View.GONE);
+            Collections.sort(myList);
+            Collections.reverse(myList);
+            TransactionsAdapter adapter = new TransactionsAdapter(this, myList);
+            rv.setAdapter(adapter);
+            rv.setLayoutManager(new LinearLayoutManager(this));
+        }
     }
 
     private void setUpBarChartEfetivado() {
