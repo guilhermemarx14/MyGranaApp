@@ -106,13 +106,11 @@ public class MenuActivity extends AppCompatActivity
         Toolbar toolbar = getToolbar();
         Realm.init(this);
         setTitle(R.string.app_name);
-        //user = getFirebaseUser();
+        user = getFirebaseUser();
         realm = Realm.getDefaultInstance();
         setFloatingActionButton();
 
-        //setNavigationDrawer(toolbar);
-
-        //setUpLinearLayoutHome();
+        setNavigationDrawer(toolbar);
 
         if (realm.where(Transaction.class).max("id") != null)
             setTransactionId((long) realm.where(Transaction.class).max("id"));
@@ -451,73 +449,8 @@ public class MenuActivity extends AppCompatActivity
     public void onStopTrackingTouch(SeekBar seekBar) {
 
     }
-//
-//    private void setUpLinearLayoutHome() {
-//        RealmResults<Transaction> result = realm.where(Transaction.class).findAll();
-//        RecyclerView rv = findViewById(R.id.rvNext);
-//        ArrayList<Transaction> myList = new ArrayList<>();
-//
-//        for (Transaction t : result)
-//            if (!t.isPayd())
-//                myList.add(t);
-//        if (myList.isEmpty())
-//            findViewById(R.id.textView19).setVisibility(View.VISIBLE);
-//        else {
-//            findViewById(R.id.textView19).setVisibility(View.GONE);
-//            Collections.sort(myList);
-//            Collections.reverse(myList);
-//            TransactionsAdapter adapter = new TransactionsAdapter(this, myList);
-//            rv.setAdapter(adapter);
-//            rv.setLayoutManager(new LinearLayoutManager(this));
-//        }
-//        float gastoEfetivado = 0, gastoInadimplente = 0, rendaEfetivada = 0, rendaInadimplente = 0;
-//
-//        for (Transaction t : result) {
-//            if (t.isPayd()) {
-//                if (position(t.getCategoryName()) == 0 || position(t.getCategoryName()) == 1)
-//                    rendaEfetivada += t.getValue();
-//                else gastoEfetivado -= t.getValue();
-//            } else {
-//                if (position(t.getCategoryName()) == 0 || position(t.getCategoryName()) == 1)
-//                    rendaInadimplente += t.getValue();
-//                else gastoInadimplente -= t.getValue();
-//            }
-//        }
-//
-//        TextView tvGastoEfetivado, tvGastoInadimplente, tvRendaEfetivada, tvRendaInadimplente;
-//        tvGastoEfetivado = findViewById(R.id.tvGastoEfetivado);
-//        tvGastoInadimplente = findViewById(R.id.tvGastoInadimplente);
-//        tvRendaEfetivada = findViewById(R.id.tvRendaEfetivada);
-//        tvRendaInadimplente = findViewById(R.id.tvRendaInadimplente);
-//
-//        tvGastoEfetivado.setText(String.format("R$ %.2f", gastoEfetivado));
-//        tvGastoInadimplente.setText(String.format("R$ %.2f", gastoInadimplente));
-//        tvRendaEfetivada.setText(String.format("R$ %.2f", rendaEfetivada));
-//        tvRendaInadimplente.setText(String.format("R$ %.2f", rendaInadimplente));
-//
-//
-//        float saldoEfetivado, saldoInadimplente;
-//        saldoEfetivado = rendaEfetivada - gastoEfetivado;
-//        saldoInadimplente = rendaInadimplente - gastoInadimplente;
-//
-//        TextView tvSaldoEfetivado, tvSaldoInadimplente;
-//        tvSaldoEfetivado = findViewById(R.id.tvSaldoEfetivado);
-//        tvSaldoInadimplente = findViewById(R.id.tvSaldoInadimplente);
-//
-//        if (saldoEfetivado >= 0)
-//            tvSaldoEfetivado.setTextColor(getResources().getColor(R.color.colorAccent));
-//        else tvSaldoEfetivado.setTextColor(getResources().getColor(R.color.colorRed));
-//
-//        if (saldoInadimplente >= 0)
-//            tvSaldoInadimplente.setTextColor(getResources().getColor(R.color.colorAccent));
-//        else tvSaldoInadimplente.setTextColor(getResources().getColor(R.color.colorRed));
-//
-//        tvSaldoEfetivado.setText(String.format("R$ %.2f", saldoEfetivado));
-//        tvSaldoInadimplente.setText(String.format("R$ %.2f", saldoInadimplente));
-//
-//    }
 
-    private void setFirstCard(int gastoOuRenda) {
+    private void setPieChart(int gastoOuRenda) {
         findViewById(R.id.noValueChart).setVisibility(View.GONE);
         chart = findViewById(R.id.chart1);
         chart.setVisibility(View.VISIBLE);
@@ -819,10 +752,10 @@ public class MenuActivity extends AppCompatActivity
             startActivity(it);
         } else if (id == R.id.nav_first_chart) {
             findViewById(R.id.linearLayoutHome).setVisibility(View.GONE);
-            setFirstCard(GASTO);
+            setPieChart(GASTO);
         } else if (id == R.id.nav_second_chart) {
             findViewById(R.id.linearLayoutHome).setVisibility(View.GONE);
-            setFirstCard(RENDA);
+            setPieChart(RENDA);
         } else if (id == R.id.nav_home) {
             findViewById(R.id.linearLayoutHome).setVisibility(View.VISIBLE);
             findViewById(R.id.chart1).setVisibility(View.GONE);
