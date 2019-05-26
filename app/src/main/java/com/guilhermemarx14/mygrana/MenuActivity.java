@@ -95,7 +95,8 @@ public class MenuActivity extends AppCompatActivity
     Context context = this;
     float balance = 0, positive = 0, negative = 0;
     private PieChart chart;
-    private BarChart barChart;
+    private BarChart barChart1;
+    private BarChart barChart2;
 
 
     @Override
@@ -120,15 +121,15 @@ public class MenuActivity extends AppCompatActivity
         if (realm.where(Subcategory.class).max("id") != null)
             setSubcategoryId((long) realm.where(Transaction.class).max("id"));
         else setSubcategoryId(0);
-
+        setUpBarChartEfetivado();
         setUpBarChartInadimplente();
     }
 
-    private void setUpBarChartInadimplente() {
+    private void setUpBarChartEfetivado() {
 
 
-        barChart = findViewById(R.id.barChart);
-        barChart.setOnChartValueSelectedListener(new OnChartValueSelectedListener() {
+        barChart2 = findViewById(R.id.barChart2);
+        barChart2.setOnChartValueSelectedListener(new OnChartValueSelectedListener() {
             @Override
             public void onValueSelected(Entry e, Highlight h) {
 
@@ -140,16 +141,16 @@ public class MenuActivity extends AppCompatActivity
             }
         });
 
-        barChart.setDrawBarShadow(false);
-        barChart.setDrawValueAboveBar(true);
-        barChart.setPinchZoom(false);
-        barChart.setDoubleTapToZoomEnabled(false);
-        barChart.getDescription().setEnabled(false);
+        barChart2.setDrawBarShadow(false);
+        barChart2.setDrawValueAboveBar(true);
+        barChart2.setPinchZoom(false);
+        barChart2.setDoubleTapToZoomEnabled(false);
+        barChart2.getDescription().setEnabled(false);
 
 
         // scaling can now only be done on x- and y-axis separately
 
-        barChart.setDrawGridBackground(false);
+        barChart2.setDrawGridBackground(false);
         // chart.setDrawYLabels(false);
 
         ValueFormatter xAxisFormatter = new ValueFormatter() {
@@ -168,7 +169,7 @@ public class MenuActivity extends AppCompatActivity
             }
         };
 
-        XAxis xAxis = barChart.getXAxis();
+        XAxis xAxis = barChart2.getXAxis();
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
         xAxis.setDrawGridLines(false);
         xAxis.setGranularity(1f); // only intervals of 1 day
@@ -183,26 +184,26 @@ public class MenuActivity extends AppCompatActivity
             }
         };
 
-        YAxis leftAxis = barChart.getAxisLeft();
+        YAxis leftAxis = barChart2.getAxisLeft();
         leftAxis.setLabelCount(8, false);
         leftAxis.setValueFormatter(custom);
         leftAxis.setPosition(YAxis.YAxisLabelPosition.OUTSIDE_CHART);
         leftAxis.setSpaceTop(15f);
         leftAxis.setAxisMinimum(0f); // this replaces setStartAtZero(true)
 
-        YAxis rightAxis = barChart.getAxisRight();
+        YAxis rightAxis = barChart2.getAxisRight();
         rightAxis.setDrawGridLines(false);
         rightAxis.setLabelCount(8, false);
         rightAxis.setValueFormatter(custom);
         rightAxis.setSpaceTop(15f);
         rightAxis.setAxisMinimum(0f); // this replaces setStartAtZero(true)
 
-        barChart.getLegend().setEnabled(false);
+        barChart2.getLegend().setEnabled(false);
 
 
         XYMarkerView mv = new XYMarkerView(this, xAxisFormatter);
-        mv.setChartView(barChart); // For bounds control
-        barChart.setMarker(mv); // Set the marker to the chart
+        mv.setChartView(barChart2); // For bounds control
+        barChart2.setMarker(mv); // Set the marker to the chart
 
 
         // chart.setDrawLegend(false);
@@ -211,7 +212,7 @@ public class MenuActivity extends AppCompatActivity
         ArrayList<Transaction> gastos = new ArrayList<>();
         ArrayList<Transaction> rendas = new ArrayList<>();
         for (Transaction t : transactions)
-            if (!t.isPayd()) {
+            if (t.isPayd()) {
                 if (t.getValue() >= 0)
                     rendas.add(t);
                 else gastos.add(t);
@@ -224,14 +225,8 @@ public class MenuActivity extends AppCompatActivity
         for (Transaction t : gastos)
             totalGasto -= t.getValue();
 
-        totalGasto = 100;
-        totalRenda = 180;
-
         float saldo = totalRenda - totalGasto;
         boolean saldoPositivo = saldo >= 0;
-
-
-
 
         ArrayList<BarEntry> values = new ArrayList<>();
         values.add(new BarEntry(GASTO, totalGasto, getResources().getDrawable(R.drawable.star)));
@@ -243,12 +238,12 @@ public class MenuActivity extends AppCompatActivity
 
         BarDataSet set1;
 
-        if (barChart.getData() != null &&
-                barChart.getData().getDataSetCount() > 0) {
-            set1 = (BarDataSet) barChart.getData().getDataSetByIndex(0);
+        if (barChart2.getData() != null &&
+                barChart2.getData().getDataSetCount() > 0) {
+            set1 = (BarDataSet) barChart2.getData().getDataSetByIndex(0);
             set1.setValues(values);
-            barChart.getData().notifyDataChanged();
-            barChart.notifyDataSetChanged();
+            barChart2.getData().notifyDataChanged();
+            barChart2.notifyDataSetChanged();
 
         } else {
             set1 = new BarDataSet(values, "The year 2017");
@@ -281,7 +276,164 @@ public class MenuActivity extends AppCompatActivity
             data.setValueTextSize(10f);
             data.setBarWidth(0.9f);
 
-            barChart.setData(data);
+            barChart2.setData(data);
+        }
+    }
+
+    private void setUpBarChartInadimplente() {
+
+
+        barChart1 = findViewById(R.id.barChart1);
+        barChart1.setOnChartValueSelectedListener(new OnChartValueSelectedListener() {
+            @Override
+            public void onValueSelected(Entry e, Highlight h) {
+
+            }
+
+            @Override
+            public void onNothingSelected() {
+
+            }
+        });
+
+        barChart1.setDrawBarShadow(false);
+        barChart1.setDrawValueAboveBar(true);
+        barChart1.setPinchZoom(false);
+        barChart1.setDoubleTapToZoomEnabled(false);
+        barChart1.getDescription().setEnabled(false);
+
+
+        // scaling can now only be done on x- and y-axis separately
+
+        barChart1.setDrawGridBackground(false);
+        // chart.setDrawYLabels(false);
+
+        ValueFormatter xAxisFormatter = new ValueFormatter() {
+            @Override
+            public String getFormattedValue(float value) {
+
+                switch ((int) value % 3) {
+                    case GASTO:
+                        return "Gasto";
+                    case RENDA:
+                        return "Renda";
+                    case SALDO:
+                        return "Saldo";
+                }
+                return "";
+            }
+        };
+
+        XAxis xAxis = barChart1.getXAxis();
+        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
+        xAxis.setDrawGridLines(false);
+        xAxis.setGranularity(1f); // only intervals of 1 day
+        xAxis.setLabelCount(7);
+        xAxis.setValueFormatter(xAxisFormatter);
+
+
+        ValueFormatter custom = new ValueFormatter() {
+            @Override
+            public String getFormattedValue(float value) {
+                return String.format("R$ %.2f", value);
+            }
+        };
+
+        YAxis leftAxis = barChart1.getAxisLeft();
+        leftAxis.setLabelCount(8, false);
+        leftAxis.setValueFormatter(custom);
+        leftAxis.setPosition(YAxis.YAxisLabelPosition.OUTSIDE_CHART);
+        leftAxis.setSpaceTop(15f);
+        leftAxis.setAxisMinimum(0f); // this replaces setStartAtZero(true)
+
+        YAxis rightAxis = barChart1.getAxisRight();
+        rightAxis.setDrawGridLines(false);
+        rightAxis.setLabelCount(8, false);
+        rightAxis.setValueFormatter(custom);
+        rightAxis.setSpaceTop(15f);
+        rightAxis.setAxisMinimum(0f); // this replaces setStartAtZero(true)
+
+        barChart1.getLegend().setEnabled(false);
+
+
+        XYMarkerView mv = new XYMarkerView(this, xAxisFormatter);
+        mv.setChartView(barChart1); // For bounds control
+        barChart1.setMarker(mv); // Set the marker to the chart
+
+
+        // chart.setDrawLegend(false);
+
+        RealmResults<Transaction> transactions = realm.where(Transaction.class).findAll();
+        ArrayList<Transaction> gastos = new ArrayList<>();
+        ArrayList<Transaction> rendas = new ArrayList<>();
+        for (Transaction t : transactions)
+            if (!t.isPayd()) {
+                if (t.getValue() >= 0)
+                    rendas.add(t);
+                else gastos.add(t);
+            }
+
+        float totalRenda = 0;
+        float totalGasto = 0;
+        for (Transaction t : rendas)
+            totalRenda += t.getValue();
+        for (Transaction t : gastos)
+            totalGasto -= t.getValue();
+        float saldo = totalRenda - totalGasto;
+        boolean saldoPositivo = saldo >= 0;
+
+
+
+
+        ArrayList<BarEntry> values = new ArrayList<>();
+        values.add(new BarEntry(GASTO, totalGasto, getResources().getDrawable(R.drawable.star)));
+        values.add(new BarEntry(RENDA, totalRenda, getResources().getDrawable(R.drawable.star)));
+        if (saldoPositivo)
+            values.add(new BarEntry(SALDO, saldo, getResources().getDrawable(R.drawable.star)));
+        else
+            values.add(new BarEntry(SALDO, -saldo, getResources().getDrawable(R.drawable.star)));
+
+        BarDataSet set1;
+
+        if (barChart1.getData() != null &&
+                barChart1.getData().getDataSetCount() > 0) {
+            set1 = (BarDataSet) barChart1.getData().getDataSetByIndex(0);
+            set1.setValues(values);
+            barChart1.getData().notifyDataChanged();
+            barChart1.notifyDataSetChanged();
+
+        } else {
+            set1 = new BarDataSet(values, "The year 2017");
+
+            set1.setDrawIcons(false);
+
+//            set1.setColors(ColorTemplate.MATERIAL_COLORS);
+
+            /*int startColor = ContextCompat.getColor(this, android.R.color.holo_blue_dark);
+            int endColor = ContextCompat.getColor(this, android.R.color.holo_blue_bright);
+            set1.setGradientColor(startColor, endColor);*/
+
+            int startColor1 = ContextCompat.getColor(this, R.color.colorRed);
+            int startColor2 = ContextCompat.getColor(this, R.color.colorAccent);
+            int startColor3;
+            if(saldoPositivo)
+                startColor3 = ContextCompat.getColor(this, R.color.colorAccent);
+            else startColor3 = ContextCompat.getColor(this, R.color.colorRed);
+            List<GradientColor> gradientColors = new ArrayList<>();
+            gradientColors.add(new GradientColor(startColor1, startColor1));
+            gradientColors.add(new GradientColor(startColor2, startColor2));
+            gradientColors.add(new GradientColor(startColor3, startColor3));
+
+            set1.setGradientColors(gradientColors);
+
+            ArrayList<IBarDataSet> dataSets = new ArrayList<>();
+            dataSets.add(set1);
+
+            BarData data = new BarData(dataSets);
+            data.setValueTextSize(10f);
+            data.setBarWidth(0.9f);
+
+            barChart1.setData(data);
         }
     }
 
