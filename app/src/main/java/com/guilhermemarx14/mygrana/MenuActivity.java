@@ -7,34 +7,53 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.SeekBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.github.mikephil.charting.animation.Easing;
+import com.github.mikephil.charting.charts.BarChart;
+import com.github.mikephil.charting.charts.BarLineChartBase;
 import com.github.mikephil.charting.charts.PieChart;
+import com.github.mikephil.charting.components.AxisBase;
 import com.github.mikephil.charting.components.Legend;
+import com.github.mikephil.charting.components.MarkerView;
+import com.github.mikephil.charting.components.XAxis;
+import com.github.mikephil.charting.components.YAxis;
+import com.github.mikephil.charting.data.BarData;
+import com.github.mikephil.charting.data.BarDataSet;
+import com.github.mikephil.charting.data.BarEntry;
+import com.github.mikephil.charting.data.CandleEntry;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
+import com.github.mikephil.charting.formatter.LargeValueFormatter;
 import com.github.mikephil.charting.formatter.PercentFormatter;
+import com.github.mikephil.charting.formatter.ValueFormatter;
 import com.github.mikephil.charting.highlight.Highlight;
+import com.github.mikephil.charting.interfaces.datasets.IBarDataSet;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
+import com.github.mikephil.charting.model.GradientColor;
 import com.github.mikephil.charting.utils.ColorTemplate;
+import com.github.mikephil.charting.utils.FileUtils;
 import com.github.mikephil.charting.utils.MPPointF;
+import com.github.mikephil.charting.utils.Utils;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -48,20 +67,23 @@ import com.leinardi.android.speeddial.SpeedDialActionItem;
 import com.leinardi.android.speeddial.SpeedDialView;
 
 import java.io.InputStream;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
+import java.util.Locale;
 
 import io.realm.Realm;
-import io.realm.RealmConfiguration;
 import io.realm.RealmResults;
 
 import static com.guilhermemarx14.mygrana.Utils.Constants.GASTO;
 import static com.guilhermemarx14.mygrana.Utils.Constants.RENDA;
+import static com.guilhermemarx14.mygrana.Utils.Constants.SALDO;
 import static com.guilhermemarx14.mygrana.Utils.Constants.setSubcategoryId;
 import static com.guilhermemarx14.mygrana.Utils.Constants.setTransactionId;
 
 public class MenuActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, OnChartValueSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener, OnChartValueSelectedListener, SeekBar.OnSeekBarChangeListener {
 
 
     protected final String[] parties = new String[]{
@@ -73,6 +95,7 @@ public class MenuActivity extends AppCompatActivity
     Context context = this;
     float balance = 0, positive = 0, negative = 0;
     private PieChart chart;
+    private BarChart barChart;
 
 
     @Override
@@ -82,13 +105,13 @@ public class MenuActivity extends AppCompatActivity
         Toolbar toolbar = getToolbar();
         Realm.init(this);
         setTitle(R.string.app_name);
-        user = getFirebaseUser();
+        //user = getFirebaseUser();
         realm = Realm.getDefaultInstance();
         setFloatingActionButton();
 
-        setNavigationDrawer(toolbar);
+        //setNavigationDrawer(toolbar);
 
-        setUpLinearLayoutHome();
+        //setUpLinearLayoutHome();
 
         if (realm.where(Transaction.class).max("id") != null)
             setTransactionId((long) realm.where(Transaction.class).max("id"));
@@ -97,72 +120,250 @@ public class MenuActivity extends AppCompatActivity
         if (realm.where(Subcategory.class).max("id") != null)
             setSubcategoryId((long) realm.where(Transaction.class).max("id"));
         else setSubcategoryId(0);
+
+        setUpBarChartInadimplente();
     }
 
-    private void setUpLinearLayoutHome() {
-        RealmResults<Transaction> result = realm.where(Transaction.class).findAll();
-        RecyclerView rv = findViewById(R.id.rvNext);
-        ArrayList<Transaction> myList = new ArrayList<>();
+    private void setUpBarChartInadimplente() {
 
-        for (Transaction t : result)
-            if (!t.isPayd())
-                myList.add(t);
-        if (myList.isEmpty())
-            findViewById(R.id.textView19).setVisibility(View.VISIBLE);
-        else {
-            findViewById(R.id.textView19).setVisibility(View.GONE);
-            Collections.sort(myList);
-            Collections.reverse(myList);
-            TransactionsAdapter adapter = new TransactionsAdapter(this, myList);
-            rv.setAdapter(adapter);
-            rv.setLayoutManager(new LinearLayoutManager(this));
-        }
-        float gastoEfetivado = 0, gastoInadimplente = 0, rendaEfetivada = 0, rendaInadimplente = 0;
 
-        for (Transaction t : result) {
-            if (t.isPayd()) {
-                if (position(t.getCategoryName()) == 0 || position(t.getCategoryName()) == 1)
-                    rendaEfetivada += t.getValue();
-                else gastoEfetivado -= t.getValue();
-            } else {
-                if (position(t.getCategoryName()) == 0 || position(t.getCategoryName()) == 1)
-                    rendaInadimplente += t.getValue();
-                else gastoInadimplente -= t.getValue();
+        barChart = findViewById(R.id.barChart);
+        barChart.setOnChartValueSelectedListener(new OnChartValueSelectedListener() {
+            @Override
+            public void onValueSelected(Entry e, Highlight h) {
+
             }
+
+            @Override
+            public void onNothingSelected() {
+
+            }
+        });
+
+        barChart.setDrawBarShadow(false);
+        barChart.setDrawValueAboveBar(true);
+        barChart.setPinchZoom(false);
+        barChart.setDoubleTapToZoomEnabled(false);
+        barChart.getDescription().setEnabled(false);
+
+
+        // scaling can now only be done on x- and y-axis separately
+
+        barChart.setDrawGridBackground(false);
+        // chart.setDrawYLabels(false);
+
+        ValueFormatter xAxisFormatter = new ValueFormatter() {
+            @Override
+            public String getFormattedValue(float value) {
+
+                switch ((int) value % 3) {
+                    case GASTO:
+                        return "Gasto";
+                    case RENDA:
+                        return "Renda";
+                    case SALDO:
+                        return "Saldo";
+                }
+                return "";
+            }
+        };
+
+        XAxis xAxis = barChart.getXAxis();
+        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
+        xAxis.setDrawGridLines(false);
+        xAxis.setGranularity(1f); // only intervals of 1 day
+        xAxis.setLabelCount(7);
+        xAxis.setValueFormatter(xAxisFormatter);
+
+
+        ValueFormatter custom = new ValueFormatter() {
+            @Override
+            public String getFormattedValue(float value) {
+                return String.format("R$ %.2f", value);
+            }
+        };
+
+        YAxis leftAxis = barChart.getAxisLeft();
+        leftAxis.setLabelCount(8, false);
+        leftAxis.setValueFormatter(custom);
+        leftAxis.setPosition(YAxis.YAxisLabelPosition.OUTSIDE_CHART);
+        leftAxis.setSpaceTop(15f);
+        leftAxis.setAxisMinimum(0f); // this replaces setStartAtZero(true)
+
+        YAxis rightAxis = barChart.getAxisRight();
+        rightAxis.setDrawGridLines(false);
+        rightAxis.setLabelCount(8, false);
+        rightAxis.setValueFormatter(custom);
+        rightAxis.setSpaceTop(15f);
+        rightAxis.setAxisMinimum(0f); // this replaces setStartAtZero(true)
+
+        barChart.getLegend().setEnabled(false);
+
+
+        XYMarkerView mv = new XYMarkerView(this, xAxisFormatter);
+        mv.setChartView(barChart); // For bounds control
+        barChart.setMarker(mv); // Set the marker to the chart
+
+
+        // chart.setDrawLegend(false);
+
+        RealmResults<Transaction> transactions = realm.where(Transaction.class).findAll();
+        ArrayList<Transaction> gastos = new ArrayList<>();
+        ArrayList<Transaction> rendas = new ArrayList<>();
+        for (Transaction t : transactions)
+            if (!t.isPayd()) {
+                if (t.getValue() >= 0)
+                    rendas.add(t);
+                else gastos.add(t);
+            }
+
+        float totalRenda = 0;
+        float totalGasto = 0;
+        for (Transaction t : rendas)
+            totalRenda += t.getValue();
+        for (Transaction t : gastos)
+            totalGasto -= t.getValue();
+
+        totalGasto = 100;
+        totalRenda = 180;
+
+        float saldo = totalRenda - totalGasto;
+        boolean saldoPositivo = saldo >= 0;
+
+
+
+
+        ArrayList<BarEntry> values = new ArrayList<>();
+        values.add(new BarEntry(GASTO, totalGasto, getResources().getDrawable(R.drawable.star)));
+        values.add(new BarEntry(RENDA, totalRenda, getResources().getDrawable(R.drawable.star)));
+        if (saldoPositivo)
+            values.add(new BarEntry(SALDO, saldo, getResources().getDrawable(R.drawable.star)));
+        else
+            values.add(new BarEntry(SALDO, -saldo, getResources().getDrawable(R.drawable.star)));
+
+        BarDataSet set1;
+
+        if (barChart.getData() != null &&
+                barChart.getData().getDataSetCount() > 0) {
+            set1 = (BarDataSet) barChart.getData().getDataSetByIndex(0);
+            set1.setValues(values);
+            barChart.getData().notifyDataChanged();
+            barChart.notifyDataSetChanged();
+
+        } else {
+            set1 = new BarDataSet(values, "The year 2017");
+
+            set1.setDrawIcons(false);
+
+//            set1.setColors(ColorTemplate.MATERIAL_COLORS);
+
+            /*int startColor = ContextCompat.getColor(this, android.R.color.holo_blue_dark);
+            int endColor = ContextCompat.getColor(this, android.R.color.holo_blue_bright);
+            set1.setGradientColor(startColor, endColor);*/
+
+            int startColor1 = ContextCompat.getColor(this, R.color.colorRed);
+            int startColor2 = ContextCompat.getColor(this, R.color.colorAccent);
+            int startColor3;
+            if(saldoPositivo)
+                startColor3 = ContextCompat.getColor(this, R.color.colorAccent);
+            else startColor3 = ContextCompat.getColor(this, R.color.colorRed);
+            List<GradientColor> gradientColors = new ArrayList<>();
+            gradientColors.add(new GradientColor(startColor1, startColor1));
+            gradientColors.add(new GradientColor(startColor2, startColor2));
+            gradientColors.add(new GradientColor(startColor3, startColor3));
+
+            set1.setGradientColors(gradientColors);
+
+            ArrayList<IBarDataSet> dataSets = new ArrayList<>();
+            dataSets.add(set1);
+
+            BarData data = new BarData(dataSets);
+            data.setValueTextSize(10f);
+            data.setBarWidth(0.9f);
+
+            barChart.setData(data);
         }
+    }
 
-        TextView tvGastoEfetivado, tvGastoInadimplente, tvRendaEfetivada, tvRendaInadimplente;
-        tvGastoEfetivado = findViewById(R.id.tvGastoEfetivado);
-        tvGastoInadimplente = findViewById(R.id.tvGastoInadimplente);
-        tvRendaEfetivada = findViewById(R.id.tvRendaEfetivada);
-        tvRendaInadimplente = findViewById(R.id.tvRendaInadimplente);
-
-        tvGastoEfetivado.setText(String.format("R$ %.2f", gastoEfetivado));
-        tvGastoInadimplente.setText(String.format("R$ %.2f", gastoInadimplente));
-        tvRendaEfetivada.setText(String.format("R$ %.2f", rendaEfetivada));
-        tvRendaInadimplente.setText(String.format("R$ %.2f", rendaInadimplente));
-
-
-        float saldoEfetivado, saldoInadimplente;
-        saldoEfetivado = rendaEfetivada - gastoEfetivado;
-        saldoInadimplente = rendaInadimplente - gastoInadimplente;
-
-        TextView tvSaldoEfetivado, tvSaldoInadimplente;
-        tvSaldoEfetivado = findViewById(R.id.tvSaldoEfetivado);
-        tvSaldoInadimplente = findViewById(R.id.tvSaldoInadimplente);
-
-        if (saldoEfetivado >= 0)
-            tvSaldoEfetivado.setTextColor(getResources().getColor(R.color.colorAccent));
-        else tvSaldoEfetivado.setTextColor(getResources().getColor(R.color.colorRed));
-
-        if (saldoInadimplente >= 0)
-            tvSaldoInadimplente.setTextColor(getResources().getColor(R.color.colorAccent));
-        else tvSaldoInadimplente.setTextColor(getResources().getColor(R.color.colorRed));
-
-        tvSaldoEfetivado.setText(String.format("R$ %.2f", saldoEfetivado));
-        tvSaldoInadimplente.setText(String.format("R$ %.2f", saldoInadimplente));
+    @Override
+    public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
 
     }
+
+    @Override
+    public void onStartTrackingTouch(SeekBar seekBar) {
+
+    }
+
+    @Override
+    public void onStopTrackingTouch(SeekBar seekBar) {
+
+    }
+//
+//    private void setUpLinearLayoutHome() {
+//        RealmResults<Transaction> result = realm.where(Transaction.class).findAll();
+//        RecyclerView rv = findViewById(R.id.rvNext);
+//        ArrayList<Transaction> myList = new ArrayList<>();
+//
+//        for (Transaction t : result)
+//            if (!t.isPayd())
+//                myList.add(t);
+//        if (myList.isEmpty())
+//            findViewById(R.id.textView19).setVisibility(View.VISIBLE);
+//        else {
+//            findViewById(R.id.textView19).setVisibility(View.GONE);
+//            Collections.sort(myList);
+//            Collections.reverse(myList);
+//            TransactionsAdapter adapter = new TransactionsAdapter(this, myList);
+//            rv.setAdapter(adapter);
+//            rv.setLayoutManager(new LinearLayoutManager(this));
+//        }
+//        float gastoEfetivado = 0, gastoInadimplente = 0, rendaEfetivada = 0, rendaInadimplente = 0;
+//
+//        for (Transaction t : result) {
+//            if (t.isPayd()) {
+//                if (position(t.getCategoryName()) == 0 || position(t.getCategoryName()) == 1)
+//                    rendaEfetivada += t.getValue();
+//                else gastoEfetivado -= t.getValue();
+//            } else {
+//                if (position(t.getCategoryName()) == 0 || position(t.getCategoryName()) == 1)
+//                    rendaInadimplente += t.getValue();
+//                else gastoInadimplente -= t.getValue();
+//            }
+//        }
+//
+//        TextView tvGastoEfetivado, tvGastoInadimplente, tvRendaEfetivada, tvRendaInadimplente;
+//        tvGastoEfetivado = findViewById(R.id.tvGastoEfetivado);
+//        tvGastoInadimplente = findViewById(R.id.tvGastoInadimplente);
+//        tvRendaEfetivada = findViewById(R.id.tvRendaEfetivada);
+//        tvRendaInadimplente = findViewById(R.id.tvRendaInadimplente);
+//
+//        tvGastoEfetivado.setText(String.format("R$ %.2f", gastoEfetivado));
+//        tvGastoInadimplente.setText(String.format("R$ %.2f", gastoInadimplente));
+//        tvRendaEfetivada.setText(String.format("R$ %.2f", rendaEfetivada));
+//        tvRendaInadimplente.setText(String.format("R$ %.2f", rendaInadimplente));
+//
+//
+//        float saldoEfetivado, saldoInadimplente;
+//        saldoEfetivado = rendaEfetivada - gastoEfetivado;
+//        saldoInadimplente = rendaInadimplente - gastoInadimplente;
+//
+//        TextView tvSaldoEfetivado, tvSaldoInadimplente;
+//        tvSaldoEfetivado = findViewById(R.id.tvSaldoEfetivado);
+//        tvSaldoInadimplente = findViewById(R.id.tvSaldoInadimplente);
+//
+//        if (saldoEfetivado >= 0)
+//            tvSaldoEfetivado.setTextColor(getResources().getColor(R.color.colorAccent));
+//        else tvSaldoEfetivado.setTextColor(getResources().getColor(R.color.colorRed));
+//
+//        if (saldoInadimplente >= 0)
+//            tvSaldoInadimplente.setTextColor(getResources().getColor(R.color.colorAccent));
+//        else tvSaldoInadimplente.setTextColor(getResources().getColor(R.color.colorRed));
+//
+//        tvSaldoEfetivado.setText(String.format("R$ %.2f", saldoEfetivado));
+//        tvSaldoInadimplente.setText(String.format("R$ %.2f", saldoInadimplente));
+//
+//    }
 
     private void setFirstCard(int gastoOuRenda) {
         findViewById(R.id.noValueChart).setVisibility(View.GONE);
@@ -337,7 +538,7 @@ public class MenuActivity extends AppCompatActivity
             ((ImageView) v.findViewById(R.id.navHeaderPhoto)).setImageBitmap(upp.getUserPhoto());
 
         String nome = user.getDisplayName().split(" ")[0];
-        nome = nome.substring(0,1).toUpperCase() + nome.substring(1).toLowerCase();
+        nome = nome.substring(0, 1).toUpperCase() + nome.substring(1).toLowerCase();
         ((TextView) v.findViewById(R.id.navHeaderTitle)).setText("Olá, " + nome);
 
 
@@ -379,6 +580,7 @@ public class MenuActivity extends AppCompatActivity
         }
         return user;
     }
+
     SpeedDialView fab;
 
     private void setFloatingActionButton() {
@@ -473,12 +675,13 @@ public class MenuActivity extends AppCompatActivity
             findViewById(R.id.linearLayoutHome).setVisibility(View.VISIBLE);
             findViewById(R.id.chart1).setVisibility(View.GONE);
             findViewById(R.id.noValueChart).setVisibility(View.GONE);
-        } if (id == R.id.nav_share){
+        }
+        if (id == R.id.nav_share) {
             Intent share = new Intent(Intent.ACTION_SEND);
             share.setType("text/plain");
-            share.putExtra(Intent.EXTRA_SUBJECT,getString(R.string.app_name));
+            share.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.app_name));
             share.putExtra(Intent.EXTRA_TEXT, getString(R.string.menu_send));
-            startActivity(Intent.createChooser(share,getString(R.string.app_name)));
+            startActivity(Intent.createChooser(share, getString(R.string.app_name)));
         }
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
@@ -543,6 +746,64 @@ public class MenuActivity extends AppCompatActivity
                 imageView.setImageBitmap(result);
 
             }
+        }
+    }
+
+    public class MyValueFormatter extends ValueFormatter {
+
+        private final DecimalFormat mFormat;
+        private String suffix;
+
+        public MyValueFormatter(String suffix) {
+            mFormat = new DecimalFormat("###,###,###,##0.0");
+            this.suffix = suffix;
+        }
+
+        @Override
+        public String getFormattedValue(float value) {
+            return suffix + " " + mFormat.format(value);
+        }
+
+        @Override
+        public String getAxisLabel(float value, AxisBase axis) {
+            if (axis instanceof XAxis) {
+                return mFormat.format(value);
+            } else if (value > 0) {
+                return mFormat.format(value) + suffix;
+            } else {
+                return mFormat.format(value);
+            }
+        }
+    }
+
+    public class XYMarkerView extends MarkerView {
+
+        private final TextView tvContent;
+        private final ValueFormatter xAxisValueFormatter;
+
+        private final DecimalFormat format;
+
+        public XYMarkerView(Context context, ValueFormatter xAxisValueFormatter) {
+            super(context, R.layout.custom_marker_view);
+
+            this.xAxisValueFormatter = xAxisValueFormatter;
+            tvContent = findViewById(R.id.tvContent);
+            format = new DecimalFormat("###.0");
+        }
+
+        // runs every time the MarkerView is redrawn, can be used to update the
+        // content (user-interface)
+        @Override
+        public void refreshContent(Entry e, Highlight highlight) {
+
+            tvContent.setText(String.format("x: %s, y: %s", xAxisValueFormatter.getFormattedValue(e.getX()), format.format(e.getY())));
+
+            super.refreshContent(e, highlight);
+        }
+
+        @Override
+        public MPPointF getOffset() {
+            return new MPPointF(-(getWidth() / 2), -getHeight());
         }
     }
 

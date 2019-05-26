@@ -16,6 +16,7 @@ import io.realm.RealmResults;
 public class Constants {
     public static final int GASTO = 0;
     public static final int RENDA = 1;
+    public static final int SALDO = 2;
     public static boolean PERSISTENCE = false;
     public static long TRANSACTION_ID;
     public static long SUBCATEGORY_ID;
