@@ -33,6 +33,9 @@ public class Subcategory extends RealmObject implements Serializable {
     private String categoryName;
 
     public Subcategory() {
+        id =0;
+        subcategoryName = "";
+        categoryName = "";
     }
 
     public Subcategory(String nameSubcategory, String category) {

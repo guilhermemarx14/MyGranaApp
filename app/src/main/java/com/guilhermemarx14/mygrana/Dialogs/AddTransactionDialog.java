@@ -104,7 +104,7 @@ public class AddTransactionDialog extends Dialog {
                 } else {
                     findViewById(R.id.textSubcategoryName).setVisibility(View.INVISIBLE);
                     findViewById(R.id.spinnerSubcategory).setVisibility(View.INVISIBLE);
-                    selected2 = null;
+                    selected2 = new Subcategory();
 
                 }
 
