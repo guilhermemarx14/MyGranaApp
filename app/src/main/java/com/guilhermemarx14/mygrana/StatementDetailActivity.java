@@ -187,7 +187,7 @@ public class StatementDetailActivity extends AppCompatActivity {
                 String numero = et.getText().toString().substring(2);
                 numero = numero.replaceAll("[.]", "");
                 numero = numero.replaceAll(",", "");
-                numero = numero.replaceAll(" ", "");
+                numero = numero.replaceAll("\\s", "");
                 int num = Integer.parseInt(numero);
 
                 String desc = ((EditText) findViewById(R.id.inpDescription)).getText().toString();

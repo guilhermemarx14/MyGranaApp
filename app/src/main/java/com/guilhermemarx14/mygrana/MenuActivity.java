@@ -53,6 +53,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.guilhermemarx14.mygrana.Adapters.TransactionsAdapter;
 import com.guilhermemarx14.mygrana.Dialogs.AddSubcategoryDialog;
 import com.guilhermemarx14.mygrana.Dialogs.AddTransactionDialog;
+import com.guilhermemarx14.mygrana.RealmObjects.Category;
 import com.guilhermemarx14.mygrana.RealmObjects.Subcategory;
 import com.guilhermemarx14.mygrana.RealmObjects.Transaction;
 import com.guilhermemarx14.mygrana.RealmObjects.UserProfilePhoto;
@@ -524,8 +525,8 @@ public class MenuActivity extends AppCompatActivity
         float valor;
         String nome;
         ArrayList<Integer> nonZeroPositions = new ArrayList<>();
-        float soma[] = new float[9];
-        for (int i = 0; i < 8; i++)
+        float soma[] = new float[Category.getNumberOfCategories(realm)];
+        for (int i = 0; i < Category.getNumberOfCategories(realm); i++)
             soma[i] = 0;
         for (int i = 0; i < list.size(); i++) {
             valor = list.get(i).getValue();
@@ -538,7 +539,7 @@ public class MenuActivity extends AppCompatActivity
 
 
         if (gastoOuRenda == GASTO) {
-            for (int i = 2; i < 9; i++) {
+            for (int i = 2; i < Category.getNumberOfCategories(realm); i++) {
                 if (nonZeroPositions.contains(i)) {
                     entries.add(new PieEntry(soma[i], parties[i], null));
                     if (soma[i] != 0) {

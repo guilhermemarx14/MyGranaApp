@@ -35,7 +35,7 @@ public class Category extends RealmObject implements Serializable {
         this.subcategories = subcategories;
     }
 
-    public int getNumberOfCategories(Realm realm){
+    public static int getNumberOfCategories(Realm realm){
         return realm.where(Category.class).findAll().size();
     }
 
