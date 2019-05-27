@@ -90,7 +90,7 @@ public class SplashActivity extends AppCompatActivity {
         ValueEventListener eventListener4 = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                if (!dataSnapshot.child("university").hasChildren()) {
+                if (!dataSnapshot.hasChild("university")) {
                     firstTime = true;
                 }
 
