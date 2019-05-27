@@ -65,6 +65,7 @@ public class SplashActivity extends AppCompatActivity {
         realm.insertOrUpdate(new Category("Transporte", GASTO));
         realm.insertOrUpdate(new Category("Investimentos", GASTO));
         realm.insertOrUpdate(new Category("Saúde", GASTO));
+        realm.insertOrUpdate(new Category("Esportes", GASTO));
         realm.commitTransaction();
         (new Thread(new Runnable() {
             @Override
