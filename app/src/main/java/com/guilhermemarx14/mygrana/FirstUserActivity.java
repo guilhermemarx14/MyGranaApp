@@ -7,8 +7,10 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.text.HtmlCompat;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -31,6 +33,10 @@ public class FirstUserActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_first_user);
+        TextView tv = findViewById(R.id.tvUniversityNotInList);
+        tv.setText(HtmlCompat.fromHtml(getString(R.string.university_not_in_list1) + "<b>" + getString(R.string.university_not_in_list2) + "</b>"
+                + getString(R.string.university_not_in_list3),HtmlCompat.FROM_HTML_MODE_LEGACY));
+
         Realm realm = Realm.getDefaultInstance();
         context = this;
         final Spinner spinner = findViewById(R.id.spinnerUniversity);
