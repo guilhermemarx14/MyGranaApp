@@ -12,25 +12,25 @@ android {
         applicationId "com.guilhermemarx14.mygrana"
         minSdkVersion 22
         targetSdkVersion 28
-        versionCode 90
-        versionName "1.3.1"
+        versionCode 95
+        versionName "1.3.2"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
-//        splits {
-//            abi {
-//                // Enable APK splitting wrt architecture
-//                enable true
-//
-//                // Reset the architectures for which you need to build the APKs for
-//                reset()
-//
-//                // Include the architectures for which Gradle is building APKs
-//                include 'x86', 'x86_64', 'armeabi-v7a', 'arm64-v8a'
-//
-//                // Set this to false if you don't want an APK that has native code for all architectures
-//                universalApk false
-//            }
-//        }
+        splits {
+            abi {
+                // Enable APK splitting wrt architecture
+                enable true
+
+                // Reset the architectures for which you need to build the APKs for
+                reset()
+
+                // Include the architectures for which Gradle is building APKs
+                include 'x86', 'x86_64', 'armeabi-v7a', 'arm64-v8a'
+
+                // Set this to false if you don't want an APK that has native code for all architectures
+                universalApk false
+            }
+        }
     }
     buildTypes {
         release {

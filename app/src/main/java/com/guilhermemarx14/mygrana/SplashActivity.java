@@ -112,7 +112,7 @@ public class SplashActivity extends AppCompatActivity {
         ValueEventListener eventListener3 = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                for (int i = 1; i < dataSnapshot.getChildrenCount(); i++) {
+                for (int i = 1; i <= dataSnapshot.getChildrenCount(); i++) {
                     University university = new University();
                     university.setName((String) dataSnapshot.child("" + i).getValue());
                     university.setId(i);
@@ -136,23 +136,25 @@ public class SplashActivity extends AppCompatActivity {
         ValueEventListener eventListener2 = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                for (int i = 1; i <= dataSnapshot.getChildrenCount(); i++) {
+
+                for (int i = 1, j=1; i <= dataSnapshot.getChildrenCount(); i++,j++) {
                     try {
                         Transaction transaction = new Transaction();
-                        transaction.setCategory(dataSnapshot.child("" + i).getValue(Transaction.class).getCategory());
-                        transaction.setId(i);
-                        transaction.setSubcategory(dataSnapshot.child("" + i).getValue(Transaction.class).getSubcategory());
-                        transaction.setDescription(dataSnapshot.child("" + i).getValue(Transaction.class).getDescription());
-                        transaction.setDate(dataSnapshot.child("" + i).getValue(Transaction.class).getDate());
-                        transaction.setPayd(dataSnapshot.child("" + i).getValue(Transaction.class).isPayd());
-                        transaction.setCategoryName(dataSnapshot.child("" + i).getValue(Transaction.class).getCategoryName());
-                        transaction.setValue(dataSnapshot.child("" + i).getValue(Transaction.class).getValue());
+                        transaction.setCategory(dataSnapshot.child("" + j).getValue(Transaction.class).getCategory());
+                        transaction.setId(j);
+                        transaction.setSubcategory(dataSnapshot.child("" + j).getValue(Transaction.class).getSubcategory());
+                        transaction.setDescription(dataSnapshot.child("" + j).getValue(Transaction.class).getDescription());
+                        transaction.setDate(dataSnapshot.child("" + j).getValue(Transaction.class).getDate());
+                        transaction.setPayd(dataSnapshot.child("" + j).getValue(Transaction.class).isPayd());
+                        transaction.setCategoryName(dataSnapshot.child("" + j).getValue(Transaction.class).getCategoryName());
+                        transaction.setValue(dataSnapshot.child("" + j).getValue(Transaction.class).getValue());
 
                         realm.beginTransaction();
                         realm.insertOrUpdate(transaction);
                         realm.commitTransaction();
                     } catch (Exception e) {
                         e.printStackTrace();
+                        i--;
                     }
 
                 }
@@ -170,13 +172,14 @@ public class SplashActivity extends AppCompatActivity {
         ValueEventListener eventListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                for (int i = 1; i <= dataSnapshot.getChildrenCount(); i++) {
+
+                for (int i = 1, j=1; i <= dataSnapshot.getChildrenCount(); i++,j++) {
                     try {
                         Subcategory subcategory = new Subcategory();
-                        subcategory.setCategory(dataSnapshot.child("" + i).getValue(Subcategory.class).getCategory());
-                        subcategory.setSubcategoryName(dataSnapshot.child("" + i).getValue(Subcategory.class).getSubcategoryName());
-                        subcategory.setCategoryName(dataSnapshot.child("" + i).getValue(Subcategory.class).getCategoryName());
-                        subcategory.setId(i);
+                        subcategory.setCategory(dataSnapshot.child("" + j).getValue(Subcategory.class).getCategory());
+                        subcategory.setSubcategoryName(dataSnapshot.child("" + j).getValue(Subcategory.class).getSubcategoryName());
+                        subcategory.setCategoryName(dataSnapshot.child("" + j).getValue(Subcategory.class).getCategoryName());
+                        subcategory.setId(j);
                         realm.beginTransaction();
                         Category category = realm.where(Category.class).equalTo("name", (String) subcategory.getCategory()).findFirst();
                         realm.insertOrUpdate(subcategory);
@@ -185,6 +188,7 @@ public class SplashActivity extends AppCompatActivity {
                         realm.commitTransaction();
                     } catch (Exception e) {
                         e.printStackTrace();
+                        i--;
                     }
 
                 }
