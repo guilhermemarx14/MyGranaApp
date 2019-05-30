@@ -4,10 +4,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.SystemClock;
+import android.util.Log;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -18,10 +20,13 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.guilhermemarx14.mygrana.RealmObjects.Category;
+import com.guilhermemarx14.mygrana.RealmObjects.FirstTime;
 import com.guilhermemarx14.mygrana.RealmObjects.Subcategory;
 import com.guilhermemarx14.mygrana.RealmObjects.Transaction;
 import com.guilhermemarx14.mygrana.RealmObjects.University;
 import com.guilhermemarx14.mygrana.RealmObjects.UserProfilePhoto;
+
+import java.util.HashMap;
 
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
@@ -36,8 +41,8 @@ public class SplashActivity extends AppCompatActivity {
     FirebaseUser user;
     UserProfilePhoto upp;
     Realm realm;
-    boolean firstTime = false;
-
+    boolean firstTime;
+    DatabaseReference queryUni;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,9 +57,22 @@ public class SplashActivity extends AppCompatActivity {
         getSupportActionBar().hide();
         user = getFirebaseUser();
         realm = Realm.getDefaultInstance();
-
-
         final Animation animRotate = AnimationUtils.loadAnimation(this, R.anim.rotate);
+
+        DatabaseReference rootRef = FirebaseDatabase.getInstance().getReference();
+        queryUni = rootRef.child(user.getUid()).child("university");
+        if(realm.where(FirstTime.class).findAll().size()>0)
+            firstTime = false;
+        else{
+            realm.beginTransaction();
+            realm.insertOrUpdate(new FirstTime(true));
+            realm.commitTransaction();
+            rootRef.child(user.getUid()).child("university").removeValue();
+            firstTime = true;
+        }
+
+
+
         realm.beginTransaction();
         realm.insertOrUpdate(new Category("Salário", RENDA));
         realm.insertOrUpdate(new Category("Pensão", RENDA));
@@ -70,8 +88,8 @@ public class SplashActivity extends AppCompatActivity {
         (new Thread(new Runnable() {
             @Override
             public void run() {
-                SystemClock.sleep(4000);
-
+                SystemClock.sleep(2000);
+                SystemClock.sleep(2000);
                 if (!firstTime) {
                     Intent it = new Intent(context, MenuActivity.class);
                     it.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -85,24 +103,12 @@ public class SplashActivity extends AppCompatActivity {
         })).start();
         ImageView progressView = findViewById(R.id.image_progress);
         progressView.startAnimation(animRotate);
-        DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
-        DatabaseReference myquery = mDatabase.child(user.getUid());
-        ValueEventListener eventListener4 = new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                if (!dataSnapshot.hasChild("university")) {
-                    firstTime = true;
-                }
 
-            }
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-            }
-        };
-        myquery.addListenerForSingleValueEvent(eventListener4);
+
         upp = realm.where(UserProfilePhoto.class).findFirst();
         setUpFirstTimeUser();
+
     }
 
     private void setUpFirstTimeUser() {
@@ -130,6 +136,7 @@ public class SplashActivity extends AppCompatActivity {
             }
         };
         myquery.addListenerForSingleValueEvent(eventListener3);
+        myquery.orderByKey();
 
         mDatabase = FirebaseDatabase.getInstance().getReference();
         myquery = mDatabase.child(user.getUid()).child("transactions");
@@ -165,7 +172,7 @@ public class SplashActivity extends AppCompatActivity {
             }
         };
         myquery.addListenerForSingleValueEvent(eventListener2);
-
+        myquery.orderByKey();
 
         mDatabase = FirebaseDatabase.getInstance().getReference();
         myquery = mDatabase.child(user.getUid()).child("subcategories");
@@ -200,6 +207,7 @@ public class SplashActivity extends AppCompatActivity {
             }
         };
         myquery.addListenerForSingleValueEvent(eventListener);
+        myquery.orderByKey();
 
     }
 

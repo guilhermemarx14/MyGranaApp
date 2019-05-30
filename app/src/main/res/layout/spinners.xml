@@ -2,7 +2,7 @@
     android:id="@+id/spinners"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:textSize="14sp"
+    android:textSize="20sp"
     android:textAppearance="?android:attr/textAppearanceListItemSmall"
     android:gravity="center_vertical|end"
     android:paddingStart="?android:attr/listPreferredItemPaddingStart"

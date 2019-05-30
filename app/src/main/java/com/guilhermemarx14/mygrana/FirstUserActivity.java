@@ -4,12 +4,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.core.text.HtmlCompat;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -34,26 +36,41 @@ public class FirstUserActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_first_user);
         TextView tv = findViewById(R.id.tvUniversityNotInList);
-        tv.setText(HtmlCompat.fromHtml(getString(R.string.university_not_in_list1) + "<b>" + getString(R.string.university_not_in_list2) + "</b>"
+        tv.setText(HtmlCompat.fromHtml(getString(R.string.university_not_in_list1) + " <b>" + getString(R.string.university_not_in_list2) + "</b> "
                 + getString(R.string.university_not_in_list3),HtmlCompat.FROM_HTML_MODE_LEGACY));
 
         Realm realm = Realm.getDefaultInstance();
         context = this;
+        disableButton();
         final Spinner spinner = findViewById(R.id.spinnerUniversity);
+        spinner.setBackground(ContextCompat.getDrawable(this, R.drawable.button_grey_shape));
        final  RealmResults<University> result = realm.where(University.class).findAll();
         universities = new ArrayList<>();
         for (University u : result)
             universities.add(u.getName());
-
+        universities.add(0,"");
         Collections.sort(universities);
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, R.layout.spinners, universities);
         spinner.setAdapter(adapter);
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if(position != 0)
+                    enableButton();
+            }
 
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
         Button confirm = findViewById(R.id.buttonConfirmUniversity);
 
         confirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(spinner.getSelectedItem().equals(""))
+                    return;
                 FirebaseAuth mAuth = FirebaseAuth.getInstance();
                 FirebaseUser user = mAuth.getCurrentUser();
                 FirebaseDatabase database = FirebaseDatabase.getInstance();
@@ -74,6 +91,17 @@ public class FirstUserActivity extends AppCompatActivity {
 
     }
 
+    private void disableButton() {
+        Button confirm = findViewById(R.id.buttonConfirmUniversity);
+        confirm.setEnabled(false);
+        confirm.setBackground(ContextCompat.getDrawable(this,R.drawable.button_grey_shape));
+    }
+
+    private void enableButton(){
+        Button confirm = findViewById(R.id.buttonConfirmUniversity);
+        confirm.setEnabled(true);
+        confirm.setBackground(ContextCompat.getDrawable(this,R.drawable.button_orange_shape));
+    }
     @Override
     public void onBackPressed() {
 
