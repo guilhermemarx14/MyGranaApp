@@ -100,7 +100,9 @@ public class TransactionsAdapter extends
         viewHolder.valueTextView.setText(String.format("R$ %.2f", transaction.getValue()));
         viewHolder.descriptionTextView.setText(transaction.getDescription());
         viewHolder.dateTextView.setText(convertDateForExibition(transaction.getDate()));
-        viewHolder.categoryTextView.setText(transaction.getCategory());
+        if(transaction.getSubcategory()== null || transaction.getSubcategory().isEmpty())
+            viewHolder.categoryTextView.setText(transaction.getCategory());
+        else viewHolder.categoryTextView.setText(transaction.getSubcategory());
         if (transaction.isPayd()) {
             viewHolder.unpayd.setVisibility(View.GONE);
             viewHolder.payd.setVisibility(View.VISIBLE);
