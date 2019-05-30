@@ -45,6 +45,7 @@ public class Constants {
         ArrayList<String> aux = new ArrayList<>();
         for(Category a: results)
             aux.add(a.getName());
+        aux.add(0,"");
         return aux;
     }
 
@@ -55,6 +56,7 @@ public class Constants {
         ArrayList<String> aux = new ArrayList<>();
         for(Subcategory a: list)
             aux.add(a.getSubcategoryName());
+        aux.add(0,"");
         return aux;
     }
 

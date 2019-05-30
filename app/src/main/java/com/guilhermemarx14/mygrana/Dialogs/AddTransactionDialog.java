@@ -19,6 +19,7 @@ import android.widget.EditText;
 import android.widget.Spinner;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.FirebaseAuth;
@@ -67,7 +68,7 @@ public class AddTransactionDialog extends Dialog {
         final Realm realm = Realm.getDefaultInstance();
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.dialog_new_transaction);
-
+        confirm = findViewById(R.id.buttonDelete);
         findViewById(R.id.textSubcategoryName).setVisibility(View.INVISIBLE);
         findViewById(R.id.spinnerSubcategory).setVisibility(View.INVISIBLE);
         final Spinner category = findViewById(R.id.spinnerCategory);
@@ -77,6 +78,11 @@ public class AddTransactionDialog extends Dialog {
         category.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {//seta os spinners
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                if(i==0) {
+                    disableButton();
+                    return;
+                }
+                else enableButton();
                 String categorySelected = arrayAdapterCategory.getItem(i);
                 selected = realm.where(Category.class).equalTo("name", categorySelected).findFirst();
                 RealmList<Subcategory> list = realm.where(Category.class).equalTo("name", categorySelected).findFirst().getSubcategories();
@@ -166,7 +172,7 @@ public class AddTransactionDialog extends Dialog {
 
 
 //
-        confirm = findViewById(R.id.buttonDelete);
+
 //
         confirm.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -195,7 +201,7 @@ public class AddTransactionDialog extends Dialog {
                 CheckBox payd = findViewById(R.id.cbPayd);
                 if (!selected.getName().equals("Pensão") && !selected.getName().equals("Salário"))
                     value = -value;
-                if (selected2 == null)
+                if (selected2.equals("") || selected2 == null )
                     t = new Transaction(0, value, selected.getName(), desc, dateConvert(inpDate.getText().toString()), payd.isChecked());
                 else
                     t = new Transaction(0, value, selected.getName(), selected2.getSubcategoryName(), desc, dateConvert(inpDate.getText().toString()), payd.isChecked());
@@ -216,6 +222,15 @@ public class AddTransactionDialog extends Dialog {
                 dismiss();
             }
         });
+    }
+
+    private void disableButton() {
+        confirm.setEnabled(false);
+        confirm.setBackground(ContextCompat.getDrawable(act, R.drawable.button_grey_shape));
+    }
+    private void enableButton() {
+        confirm.setEnabled(true);
+        confirm.setBackground(ContextCompat.getDrawable(act, R.drawable.button_orange_shape));
     }
 
     public String dateConvert(String date) {
