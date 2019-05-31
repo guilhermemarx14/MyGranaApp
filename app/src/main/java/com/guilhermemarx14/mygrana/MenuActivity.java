@@ -241,12 +241,12 @@ public class MenuActivity extends AppCompatActivity
         boolean saldoPositivo = saldo >= 0;
 
         ArrayList<BarEntry> values = new ArrayList<>();
-        values.add(new BarEntry(GASTO, totalGasto, ContextCompat.getDrawable(this,R.drawable.star)));
-        values.add(new BarEntry(RENDA, totalRenda, ContextCompat.getDrawable(this,R.drawable.star)));
+        values.add(new BarEntry(GASTO, totalGasto));
+        values.add(new BarEntry(RENDA, totalRenda));
         if (saldoPositivo)
-            values.add(new BarEntry(SALDO, saldo, ContextCompat.getDrawable(this,R.drawable.star)));
+            values.add(new BarEntry(SALDO, saldo));
         else
-            values.add(new BarEntry(SALDO, -saldo, ContextCompat.getDrawable(this,R.drawable.star)));
+            values.add(new BarEntry(SALDO, -saldo));
 
         BarDataSet set1;
 
@@ -398,12 +398,12 @@ public class MenuActivity extends AppCompatActivity
 
 
         ArrayList<BarEntry> values = new ArrayList<>();
-        values.add(new BarEntry(GASTO, totalGasto, ContextCompat.getDrawable(this,R.drawable.star)));
-        values.add(new BarEntry(RENDA, totalRenda, ContextCompat.getDrawable(this,R.drawable.star)));
+        values.add(new BarEntry(GASTO, totalGasto));
+        values.add(new BarEntry(RENDA, totalRenda));
         if (saldoPositivo)
-            values.add(new BarEntry(SALDO, saldo, ContextCompat.getDrawable(this,R.drawable.star)));
+            values.add(new BarEntry(SALDO, saldo));
         else
-            values.add(new BarEntry(SALDO, -saldo, ContextCompat.getDrawable(this,R.drawable.star)));
+            values.add(new BarEntry(SALDO, -saldo));
 
         BarDataSet set1;
 
