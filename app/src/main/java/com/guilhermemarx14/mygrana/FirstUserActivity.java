@@ -79,10 +79,11 @@ public class FirstUserActivity extends AppCompatActivity {
                 DatabaseReference myRef = database.getReference(user.getUid());
                 HashMap<String, Object> map = new HashMap<>();
                 for (University u : result)
-                    if (u.getName().equals(spinner.getSelectedItem())) {
-                        map.put("" + u.getId(), spinner.getSelectedItem());
-                        break;
-                    }
+                    if (u.getName() != null)
+                        if (u.getName().equals(spinner.getSelectedItem())) {
+                            map.put("" + u.getId(), spinner.getSelectedItem());
+                            break;
+                        }
                 myRef.child("university").updateChildren(map);
 
                 Intent it = new Intent(context, MenuActivity.class);
