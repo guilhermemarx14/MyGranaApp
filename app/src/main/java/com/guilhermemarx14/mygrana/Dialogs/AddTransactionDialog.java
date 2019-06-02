@@ -201,7 +201,7 @@ public class AddTransactionDialog extends Dialog {
                 CheckBox payd = findViewById(R.id.cbPayd);
                 if (!selected.getName().equals("Pensão") && !selected.getName().equals("Salário"))
                     value = -value;
-                if (selected2.equals("") || selected2 == null )
+                if (isNullOrEmpty(selected2))
                     t = new Transaction(0, value, selected.getName(), desc, dateConvert(inpDate.getText().toString()), payd.isChecked());
                 else
                     t = new Transaction(0, value, selected.getName(), selected2.getSubcategoryName(), desc, dateConvert(inpDate.getText().toString()), payd.isChecked());
@@ -222,6 +222,14 @@ public class AddTransactionDialog extends Dialog {
                 dismiss();
             }
         });
+    }
+
+    private boolean isNullOrEmpty(Subcategory selected2) {
+        if(selected2 == null)
+            return true;
+        if(selected2.equals(""))
+            return true;
+        return false;
     }
 
     private void disableButton() {
