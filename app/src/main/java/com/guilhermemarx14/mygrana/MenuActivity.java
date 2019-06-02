@@ -110,7 +110,7 @@ public class MenuActivity extends AppCompatActivity
         else setTransactionId(0);
 
         if (realm.where(Subcategory.class).max("id") != null)
-            setSubcategoryId((long) realm.where(Transaction.class).max("id"));
+            setSubcategoryId((long) realm.where(Subcategory.class).max("id"));
         else setSubcategoryId(0);
         setUpBarChartEfetivado();
         setUpBarChartInadimplente();
